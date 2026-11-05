@@ -4,7 +4,11 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 
 const allPosts = await getCollection('blog');
-const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf());
+
+const uniqueCategories = Array.from(
+    new Set(sortedPosts.map((p) => p.data.category).filter(Boolean))
+) as string[];
 ---
 
 <Layout
@@ -14,17 +18,48 @@ const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - ne
 	<main style="background-color: var(--color-bg-offset); min-height: 100vh; padding-bottom: 80px;">
         <section class="section" style="background-color: transparent;">
             <div class="container">
-                <div class="section-header" style="text-align: center; margin-bottom: 60px;">
-                    <h1 class="section-title" style="font-size: 3.5rem; margin-top: 48px; color: var(--color-text-dark); font-weight: 800; letter-spacing: -0.05em;">All Articles</h1>
+                <div class="section-header" style="text-align: center; margin-bottom: 36px;">
+                    <h1 class="section-title" style="font-size: clamp(2.4rem, 4vw, 3.5rem); margin-top: 48px; color: var(--color-text-dark); font-weight: 800; letter-spacing: -0.05em;">All Articles</h1>
                     <p class="section-subtitle" style="color: var(--color-text-muted); font-size: 1.15rem; margin-top: 10px;">
-                        Deep dives, reviews, and updates from the Stackrank team.
+                        Deep dives, independent reviews, and practical playbooks from the ToolVector editorial team.
                     </p>
                 </div>
 
-                <div class="articles-grid">
+                <!-- Live Blog Search & Category Filter -->
+                <div class="blog-toolbar">
+                    <div class="blog-search-box">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
+                        <input
+                            type="search"
+                            id="blog-filter-input"
+                            placeholder="Filter articles by tool name, category, or topic..."
+                            aria-label="Filter articles"
+                        />
+                        <span class="blog-count-badge" id="blog-count-badge">{sortedPosts.length} articles</span>
+                    </div>
+
+                    <div class="blog-cat-pills" role="tablist" aria-label="Filter by category">
+                        <button type="button" class="blog-cat-pill is-active" data-cat="">All</button>
+                        {uniqueCategories.map((cat) => (
+                            <button type="button" class="blog-cat-pill" data-cat={cat}>{cat}</button>
+                        ))}
+                    </div>
+                </div>
+
+                <div class="articles-grid" id="blog-articles-grid">
                     {
-                        sortedPosts.map((post) => (
-                            <a href={`/blog/${post.id}/`} class="article-card">
+                        sortedPosts.map((post) => {
+                            const searchText = `${post.data.name || ''} ${post.data.description || ''} ${post.data.category || ''} ${post.data.serviceType || ''} ${post.id}`.toLowerCase();
+                            return (
+                            <a
+                                href={`/blog/${post.id}/`}
+                                class="article-card"
+                                data-search={searchText}
+                                data-category={post.data.category || ''}
+                            >
                                 <div class="article-card__image-wrapper">
                                     {post.data.thumbnail || post.data.logo ? (
                                         <Image
@@ -47,21 +82,194 @@ const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).valueOf() - ne
                                     </p>
                                     <div class="article-card__footer">
                                         <span class="article-card__date">
-                                            {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            {new Date(post.data.date || 0).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </span>
                                         <span class="article-card__readmore">Read article &rarr;</span>
                                     </div>
                                 </div>
                             </a>
-                        ))
+                            );
+                        })
                     }
+                </div>
+
+                <div class="blog-empty-state" id="blog-empty-state" hidden>
+                    <p>No articles matched your filter criteria.</p>
+                    <button type="button" id="blog-reset-btn" class="blog-reset-btn">Reset filters</button>
                 </div>
             </div>
         </section>
 	</main>
 </Layout>
 
+<script>
+    function initBlogFilter() {
+        const input = document.getElementById('blog-filter-input') as HTMLInputElement | null;
+        const countBadge = document.getElementById('blog-count-badge');
+        const emptyState = document.getElementById('blog-empty-state');
+        const resetBtn = document.getElementById('blog-reset-btn');
+        const cards = Array.from(document.querySelectorAll<HTMLElement>('#blog-articles-grid .article-card'));
+        const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-cat-pill'));
+
+        if (!input || !cards.length) return;
+
+        let activeCat = '';
+
+        // Read ?q= query parameter if navigated from search
+        const params = new URLSearchParams(window.location.search);
+        const initialQuery = params.get('q');
+        if (initialQuery) {
+            input.value = initialQuery;
+        }
+
+        const applyFilter = () => {
+            const q = input.value.trim().toLowerCase();
+            let visible = 0;
+
+            cards.forEach((card) => {
+                const hay = card.dataset.search || '';
+                const cat = card.dataset.category || '';
+                const matchText = !q || hay.includes(q);
+                const matchCat = !activeCat || cat === activeCat;
+                const show = matchText && matchCat;
+                card.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+
+            if (countBadge) {
+                countBadge.textContent = `${visible} ${visible === 1 ? 'article' : 'articles'}`;
+            }
+            if (emptyState) {
+                emptyState.hidden = visible > 0;
+            }
+        };
+
+        input.addEventListener('input', applyFilter);
+
+        pills.forEach((pill) => {
+            pill.addEventListener('click', () => {
+                pills.forEach((p) => p.classList.remove('is-active'));
+                pill.classList.add('is-active');
+                activeCat = pill.dataset.cat || '';
+                applyFilter();
+            });
+        });
+
+        resetBtn?.addEventListener('click', () => {
+            input.value = '';
+            activeCat = '';
+            pills.forEach((p, idx) => p.classList.toggle('is-active', idx === 0));
+            applyFilter();
+        });
+
+        applyFilter();
+    }
+
+    document.addEventListener('DOMContentLoaded', initBlogFilter);
+    document.addEventListener('astro:page-load', initBlogFilter);
+    initBlogFilter();
+</script>
+
 <style>
+    .blog-toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 860px;
+        margin: 0 auto 44px;
+    }
+
+    .blog-search-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        border-radius: 14px;
+        background: var(--color-bg-base);
+        border: 1px solid var(--color-border-base);
+        box-shadow: var(--shadow-sm);
+        color: var(--color-text-muted);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .blog-search-box:focus-within {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .blog-search-box input {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: var(--color-text-dark);
+        font-size: 0.98rem;
+        font-family: inherit;
+    }
+
+    .blog-count-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--color-bg-offset);
+        color: var(--color-text-muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .blog-cat-pills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .blog-cat-pill {
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--color-border-base);
+        background: var(--color-bg-base);
+        color: var(--color-text-subtle);
+        font-size: 0.82rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.18s ease;
+    }
+
+    .blog-cat-pill:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .blog-cat-pill.is-active {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: #ffffff;
+    }
+
+    .blog-empty-state[hidden] {
+        display: none !important;
+    }
+
+    .blog-empty-state {
+        text-align: center;
+        padding: 48px 20px;
+        color: var(--color-text-muted);
+    }
+
+    .blog-reset-btn {
+        margin-top: 12px;
+        padding: 9px 18px;
+        border-radius: 10px;
+        border: none;
+        background: var(--color-primary);
+        color: #ffffff;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
     .articles-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));

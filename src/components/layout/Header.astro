@@ -100,8 +100,7 @@ const isHome = currentPath === '/' || currentPath === '';
               stroke-linejoin="round"></path>
           </svg>
         </button>
-        <a href="#" class="header__btn header__btn--login">Sign in</a>
-        <a href="#" class="header__btn header__btn--post">List your tool</a>
+        <a href="/contact/" class="header__btn header__btn--post">List your tool</a>
       </div>
     </div>
 
@@ -306,14 +305,11 @@ const isHome = currentPath === '/' || currentPath === '';
   const drawerSearch = document.getElementById("drawer-search-input") as HTMLInputElement | null;
   drawerSearch?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       const val = drawerSearch.value.trim();
       closeDrawer();
       if (val) {
-        const heroInput = document.querySelector<HTMLInputElement>(".hero__search-input");
-        if (heroInput) {
-          heroInput.value = val;
-        }
-        document.querySelector("#discover-tools")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.location.href = `/blog/?q=${encodeURIComponent(val)}`;
       }
     }
   });

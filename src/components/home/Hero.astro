@@ -1,15 +1,92 @@
 ---
 // src/components/home/Hero.astro
+import { getCollection } from 'astro:content';
+import { categories } from '../../data/categories';
 import '../../style/home/hero.css';
+
+const svgAssets = import.meta.glob<{ default: { src: string } }>('../../assets/**/*.svg', { eager: true });
+
+function slugify(text: string) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, '-and-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+}
+
+function resolveLogo(logo: any): string | null {
+  if (!logo) return null;
+  if (typeof logo === 'string') {
+    const mod = svgAssets[logo];
+    if (mod?.default) {
+      return typeof mod.default === 'string' ? mod.default : mod.default.src;
+    }
+    return logo;
+  }
+  return logo.src || null;
+}
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort(
+  (a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf()
+);
+
+const latestPicks = sortedPosts.slice(0, 3).map((post) => ({
+  id: post.id,
+  name: post.data.name || post.id,
+  serviceType: post.data.serviceType || post.data.category || 'Software Review',
+  price: post.data.startingPrice || 'See plans',
+  date: post.data.date
+    ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
+        new Date(`${post.data.date}T00:00:00`)
+      )
+    : '2026',
+  logo: resolveLogo(post.data.logo),
+  url: `/blog/${post.id}/`,
+}));
+
+const searchIndex = [
+  ...sortedPosts.map((post) => ({
+    type: 'Review',
+    title: post.data.name || post.id,
+    subtitle: post.data.serviceType || post.data.category || 'Independent Review',
+    meta: post.data.startingPrice || '',
+    logo: resolveLogo(post.data.logo),
+    keywords: `${post.data.name || ''} ${post.data.category || ''} ${post.data.serviceType || ''} ${post.data.description || ''} ${post.id}`.toLowerCase(),
+    url: `/blog/${post.id}/`,
+  })),
+  ...categories.map((cat) => ({
+    type: 'Category',
+    title: cat.title,
+    subtitle: `${cat.count} curated directory`,
+    meta: 'Category',
+    logo: null,
+    keywords: `${cat.title} ${cat.count}`.toLowerCase(),
+    url: `/category/${slugify(cat.title)}/`,
+  })),
+];
+
+const quickTags = [
+  { label: 'AI Software & Agents', href: '/category/ai-software-and-ai-agents/' },
+  { label: 'SEO & Marketing', href: '/category/seo-and-marketing/' },
+  { label: 'Developer Tools', href: '/category/website-and-developer/' },
+  { label: 'Travel & eSIM', href: '/category/travel-and-connectivity/' },
+];
 ---
 
 <section class="hero" id="hero-top" aria-labelledby="hero-title">
-  <!-- Video Background (CanhCam agency style) -->
+  <!-- Video Background + Ambient Glows -->
   <div class="hero__video-wrapper" aria-hidden="true">
     <video class="hero__video" autoplay loop muted playsinline>
       <source src="/video_bg.mp4" type="video/mp4" />
     </video>
     <div class="hero__video-overlay"></div>
+    <div class="hero__ambient-glow hero__ambient-glow--primary"></div>
+    <div class="hero__ambient-glow hero__ambient-glow--secondary"></div>
   </div>
 
   <!-- Horizontal Architectural Grid Line -->
@@ -27,31 +104,303 @@ import '../../style/home/hero.css';
     </div>
   </div>
 
-  <!-- Center Main Content -->
+  <!-- Center Main Content (2-Column Asymmetric Layout) -->
   <div class="container hero__container">
-    <div class="hero__copy">
-      <h1 class="hero__title" id="hero-title">
-        Choose your next<br />
-        <span class="hero__title-line2">software advantage.</span>
-      </h1>
+    <div class="hero__grid">
+      <!-- Left Column: Value Proposition, Command Search & Quick Chips -->
+      <div class="hero__copy">
+        <a href="#reviews" class="hero__eyebrow">
+          <span class="hero__eyebrow-dot" aria-hidden="true"></span>
+          <span class="hero__eyebrow-text">Independent Software Intelligence</span>
+          <span class="hero__eyebrow-badge">2026 Benchmarks</span>
+        </a>
 
-      <p class="hero__description">
-        Discover the tools your team will love, compare every important detail,<br />
-        & make confident decisions!
-      </p>
+        <h1 class="hero__title" id="hero-title">
+          Choose your next
+          <span class="hero__title-accent">software advantage.</span>
+        </h1>
+
+        <p class="hero__description">
+          Honest, research-backed evaluations covering real pricing, security trade-offs, and hidden limits—so your team can adopt the right stack with confidence.
+        </p>
+
+        <!-- Interactive Live Search Box -->
+        <div class="hero__search-wrap" id="hero-search-wrap">
+          <form class="hero__search-box" id="hero-search-form" role="search" autocomplete="off">
+            <span class="hero__search-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+            </span>
+            <input
+              type="text"
+              class="hero__search-input"
+              id="hero-search-input"
+              placeholder="Search tools, AI agents, SEO, eSIM, pricing..."
+              aria-label="Search software reviews and categories"
+            />
+            <button type="button" class="hero__search-clear" id="hero-search-clear" aria-label="Clear search" hidden>&times;</button>
+            <kbd class="hero__search-kbd" aria-hidden="true">/</kbd>
+            <button type="submit" class="hero__search-btn">
+              <span>Explore</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Instant Dropdown Results -->
+          <div class="hero__search-dropdown" id="hero-search-dropdown" role="listbox" hidden></div>
+        </div>
+
+        <!-- Quick Category & Action Pills -->
+        <div class="hero__tags" aria-label="Popular categories">
+          <span class="hero__tags-label">Popular:</span>
+          {
+            quickTags.map((tag) => (
+              <a href={tag.href} class="hero__tag">
+                {tag.label}
+              </a>
+            ))
+          }
+          <a href="/blog/" class="hero__tag hero__tag--all">
+            All {sortedPosts.length} Reviews &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Floating Glass "Live Editorial Radar" Card -->
+      <aside class="hero__radar" aria-label="Latest verified software evaluations">
+        <div class="hero__radar-card">
+          <div class="hero__radar-header">
+            <div class="hero__radar-title-group">
+              <span class="hero__radar-pulse" aria-hidden="true"></span>
+              <span class="hero__radar-eyebrow">LIVE EDITORIAL RADAR</span>
+            </div>
+            <span class="hero__radar-count">{sortedPosts.length} Deep Dives</span>
+          </div>
+
+          <div class="hero__radar-list">
+            {
+              latestPicks.map((item) => (
+                <a href={item.url} class="hero__radar-item">
+                  <div class="hero__radar-logo">
+                    {item.logo ? (
+                      <img src={item.logo} alt={item.name} width="38" height="38" loading="eager" />
+                    ) : (
+                      <span>{item.name.slice(0, 2).toUpperCase()}</span>
+                    )}
+                  </div>
+                  <div class="hero__radar-info">
+                    <div class="hero__radar-row">
+                      <strong class="hero__radar-name">{item.name}</strong>
+                      <span class="hero__radar-date">{item.date}</span>
+                    </div>
+                    <div class="hero__radar-meta">
+                      <span class="hero__radar-type">{item.serviceType}</span>
+                      <span class="hero__radar-sep">·</span>
+                      <span class="hero__radar-price">{item.price}</span>
+                    </div>
+                  </div>
+                  <span class="hero__radar-arrow" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  </span>
+                </a>
+              ))
+            }
+          </div>
+
+          <div class="hero__radar-footer">
+            <div class="hero__radar-trust">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <span>Unbiased scoring · No paid placements</span>
+            </div>
+            <a href="/blog/" class="hero__radar-all">View all &rarr;</a>
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
+
+  <script type="application/json" id="hero-search-data" set:html={JSON.stringify(searchIndex)} />
 </section>
 
 <script>
+  interface SearchEntry {
+    type: string;
+    title: string;
+    subtitle: string;
+    meta: string;
+    logo: string | null;
+    keywords: string;
+    url: string;
+  }
+
   function initHero() {
     const video = document.querySelector<HTMLVideoElement>('.hero__video');
     if (video) {
       video.muted = true;
       video.play().catch(() => {});
     }
+
+    const wrap = document.getElementById('hero-search-wrap');
+    const form = document.getElementById('hero-search-form') as HTMLFormElement | null;
+    const input = document.getElementById('hero-search-input') as HTMLInputElement | null;
+    const clearBtn = document.getElementById('hero-search-clear');
+    const dropdown = document.getElementById('hero-search-dropdown');
+    const dataEl = document.getElementById('hero-search-data');
+
+    if (!wrap || !form || !input || !dropdown || !dataEl) return;
+    if (wrap.dataset.initialized === 'true') return;
+    wrap.dataset.initialized = 'true';
+
+    let entries: SearchEntry[] = [];
+    try {
+      entries = JSON.parse(dataEl.textContent || '[]');
+    } catch {
+      entries = [];
+    }
+
+    let activeIdx = -1;
+    let currentMatches: SearchEntry[] = [];
+
+    const escapeHtml = (str: string) =>
+      str.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+    const closeDropdown = () => {
+      dropdown.hidden = true;
+      wrap.classList.remove('is-open');
+    };
+
+    const openDropdown = () => {
+      dropdown.hidden = false;
+      wrap.classList.add('is-open');
+    };
+
+    const renderResults = (query: string, resetScroll = false) => {
+      const q = query.trim().toLowerCase();
+      if (clearBtn) clearBtn.hidden = !q;
+
+      currentMatches = q
+        ? entries.filter((item) => item.keywords.includes(q) || item.title.toLowerCase().includes(q)).slice(0, 6)
+        : entries.slice(0, 4);
+
+      if (activeIdx >= currentMatches.length) activeIdx = 0;
+
+      if (!currentMatches.length) {
+        dropdown.innerHTML = `
+          <div class="hero__search-empty">
+            No exact match for "<strong>${escapeHtml(query.trim())}</strong>" — <a href="/blog/?q=${encodeURIComponent(query.trim())}">search all articles &rarr;</a>
+          </div>
+        `;
+        openDropdown();
+        if (resetScroll) dropdown.scrollTop = 0;
+        return;
+      }
+
+      const headingLabel = q ? `Matching tools & categories (${currentMatches.length})` : 'Recent & popular evaluations';
+      const footerLink = q
+        ? `<a href="/blog/?q=${encodeURIComponent(query.trim())}" class="hero__search-view-all">View all results for "${escapeHtml(query.trim())}" in Blog &rarr;</a>`
+        : '';
+
+      dropdown.innerHTML = `
+        <div class="hero__search-heading">${headingLabel}</div>
+        ${currentMatches
+          .map((item, idx) => {
+            const initials = escapeHtml(item.title.slice(0, 2).toUpperCase());
+            const thumb = item.logo
+              ? `<img src="${escapeHtml(item.logo)}" alt="${escapeHtml(item.title)}" loading="lazy" />`
+              : `<span>${initials}</span>`;
+            return `
+          <a href="${escapeHtml(item.url)}" class="hero__search-item ${idx === activeIdx ? 'is-active' : ''}" role="option">
+            <span class="hero__search-thumb">${thumb}</span>
+            <span class="hero__search-item-main">
+              <strong>${escapeHtml(item.title)} <span class="hero__search-item-badge ${item.type === 'Category' ? 'is-cat' : ''}">${escapeHtml(item.type)}</span></strong>
+              <small>${escapeHtml(item.subtitle)}</small>
+            </span>
+            ${item.meta ? `<span class="hero__search-item-meta">${escapeHtml(item.meta)}</span>` : ''}
+          </a>
+        `;
+          })
+          .join('')}
+        ${footerLink}
+      `;
+      openDropdown();
+      if (resetScroll) dropdown.scrollTop = 0;
+    };
+
+    input.addEventListener('focus', () => {
+      activeIdx = -1;
+      renderResults(input.value, true);
+    });
+    input.addEventListener('input', () => {
+      activeIdx = 0;
+      renderResults(input.value, true);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      activeIdx = -1;
+      renderResults('', true);
+      input.focus();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' && !dropdown.hidden && currentMatches.length) {
+        e.preventDefault();
+        activeIdx = (activeIdx + 1) % currentMatches.length;
+        renderResults(input.value, false);
+        dropdown.querySelector('.hero__search-item.is-active')?.scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp' && !dropdown.hidden && currentMatches.length) {
+        e.preventDefault();
+        activeIdx = activeIdx <= 0 ? currentMatches.length - 1 : activeIdx - 1;
+        renderResults(input.value, false);
+        dropdown.querySelector('.hero__search-item.is-active')?.scrollIntoView({ block: 'nearest' });
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (!q) {
+        document.querySelector('#discover-tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeDropdown();
+        return;
+      }
+      const chosen = activeIdx >= 0 && currentMatches[activeIdx] ? currentMatches[activeIdx] : currentMatches[0];
+      if (chosen) {
+        window.location.href = chosen.url;
+      } else {
+        window.location.href = `/blog/?q=${encodeURIComponent(q)}`;
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target as Node)) {
+        closeDropdown();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== input && !['INPUT', 'TEXTAREA'].includes((document.activeElement as HTMLElement)?.tagName || '')) {
+        e.preventDefault();
+        input.focus();
+      } else if (e.key === 'Escape') {
+        closeDropdown();
+        input.blur();
+      }
+    });
   }
 
   document.addEventListener('DOMContentLoaded', initHero);
+  document.addEventListener('astro:page-load', initHero);
   initHero();
 </script>
