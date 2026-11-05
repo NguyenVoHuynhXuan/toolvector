@@ -1,0 +1,133 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonical, ogImage, noindex = false } = Astro.props;
+
+const rawUrl = canonical || new URL(Astro.url.pathname, Astro.site || Astro.url).href;
+const formatTrailingSlash = (urlStr: string) => {
+  try {
+    const parsed = new URL(urlStr, Astro.site || Astro.url);
+    if (!parsed.pathname.endsWith('/') && !/\.[a-zA-Z0-9]+$/.test(parsed.pathname)) {
+      parsed.pathname = `${parsed.pathname}/`;
+    }
+    return parsed.href;
+  } catch {
+    return urlStr;
+  }
+};
+const canonicalURL = formatTrailingSlash(rawUrl);
+const ogImageUrl = new URL(ogImage || '/thumbnail.png', Astro.site || Astro.url).href;
+
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Favicons & Manifest -->
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- google search console -->
+ <meta name="google-site-verification" content="Lt2Ut1XR0TCkhWBUqMrqrjB3Xf0JpQx8yJidrtv_Qck" />
+<!-- End google search console -->
+
+<!-- Google analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y571C1HFFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y571C1HFFM');
+</script>
+<!-- End Google analytics -->
+
+<!-- xác minh impact -->
+<meta name='impact-site-verification' value='b8ac1ad9-0e8e-4be5-8c35-e8be695aa428'>
+<!-- xác minh impact -->
+
+<!-- Google Tag Manager -->
+{gtmId && (
+  <script is:inline define:vars={{ gtmId }}>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({
+        'gtm.start': new Date().getTime(),
+        event: 'gtm.js',
+      });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true;
+      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', gtmId);
+  </script>
+)}
+<!-- End Google Tag Manager -->
+
+<!-- Google Tag Manager (noscript) -->
+{gtmId && (
+  <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+)}
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+
+<!--avantlink -->
+<script type="text/javascript" src="http://classic.avantlink.com/affiliate_app_confirm.php?mode=js&authResponse=fd1ee0faeda2babb755742648c7988e0cd5fb766"></script>
+
+<!-- Robots -->
+{noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+{ogImageUrl && <meta property="twitter:image" content={ogImageUrl} />}
+
+
+<!-- script tracking -->
+ <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.setAttribute("data-cmp-ab","2");
+      script.src = 'https://emrldco.com/NTU4Nzky.js?t=558792';
+      document.head.appendChild(script);
+  })();
+</script>

@@ -1,0 +1,344 @@
+---
+import "../../style/layout/header.css";
+import { Image } from "astro:assets";
+import logoImg from "../../assets/logo_website.png";
+
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/' || currentPath === '';
+---
+
+<header class:list={["header", { "header--home": isHome }]}>
+  <div class="container header__container">
+    <div class="header__brand">
+      <a href="/" class="header__logo">
+        <div class="header__logo-icon">
+          <Image src={logoImg} alt="ToolVector Logo" width={40} height={40} />
+        </div>
+        <span class="header__logo-text"><strong>ToolVector</strong></span>
+      </a>
+    </div>
+
+    <div class="header__content" id="mobile-menu">
+      <!-- Phần Khung Tìm Kiếm (Search) -->
+      <div class="header__search">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.5 16.5C13.8137 16.5 16.5 13.8137 16.5 10.5C16.5 7.18629 13.8137 4.5 10.5 4.5C7.18629 4.5 4.5 7.18629 4.5 10.5C4.5 13.8137 7.18629 16.5 10.5 16.5Z"
+            stroke="#9ca3af"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M14.7422 14.7422L19.5 19.5"
+            stroke="#9ca3af"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <input type="text" placeholder="Search 4,200+ tools..." />
+      </div>
+
+      <!-- Phần Menu Điều Hướng (Navigation) -->
+      <nav class="header__nav">
+        <ul class="header__nav-list">
+          <li><a href="/#discover-tools" class:list={["header__nav-item", { active: currentPath === '/' }]}>Categories</a></li>
+          <li><a href="/#reviews" class="header__nav-item">Reviews</a></li>
+          <li><a href="/blog/" class:list={["header__nav-item", { active: currentPath.startsWith('/blog') }]}>Blog</a></li>
+          <li><a href="/about/" class:list={["header__nav-item", { active: currentPath.startsWith('/about') }]}>About</a></li>
+        </ul>
+      </nav>
+
+      <!-- Phần Nút Bấm & Hành Động (Buttons & Actions) -->
+      <div class="header__actions">
+        <!-- Desktop Theme Toggle -->
+        <button
+          class="header__theme-toggle header__theme-toggle--desktop"
+          aria-label="Toggle dark mode"
+        >
+          <svg
+            class="icon-sun"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></circle>
+            <path
+              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+          <svg
+            class="icon-moon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </button>
+        <a href="#" class="header__btn header__btn--login">Sign in</a>
+        <a href="#" class="header__btn header__btn--post">List your tool</a>
+      </div>
+    </div>
+
+    <!-- Phần Nút Bấm Cho Giao Diện Điện Thoại (Mobile Controls) -->
+    <div class="header__mobile-controls">
+      <!-- Mobile Theme Toggle -->
+      <button
+        class="header__theme-toggle header__theme-toggle--mobile"
+        aria-label="Toggle dark mode"
+      >
+        <svg
+          class="icon-sun"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></circle>
+          <path
+            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <svg
+          class="icon-moon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+
+      <button
+        class="header__menu-btn"
+        id="menu-toggle"
+        aria-label="Toggle menu"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Offcanvas Agency Drawer (CanhCam Agency Style) -->
+  <div class="header__drawer-backdrop" id="drawer-backdrop" aria-hidden="true"></div>
+  <aside class="header__drawer" id="agency-drawer" aria-label="Main Navigation Drawer">
+    <div class="header__drawer-header">
+      <a href="/" class="header__logo">
+        <div class="header__logo-icon">
+          <Image src={logoImg} alt="ToolVector Logo" width={36} height={36} />
+        </div>
+        <span class="header__logo-text"><strong>ToolVector</strong></span>
+      </a>
+      <button class="header__drawer-close" id="drawer-close" aria-label="Close navigation drawer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="header__drawer-body">
+      <!-- Quick Search inside Drawer -->
+      <div class="header__drawer-search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <input type="search" placeholder="Search tools, reviews..." id="drawer-search-input" />
+      </div>
+
+      <!-- Numbered Agency Nav (CanhCam style) -->
+      <nav class="header__drawer-nav">
+        <ul class="header__drawer-list">
+          <li class="header__drawer-item">
+            <a href="/#discover-tools" class="header__drawer-link">
+              <span class="drawer-link-number">01</span>
+              <div class="drawer-link-content">
+                <span class="drawer-link-title">Software Categories</span>
+                <span class="drawer-link-desc">Browse 4,200+ curated tools & apps</span>
+              </div>
+            </a>
+          </li>
+          <li class="header__drawer-item">
+            <a href="/#reviews" class="header__drawer-link">
+              <span class="drawer-link-number">02</span>
+              <div class="drawer-link-content">
+                <span class="drawer-link-title">Verified Reviews</span>
+                <span class="drawer-link-desc">In-depth tests, pricing & benchmarks</span>
+              </div>
+            </a>
+          </li>
+          <li class="header__drawer-item">
+            <a href="/#stats-counter" class="header__drawer-link">
+              <span class="drawer-link-number">03</span>
+              <div class="drawer-link-content">
+                <span class="drawer-link-title">Verified Signals</span>
+                <span class="drawer-link-desc">4,200+ tools & research data</span>
+              </div>
+            </a>
+          </li>
+          <li class="header__drawer-item">
+            <a href="/blog/" class="header__drawer-link">
+              <span class="drawer-link-number">04</span>
+              <div class="drawer-link-content">
+                <span class="drawer-link-title">Insights & Guides</span>
+                <span class="drawer-link-desc">Growth playbooks & industry research</span>
+              </div>
+            </a>
+          </li>
+          <li class="header__drawer-item">
+            <a href="/contact/" class="header__drawer-link">
+              <span class="drawer-link-number">05</span>
+              <div class="drawer-link-content">
+                <span class="drawer-link-title">Advisory & Contact</span>
+                <span class="drawer-link-desc">Get tailored tool recommendations</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="header__drawer-footer">
+      <a href="/contact/" class="header__btn header__btn--post" style="width: 100%; text-align: center; justify-content: center; padding: 13px;">List your tool &rarr;</a>
+      <p class="drawer-trust-note">Trusted intelligence for modern digital teams</p>
+    </div>
+  </aside>
+</header>
+
+<script>
+  // Agency Drawer Logic (Mobile & Drawer)
+  const menuToggle = document.getElementById("menu-toggle");
+  const drawerClose = document.getElementById("drawer-close");
+  const drawerBackdrop = document.getElementById("drawer-backdrop");
+  const agencyDrawer = document.getElementById("agency-drawer");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  const openDrawer = () => {
+    agencyDrawer?.classList.add("active");
+    drawerBackdrop?.classList.add("active");
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeDrawer = () => {
+    agencyDrawer?.classList.remove("active");
+    drawerBackdrop?.classList.remove("active");
+    mobileMenu?.classList.remove("active");
+    document.body.style.overflow = "";
+  };
+
+  menuToggle?.addEventListener("click", () => {
+    // If mobile drawer exists, open it directly
+    openDrawer();
+  });
+  drawerClose?.addEventListener("click", closeDrawer);
+  drawerBackdrop?.addEventListener("click", closeDrawer);
+
+  // Close drawer on link click
+  agencyDrawer?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeDrawer);
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && agencyDrawer?.classList.contains("active")) {
+      closeDrawer();
+    }
+  });
+
+  // Drawer Search handler
+  const drawerSearch = document.getElementById("drawer-search-input") as HTMLInputElement | null;
+  drawerSearch?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const val = drawerSearch.value.trim();
+      closeDrawer();
+      if (val) {
+        const heroInput = document.querySelector<HTMLInputElement>(".hero__search-input");
+        if (heroInput) {
+          heroInput.value = val;
+        }
+        document.querySelector("#discover-tools")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  });
+
+  // Scroll Detection for Header transparency / blur
+  const header = document.querySelector(".header");
+  const handleScroll = () => {
+    if (window.scrollY > 40) {
+      header?.classList.add("header--scrolled");
+    } else {
+      header?.classList.remove("header--scrolled");
+    }
+  };
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+
+  // Dark Mode Toggle Logic
+  const themeToggles = document.querySelectorAll(".header__theme-toggle");
+  themeToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+      const newTheme = isDark ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    });
+  });
+</script>

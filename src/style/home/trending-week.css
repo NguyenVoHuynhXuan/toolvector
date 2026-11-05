@@ -1,0 +1,232 @@
+/* src/style/home/trending-week.css */
+
+.trending-week {
+  scroll-margin-top: 90px;
+}
+
+.trending-week__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.trending-week__title-group {
+  text-align: left;
+}
+
+.trending-week__subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.trending-week__subtitle span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin: 0 7px 1px 0;
+  border-radius: 50%;
+  background: #2dd4bf;
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.12);
+}
+
+.trending-week__link {
+  flex: none;
+  color: var(--color-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background-color: var(--color-bg-primary-subtle);
+  border: 1px solid var(--color-border-primary-subtle);
+  transition: all var(--transition-fast);
+}
+
+.trending-week__link:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.article-feed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+/* Staggered Slide-Up Entrance Animation (Bottom to Top) */
+@keyframes trending-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.trending-card-wrapper {
+  position: relative;
+  opacity: 0;
+  will-change: transform, opacity;
+  display: flex;
+  scroll-margin-top: 110px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.trending-card-wrapper.is-visible {
+  opacity: 1;
+}
+
+.trending-card-wrapper > * {
+  width: 100%;
+}
+
+/* Sáng lên (Highlight State) khi bấm từ Marquee Bar */
+.trending-card-wrapper.is-highlighted {
+  z-index: 10;
+  opacity: 1 !important;
+}
+
+.trending-card-wrapper.is-highlighted .article-feed-card {
+  transform: translateY(-9px) scale(1.025);
+  border-color: #2563eb !important;
+  box-shadow: 
+    0 0 0 3px rgba(37, 99, 235, 0.55),
+    0 0 36px rgba(59, 130, 246, 0.52),
+    0 26px 52px -12px rgba(30, 64, 175, 0.45) !important;
+  animation: card-spotlight-pulse 2.2s infinite ease-in-out;
+}
+
+@keyframes card-spotlight-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 3px rgba(37, 99, 235, 0.55),
+      0 0 28px rgba(59, 130, 246, 0.45),
+      0 26px 50px -10px rgba(30, 64, 175, 0.4);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 5px rgba(96, 165, 250, 0.85),
+      0 0 48px rgba(59, 130, 246, 0.75),
+      0 30px 60px -8px rgba(30, 64, 175, 0.6);
+  }
+}
+
+/* Selected Pill Badge on Highlighted Card */
+.card-selected-badge {
+  position: absolute;
+  top: -12px;
+  right: 18px;
+  z-index: 25;
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-selected-badge .badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+  animation: badge-dot-pulse 1.4s infinite ease-in-out;
+}
+
+@keyframes badge-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.65; }
+}
+
+.trending-card-wrapper.is-highlighted .card-selected-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Dark Mode Adjustments */
+:root[data-theme="dark"] .trending-week .section-title,
+:global([data-theme="dark"]) .trending-week .section-title {
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .trending-week__subtitle,
+:global([data-theme="dark"]) .trending-week__subtitle {
+  color: #cbd5e1 !important;
+}
+
+:root[data-theme="dark"] .trending-week__link,
+:global([data-theme="dark"]) .trending-week__link {
+  background-color: rgba(30, 58, 138, 0.4);
+  border-color: rgba(96, 165, 250, 0.3);
+  color: #93c5fd;
+}
+
+:root[data-theme="dark"] .trending-week__link:hover,
+:global([data-theme="dark"]) .trending-week__link:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .trending-card-wrapper.is-highlighted .article-feed-card {
+  border-color: #60a5fa !important;
+  box-shadow: 
+    0 0 0 3px rgba(96, 165, 250, 0.6),
+    0 0 42px rgba(59, 130, 246, 0.65),
+    0 28px 55px -10px rgba(0, 0, 0, 0.75) !important;
+}
+
+:global([data-theme="dark"]) .card-selected-badge {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 18px rgba(59, 130, 246, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trending-card-wrapper {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  .trending-card-wrapper.is-highlighted .article-feed-card {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .article-feed-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .trending-week__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .article-feed-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}

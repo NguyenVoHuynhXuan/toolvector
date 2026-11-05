@@ -1,0 +1,45 @@
+---
+import "../../style/home/future-tool.css";
+import { futureDealsData } from "../../data/futureDeals";
+---
+
+<section class="section future-tool">
+    <div class="container">
+        <!-- Header -->
+        <div class="section-header future-tool__header">
+            <div class="future-tool__title-group">
+                <h2 class="section-title">Featured deals</h2>
+                <p class="section-subtitle future-tool__subtitle">
+                    Exclusive discounts negotiated with our partners.
+                </p>
+            </div>
+            <a href="#" class="future-tool__link">All deals &rarr;</a>
+        </div>
+
+        <!-- Grid -->
+        <div class="future-tool__grid">
+            {
+                futureDealsData.map((deal) => (
+                    <a href={deal.link} class="future-card">
+                        <div
+                            class="future-card__badge"
+                            style={`background-color: ${deal.badgeColor};`}
+                        >
+                            <span class="future-card__badge-top">
+                                {deal.badgeTop}
+                            </span>
+                            <span class="future-card__badge-bottom">
+                                {deal.badgeBottom}
+                            </span>
+                        </div>
+
+                        <div class="future-card__info">
+                            <h3 class="future-card__title">{deal.title}</h3>
+                            <p class="future-card__subtitle">{deal.subtitle}</p>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</section>

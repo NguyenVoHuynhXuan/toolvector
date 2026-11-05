@@ -1,0 +1,41 @@
+---
+import "../../style/home/blog.css";
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+const allPosts = await getCollection('blog');
+const displayPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .slice(0, 4);
+---
+
+<section class="section blog">
+  <div class="container">
+    <div class="section-header blog__header">
+      <div class="blog__title-group">
+        <h2 class="section-title">Ideas worth sharing</h2>
+        <p class="section-subtitle blog__subtitle">Field notes, practical playbooks and opinions from the software world.</p>
+      </div>
+      <a href="/blog/" class="blog__link">Visit blog &rarr;</a>
+    </div>
+
+    <div class="blog__grid">
+      {displayPosts.map((post, index) => (
+        <a href={`/blog/${post.id}/`} class:list={['blog-card', { 'blog-card--featured': index === 0 }]}>
+          <div class="blog-card__cover">
+            {post.data.logo ? (
+              <Image src={post.data.logo} alt={post.data.name || ''} class="blog-card__image" />
+            ) : (
+              <span class="blog-card__index">0{index + 1}</span>
+            )}
+            <span class="blog-card__category">{post.data.serviceType || post.data.foodType || 'Review'}</span>
+          </div>
+          <div class="blog-card__body">
+            <h3 class="blog-card__title">{post.data.name}</h3>
+            <p class="blog-card__meta">{post.data.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

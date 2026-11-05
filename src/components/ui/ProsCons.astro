@@ -1,0 +1,143 @@
+---
+interface Props { pros: string[]; cons: string[]; }
+const { pros = [], cons = [] } = Astro.props;
+---
+
+<section class="pros-cons" aria-label="Pros and cons">
+  <div class="pros-cons__column pros-cons__column--pros">
+    <div class="pros-cons__icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+    </div>
+    <h3>What We Liked (Pros)</h3>
+    <ul>
+      {pros.map((pro) => (
+        <li>
+          <span class="pros-cons__list-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </span>
+          <span class="pros-cons__text">{pro}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div class="pros-cons__column pros-cons__column--cons">
+    <div class="pros-cons__icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2"></path></svg>
+    </div>
+    <h3>Areas for Improvement (Cons)</h3>
+    <ul>
+      {cons.map((con) => (
+        <li>
+          <span class="pros-cons__list-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </span>
+          <span class="pros-cons__text">{con}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin: 50px 0;
+  }
+  
+  .pros-cons__column {
+    position: relative;
+    padding: 35px 25px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .pros-cons__column--pros {
+    background: #f4fdf8;
+    border: 2px solid #16a34a;
+  }
+  
+  .pros-cons__column--cons {
+    background: #fdf5f5;
+    border: 2px solid #dc2626;
+  }
+  
+  .pros-cons__icon-wrapper {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-width: 2px;
+    border-style: solid;
+  }
+  
+  .pros-cons__column--pros .pros-cons__icon-wrapper {
+    border-color: #16a34a;
+    color: #16a34a;
+  }
+  
+  .pros-cons__column--cons .pros-cons__icon-wrapper {
+    border-color: #dc2626;
+    color: #dc2626;
+  }
+  
+  .pros-cons h3 {
+    text-align: center;
+    margin: 0 0 20px;
+    color: var(--color-text-dark);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  .pros-cons ul {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .pros-cons li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--color-text-dark);
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+  
+  .pros-cons__list-icon {
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  
+  :global([data-theme="dark"]) .pros-cons__column--pros {
+    background: #142a2a;
+    box-shadow: none;
+  }
+  
+  :global([data-theme="dark"]) .pros-cons__column--cons {
+    background: #2a161b;
+    box-shadow: none;
+  }
+  
+  :global([data-theme="dark"]) .pros-cons__icon-wrapper {
+    background: var(--color-bg-base);
+  }
+  
+  @media (max-width: 768px) {
+    .pros-cons {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+</style>

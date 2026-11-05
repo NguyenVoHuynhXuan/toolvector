@@ -1,0 +1,68 @@
+---
+import smartMatchBg from '../../assets/hero_bg2.jpg';
+const needs = [
+  { id: 'growth', label: 'Grow marketing', icon: '↗' },
+  { id: 'collaborate', label: 'Work together', icon: '⌘' },
+  { id: 'automate', label: 'Automate workflows', icon: '✦' },
+];
+---
+
+<section class="smart-match section" id="smart-match" style={`--smart-match-bg: url('${smartMatchBg.src}')`}>
+  <div class="container smart-match__shell">
+    <div class="smart-match__copy">
+      <span class="eyebrow">YOUR PERSONAL SHORTLIST</span>
+      <h2>Skip the tabs.<br /><em>Find your fit.</em></h2>
+      <p>Tell us what you are trying to solve. Our match engine turns thousands of signals into a focused shortlist.</p>
+      <div class="smart-match__proof"><span>4,218</span> tools, filtered for your exact workflow</div>
+    </div>
+
+    <div class="match-panel">
+      <div class="match-panel__head"><span><i></i> SMART MATCH</span><b>Step <strong>1</strong> of 3</b></div>
+      <h3>What is your team optimizing for?</h3>
+      <div class="match-panel__choices">
+        {needs.map((need, index) => <button class:list={['match-choice', { 'is-selected': index === 0 }]} type="button" data-need={need.id}><i>{need.icon}</i><span>{need.label}</span><b>+</b></button>)}
+      </div>
+      <div class="match-panel__result" aria-live="polite">
+        <div class="result-avatars"><span>H</span><span>S</span><span>C</span></div>
+        <p><strong>12 strong matches</strong><small>based on team fit and value</small></p>
+        <button type="button" class="match-panel__next">See my shortlist <span>→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initSmartMatch() {
+    const panel = document.querySelector<HTMLElement>('.match-panel');
+    if (!panel || panel.dataset.ready) return;
+    panel.dataset.ready = 'true';
+    const result = panel.querySelector('.match-panel__result strong');
+    const labels: Record<string, string> = { growth: '12 strong matches', collaborate: '9 strong matches', automate: '16 strong matches' };
+    panel.querySelectorAll<HTMLButtonElement>('.match-choice').forEach((choice) => {
+      choice.addEventListener('click', () => {
+        panel.querySelectorAll('.match-choice').forEach((item) => item.classList.remove('is-selected'));
+        choice.classList.add('is-selected');
+        if (result) result.textContent = labels[choice.dataset.need || 'growth'];
+      });
+    });
+  }
+  initSmartMatch();
+  document.addEventListener('astro:page-load', initSmartMatch);
+</script>
+
+<style>
+  .smart-match { background:linear-gradient(90deg,rgba(245,243,255,.97) 0%,rgba(250,250,255,.92) 45%,rgba(236,254,255,.58)),var(--smart-match-bg); background-position:center; background-size:cover; overflow:hidden; }
+  :global([data-theme="dark"]) .smart-match { background:linear-gradient(145deg,#11162e,#10162d); }
+  .smart-match__shell { display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(44px,9vw,140px); align-items:center; }
+  .eyebrow { display:block; margin-bottom:15px; color:#635bdb; font-size:.68rem; font-weight:850; letter-spacing:.14em; }
+  .smart-match__copy h2 { margin:0; color:var(--color-text-dark); font-size:clamp(2.5rem,4.1vw,4.4rem); line-height:.96; letter-spacing:-.075em; }.smart-match__copy h2 em { font-style:normal; color:#635bdb; }
+  .smart-match__copy > p { max-width:470px; margin:25px 0; color:var(--color-text-muted); font-size:1.05rem; line-height:1.7; }.smart-match__proof { display:flex; align-items:center; gap:9px; color:var(--color-text-muted); font-size:.78rem; font-weight:650; }.smart-match__proof span { color:var(--color-text-dark); font-size:1.1rem; font-weight:850; }
+  .match-panel { position:relative; padding:24px; border:1px solid rgba(99,91,219,.15); border-radius:24px; background:rgba(255,255,255,.86); box-shadow:0 30px 65px -34px rgba(73,63,169,.38),inset 0 1px rgba(255,255,255,.9); backdrop-filter:blur(14px); }.match-panel::after { content:""; position:absolute; width:180px; height:180px; right:-75px; bottom:-85px; border-radius:50%; background:#a5f3fc; filter:blur(12px); opacity:.55; z-index:-1; }
+  :global([data-theme="dark"]) .match-panel { background:rgba(23,29,55,.85); }.match-panel__head { display:flex; justify-content:space-between; color:#8390a9; font-size:.66rem; font-weight:750; letter-spacing:.08em; }.match-panel__head > span { display:flex; align-items:center; gap:7px; color:#635bdb; }.match-panel__head i { width:7px; height:7px; border-radius:50%; background:#2dd4bf; }.match-panel__head strong { color:#635bdb; }.match-panel h3 { margin:22px 0 17px; color:var(--color-text-dark); font-size:1.2rem; letter-spacing:-.035em; }
+  .match-panel__choices { display:grid; gap:10px; }.match-choice { display:flex; align-items:center; width:100%; gap:12px; padding:13px; border:1px solid var(--color-border-base); border-radius:13px; background:var(--color-bg-base); color:var(--color-text-dark); text-align:left; cursor:pointer; transition:.23s ease; }.match-choice i { width:29px; height:29px; display:grid; place-items:center; border-radius:9px; background:#f1efff; color:#635bdb; font-size:.9rem; font-style:normal; }.match-choice span { flex:1; font:700 .83rem inherit; }.match-choice b { font-size:1rem; color:#94a3b8; font-weight:400; }.match-choice:hover,.match-choice.is-selected { border-color:#8b83ec; background:#f8f7ff; transform:translateX(4px); box-shadow:0 7px 14px -12px #4338ca; }.match-choice.is-selected b { color:#635bdb; transform:rotate(45deg); }
+  :global([data-theme="dark"]) .match-choice:hover, :global([data-theme="dark"]) .match-choice.is-selected { background:rgba(99,91,219,.15); border-color:#635bdb; }
+  :global([data-theme="dark"]) .match-choice i { background:rgba(99,91,219,.15); color:#a7a0f8; }
+  .match-panel__result { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px; margin-top:20px; padding:13px 0 0; border-top:1px solid var(--color-border-subtle); }.result-avatars { display:flex; }.result-avatars span { width:25px; height:25px; display:grid; place-items:center; margin-right:-7px; border:2px solid var(--color-bg-base); border-radius:50%; background:#635bdb; color:#fff; font-size:.56rem; font-weight:800; }.result-avatars span:nth-child(2) { background:#f97316; }.result-avatars span:nth-child(3) { background:#0ea5e9; }.match-panel__result p { margin:0 0 0 4px; }.match-panel__result strong,.match-panel__result small { display:block; }.match-panel__result strong { color:var(--color-text-dark); font-size:.73rem; }.match-panel__result small { margin-top:3px; color:var(--color-text-muted); font-size:.62rem; }.match-panel__next { padding:8px 10px; border:0; border-radius:8px; background:#161d39; color:#fff; font:700 .68rem inherit; cursor:pointer; }.match-panel__next span { margin-left:3px; color:#7ce7d7; }
+  @media (max-width:850px) { .smart-match__shell { grid-template-columns:1fr; gap:35px; }.smart-match__copy { text-align:center; }.smart-match__copy > p { margin-left:auto; margin-right:auto; }.smart-match__proof { justify-content:center; } }
+  @media (max-width:480px) { .match-panel { padding:18px; }.match-panel__result { grid-template-columns:auto 1fr; }.match-panel__next { grid-column:1/-1; width:100%; }.smart-match__proof { font-size:.7rem; } }
+</style>

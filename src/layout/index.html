@@ -1,0 +1,330 @@
+<style>
+    /* Import Font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* Wrapper - Dùng để thay thế body, chứa toàn bộ nội dung */
+    .home_wrapper {
+        font-family: 'Inter', sans-serif;
+        background-color: #0d1b2a;
+        background-image: url('https://bolanpingtai.com/wp-content/uploads/2026/07/Untitled-design.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow-x: hidden;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    /* Container - Căn giữa nội dung và giới hạn chiều rộng */
+    .home_container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0px 0px;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Header - Chứa Logo, Nav và các nút thao tác */
+    .home_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 32px 0;
+        width: 100%;
+    }
+
+    /* Logo */
+    .home_logo {
+        font-size: 24px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Navigation Links */
+    .home_nav {
+        display: flex;
+        gap: 32px;
+    }
+
+    .home_nav_link {
+        color: #a0aec0;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .home_nav_link:hover {
+        color: #ffffff;
+    }
+
+    /* Header Actions (Login / Signup) */
+    .home_header_actions {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .home_login_btn {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .home_signup_btn {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 24px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .home_signup_btn:hover {
+        border-color: #60a5fa;
+        background: rgba(96, 165, 250, 0.1);
+    }
+
+    /* Main Section - Hero area chứa text và ảnh */
+    .home_main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px 0 60px 0;
+        /* Thay vì dùng flex: 1 đẩy footer xuống đáy, ta dùng padding cụ thể */
+        gap: 40px;
+    }
+
+    /* Cột bên trái - Chứa tiêu đề và mô tả */
+    .home_content_left {
+        flex: 1;
+        max-width: 600px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Tiêu đề chính */
+    .home_headline {
+        font-size: 64px;
+        font-weight: 700;
+        line-height: 1.15;
+        margin: 0 0 24px 0;
+    }
+
+    /* Mô tả bên dưới tiêu đề */
+    .home_description {
+        font-size: 16px;
+        color: #a0aec0;
+        line-height: 1.6;
+        margin: 0 0 40px 0;
+        max-width: 500px;
+    }
+
+    /* Nhóm nút Call to Action */
+    .home_cta_group {
+        display: flex;
+        gap: 16px;
+    }
+
+    /* Nút Primary (Get It Now) */
+    .home_btn_primary {
+        background: linear-gradient(135deg, #7cb8ff, #408dfa);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(64, 141, 250, 0.3);
+        transition: transform 0.2s ease;
+    }
+
+    .home_btn_primary:hover {
+        transform: translateY(-2px);
+        color: white !important;
+    }
+
+    /* Nút Secondary (Download App) */
+    .home_btn_secondary {
+        background: transparent;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .home_btn_secondary:hover {
+        border-color: #60a5fa;
+        background: rgba(96, 165, 250, 0.05);
+        color: white !important;
+    }
+
+    /* Cột bên phải - Chứa ánh sáng */
+    .home_content_right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Hiệu ứng ánh sáng xanh mờ */
+    .home_hero_glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-40%, -40%);
+        width: 75%;
+        height: 75%;
+        background: radial-gradient(circle, rgba(64, 141, 250, 0.45) 0%, rgba(64, 141, 250, 0) 70%);
+        z-index: -1;
+        border-radius: 50%;
+        filter: blur(50px);
+        pointer-events: none;
+    }
+
+    /* --- RESPONSIVE CSS --- */
+
+    /* Tablet & Màn hình nhỏ */
+    @media (max-width: 1024px) {
+        .home_headline {
+            font-size: 48px;
+        }
+
+        .home_hero_img {
+            max-width: 100%;
+            transform: translateX(0);
+        }
+    }
+
+    /* Mobile dọc */
+    @media (max-width: 768px) {
+        .home_nav {
+            display: none;
+        }
+
+        .home_main {
+            flex-direction: column;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .home_content_left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .home_description {
+            text-align: center;
+        }
+    }
+
+    /* Mobile nhỏ */
+    @media (max-width: 480px) {
+        .home_header_actions {
+            display: none;
+        }
+
+        .home_headline {
+            font-size: 36px;
+        }
+
+        .home_cta_group {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .home_btn_primary,
+        .home_btn_secondary {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .home_feature {
+            max-width: 100%;
+        }
+
+        .home_stats_container {
+            flex-direction: column;
+        }
+    }
+
+    /* Mobile nhỏ */
+    @media (max-width: 480px) {
+        .home_header_actions {
+            display: none;
+        }
+
+        .home_headline {
+            font-size: 36px;
+        }
+
+        .home_cta_group {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .home_btn_primary,
+        .home_btn_secondary {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .home_feature {
+            max-width: 100%;
+        }
+
+        .home_stats_container {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<!-- Wrapper chính để style thay cho body -->
+<div class="home_wrapper">
+    <div class="home_container">
+
+
+        <!-- Phần Main Content -->
+        <main class="home_main">
+            <!-- Nội dung bên trái -->
+            <div class="home_content_left">
+                <div class="home_headline">Find And Compare The Best AI Tools</div>
+                <div class="home_description">
+                    Compare top AI tools for writing, design, coding, SEO, and automation with honest reviews and
+                    practical guides.
+                </div>
+                <div class="home_cta_group">
+                    <a href="#" class="home_btn_primary">Explore Tools</a>
+                    <a href="#" class="home_btn_secondary">Read Reviews</a>
+                </div>
+            </div>
+
+            <!-- Hình ảnh bên phải (sử dụng hinh2.png) -->
+            <div class="home_content_right">
+                <div class="home_hero_glow"></div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+---
+// src/components/home/StatsCounter.astro
+import '../../style/home/stats-counter.css';
+
+const stats = [
+  {
+    target: 4218,
+    suffix: "+",
+    hasComma: true,
+    label: "Tools indexed",
+    desc: "Across AI, SEO, marketing, business and more"
+  },
+  {
+    target: 318,
+    suffix: "k+",
+    hasComma: false,
+    label: "Verified signals",
+    desc: "Features, pricing and user feedback behind every rating"
+  },
+  {
+    target: 1940,
+    suffix: "+",
+    hasComma: true,
+    label: "Head-to-head comparisons",
+    desc: "Side-by-side, on the same criteria"
+  },
+  {
+    target: 96,
+    suffix: "%",
+    hasComma: false,
+    label: "Found a better fit",
+    desc: "Readers who discovered a tool that suited them better"
+  }
+];
+---
+
+<section class="stats-counter" id="stats-counter" aria-label="ToolVector impact metrics">
+  <!-- Subtle Architectural Grid Lanes matching CanhCam agency style -->
+  <div class="stats-counter__lanes-wrapper" aria-hidden="true">
+    <div class="container stats-counter__lanes-container">
+      <div class="stats-counter__lanes">
+        <div class="stats-counter__lane"></div>
+        <div class="stats-counter__lane"></div>
+        <div class="stats-counter__lane"></div>
+        <div class="stats-counter__lane"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container stats-counter__container">
+    <!-- Header -->
+    <div class="stats-counter__header">
+      <h2 class="stats-counter__title">The Numbers That Build Trust</h2>
+      <p class="stats-counter__subtitle">
+        ToolVector provides <strong>independent, research-backed software evaluations</strong>. Our dedicated editorial team analyzes thousands of data signals to help teams choose software with complete confidence.
+      </p>
+    </div>
+
+    <!-- 4-Column Statistics Grid -->
+    <div class="stats-counter__grid-wrapper">
+      <div class="stats-counter__grid">
+        {
+          stats.map((item, index) => (
+            <div class="stat-card" data-index={index} title="Click to replay animation">
+              <div class="stat-card__number-wrap">
+                <span 
+                  class="stat-card__number stat-counter" 
+                  data-target={item.target} 
+                  data-suffix={item.suffix}
+                  data-comma={item.hasComma ? "true" : "false"}
+                  data-delay={index * 140}
+                >
+                  <span class="stat-counter__value">0</span><span class="stat-counter__suffix">{item.suffix}</span>
+                </span>
+              </div>
+              <h3 class="stat-card__label">{item.label}</h3>
+              <p class="stat-card__desc">{item.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initStatsCounter() {
+    const section = document.querySelector('.stats-counter');
+    if (!section) return;
+
+    const counters = section.querySelectorAll<HTMLElement>('.stat-counter');
+    if (!counters.length) return;
+
+    // Check if already initialized on this DOM element
+    if (section.getAttribute('data-counter-initialized') === 'true') return;
+    section.setAttribute('data-counter-initialized', 'true');
+
+    /**
+     * Animate a single counter element
+     */
+    function animateCounter(el: HTMLElement, delay: number = 0) {
+      const target = parseInt(el.dataset.target || '0', 10);
+      const hasComma = el.dataset.comma === 'true';
+      const valSpan = el.querySelector<HTMLElement>('.stat-counter__value');
+      if (!valSpan) return;
+
+      // Reset state
+      el.classList.remove('is-finished');
+      el.classList.add('is-counting');
+
+      const duration = 1800; // ms
+
+      setTimeout(() => {
+        const startTime = performance.now();
+
+        function tick(currentTime: number) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          // Easing: easeOutExpo for high-energy initial spin and smooth landing
+          const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          const currentVal = Math.round(easeProgress * target);
+
+          const formatted = hasComma
+            ? currentVal.toLocaleString('en-US')
+            : currentVal.toString();
+
+          if (valSpan) {
+            valSpan.textContent = formatted;
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            const finalFormatted = hasComma ? target.toLocaleString('en-US') : target.toString();
+            if (valSpan) {
+              valSpan.textContent = finalFormatted;
+            }
+            el.classList.remove('is-counting');
+            el.classList.add('is-finished');
+            setTimeout(() => {
+              el.classList.remove('is-finished');
+            }, 700);
+          }
+        }
+
+        requestAnimationFrame(tick);
+      }, delay);
+    }
+
+    let hasTriggered = false;
+
+    function triggerAll() {
+      if (hasTriggered) return;
+      hasTriggered = true;
+
+      counters.forEach((el, index) => {
+        const delay = parseInt(el.dataset.delay || `${index * 140}`, 10);
+        animateCounter(el, delay);
+      });
+    }
+
+    // IntersectionObserver to start counting when scrolled into viewport
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          triggerAll();
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    observer.observe(section);
+
+    // Fallback: If section is already within viewport on load
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setTimeout(triggerAll, 150);
+    }
+
+    // Interactive Replay: Clicking on any stat card triggers replay
+    counters.forEach(el => {
+      const card = el.closest('.stat-card');
+      if (card) {
+        card.addEventListener('click', () => {
+          animateCounter(el, 0);
+        });
+      }
+    });
+  }
+
+  // Initialize on load and Astro page transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStatsCounter);
+  } else {
+    initStatsCounter();
+  }
+  document.addEventListener('astro:page-load', initStatsCounter);
+</script>

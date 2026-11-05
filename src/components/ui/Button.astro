@@ -1,0 +1,43 @@
+---
+interface Props {
+  link: string;
+  text: string;
+  bg?: string;
+  color?: string;
+}
+
+const { 
+  link, 
+  text,
+  bg = "#07371f",
+  color = "#fff"
+} = Astro.props;
+---
+
+<a href={link} target="_blank" rel="noopener noreferrer sponsored" class="inline-btn" style={`background-color: ${bg}; color: ${color};`}>
+  {text}
+</a>
+
+<style>
+  .inline-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 50px;
+    margin: 1.5rem 0;
+    padding: 0 24px;
+    font-weight: 800;
+    border-radius: 7px;
+    text-decoration: none !important;
+    font-size: .95rem;
+    font-family: system-ui,sans-serif;
+    transition: transform .2s, opacity .2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .inline-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+</style>

@@ -1,0 +1,94 @@
+/* src/style/home/compare-tool.css */
+/* Utilizes global .section, .container classes */
+
+.compare-tool__banner {
+    background: linear-gradient(115deg, #171b45, #312566 56%, #133a61);
+    border-radius: 22px;
+    padding: 32px 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    border: 1px solid rgba(196,181,253,.28);
+    box-shadow: 0 22px 45px -25px #312e81;
+}
+
+.compare-tool__participants {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-extrabold);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.compare-tool__vs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: rgba(255,255,255,.14);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    color: #c7d2fe;
+    box-shadow: var(--shadow-sm);
+}
+
+.compare-tool__desc {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 500px;
+}
+
+.compare-tool__btn {
+    background-color: #fff;
+    color: #312e81;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.875rem;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+    border: none;
+}
+
+.compare-tool__btn:hover {
+    transform: translateY(-1px);
+    background-color: #e0e7ff;
+    box-shadow: 0 8px 22px rgba(15,23,42,.3);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .compare-tool__banner {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .compare-tool__banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+    }
+
+    .compare-tool__desc {
+        max-width: 100%;
+    }
+
+    .compare-tool__btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

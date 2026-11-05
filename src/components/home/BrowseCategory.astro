@@ -1,0 +1,135 @@
+---
+import "../../style/home/browse-category.css";
+import { categories } from "../../data/categories";
+
+function slugify(text: string) {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/&/g, '-and-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+}
+---
+
+<section class="section browse-category" id="discover-tools">
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header browse-category__header">
+      <div class="browse-category__title-group">
+        <span class="browse-category__eyebrow">DISCOVER</span>
+        <h2 class="section-title">Browse by category</h2>
+        <p class="section-subtitle">
+          Jump straight to the tools built for your workflow.
+        </p>
+      </div>
+      <a href="/category/ai-software-and-ai-agents/" class="browse-category__link">
+        All categories
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+
+    <!-- CanhCam Architectural Grid with Large Unblocked Images -->
+    <div class="browse-category__grid">
+      {
+        categories.map((category, index) => {
+          const delay = (0.08 + (index % 6) * 0.08).toFixed(2);
+          return (
+            <div
+              class="category-item"
+              data-animate={`canhcam-fade-in 0.9s cubic-bezier(0.45, 0, 0.14, 1.03) both ${delay}s`}
+              style={`--item-delay: ${delay}s;`}
+            >
+              <a href={`/category/${slugify(category.title)}/`} class="category-item__link">
+                <!-- Media / Zoom image (taller aspect ratio, object-position center 15% so heads are not cropped) -->
+                <div class="category-item__media zoom-img">
+                  <div class="category-item__ratio">
+                    <img
+                      src={category.bgImage}
+                      alt={category.title}
+                      loading="lazy"
+                      class="category-item__img"
+                    />
+                  </div>
+                </div>
+
+                <!-- Unblocked bottom gradient info card (image stays 100% visible on top) -->
+                <div class="category-item__info">
+                  <div class="category-item__badge-row">
+                    <span class="category-item__badge">{category.count}</span>
+                  </div>
+                  <h3 class="category-item__title">{category.title}</h3>
+                  <div class="category-item__action">
+                    <span>Explore category</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </div>
+          );
+        })
+      }
+
+      <!-- 12th item: Explore all categories to make a perfect 3-column architectural grid -->
+      <div
+        class="category-item category-item--view-all"
+        data-animate={`canhcam-fade-in 0.9s cubic-bezier(0.45, 0, 0.14, 1.03) both 0.5s`}
+        style="--item-delay: 0.5s;"
+      >
+        <a href="/category/ai-software-and-ai-agents/" class="category-item__link category-item__link--more">
+          <div class="category-item__more-inner">
+            <div class="category-item__more-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
+            <h3 class="category-item__title">Explore All Categories</h3>
+            <p class="category-item__count">4,200+ Software & Tools</p>
+            <span class="category-item__btn">
+              View Directory &rarr;
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupCategoryAnimate() {
+    const items = document.querySelectorAll('.browse-category .category-item');
+    if (!items.length) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const anim = el.getAttribute('data-animate');
+          if (anim) {
+            el.style.animation = anim;
+          }
+          el.classList.add('is-visible');
+          obs.unobserve(el);
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -8% 0px',
+      threshold: 0.1
+    });
+
+    items.forEach(item => observer.observe(item));
+  }
+
+  setupCategoryAnimate();
+  document.addEventListener('astro:page-load', setupCategoryAnimate);
+</script>

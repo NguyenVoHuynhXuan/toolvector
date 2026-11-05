@@ -1,0 +1,57 @@
+---
+// src/components/home/Hero.astro
+import '../../style/home/hero.css';
+---
+
+<section class="hero" id="hero-top" aria-labelledby="hero-title">
+  <!-- Video Background (CanhCam agency style) -->
+  <div class="hero__video-wrapper" aria-hidden="true">
+    <video class="hero__video" autoplay loop muted playsinline>
+      <source src="/video_bg.mp4" type="video/mp4" />
+    </video>
+    <div class="hero__video-overlay"></div>
+  </div>
+
+  <!-- Horizontal Architectural Grid Line -->
+  <div class="hero__hline" aria-hidden="true"></div>
+
+  <!-- Subtle Vertical Architectural Grid Lanes (4 columns aligned with content) -->
+  <div class="hero__lanes-wrapper" aria-hidden="true">
+    <div class="container hero__lanes-container">
+      <div class="hero__lanes">
+        <div class="hero__lane"></div>
+        <div class="hero__lane"></div>
+        <div class="hero__lane"></div>
+        <div class="hero__lane"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center Main Content -->
+  <div class="container hero__container">
+    <div class="hero__copy">
+      <h1 class="hero__title" id="hero-title">
+        Choose your next<br />
+        <span class="hero__title-line2">software advantage.</span>
+      </h1>
+
+      <p class="hero__description">
+        Discover the tools your team will love, compare every important detail,<br />
+        & make confident decisions!
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initHero() {
+    const video = document.querySelector<HTMLVideoElement>('.hero__video');
+    if (video) {
+      video.muted = true;
+      video.play().catch(() => {});
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initHero);
+  initHero();
+</script>

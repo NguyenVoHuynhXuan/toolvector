@@ -1,0 +1,27 @@
+---
+import Layout from "../layout/Layout.astro";
+import Hero from "../components/home/Hero.astro";
+import IntroStatement from "../components/home/IntroStatement.astro";
+import BrowseCategory from "../components/home/BrowseCategory.astro";
+import StatsCounter from "../components/home/StatsCounter.astro";
+import TrustMarquee from "../components/home/TrustMarquee.astro";
+import TrendingWeek from "../components/home/TrendingWeek.astro";
+import AffiliateRankings from "../components/home/AffiliateRankings.astro";
+import Testimonials from "../components/home/Testimonials.astro";
+---
+
+<Layout
+	title="ToolVector: Independent & Transparent Software Reviews"
+	description="Honest, research-based software reviews covering features, security, pricing, and real drawbacks. Choose the right tool for your team with confidence."
+>
+	<main>
+		<Hero />
+		<div class="reveal"><StatsCounter /></div>
+		<TrustMarquee />
+		<IntroStatement />
+		<div class="reveal"><BrowseCategory /></div>
+		<div class="reveal"><TrendingWeek /></div>
+		<div class="reveal"><AffiliateRankings /></div>
+		<div class="reveal"><Testimonials /></div>
+	</main>
+</Layout>

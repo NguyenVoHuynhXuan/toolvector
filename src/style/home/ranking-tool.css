@@ -1,0 +1,211 @@
+/* src/style/home/ranking-tool.css */
+/* Utilizes global .section, .container classes */
+
+.ranking-tool {
+    scroll-margin-top: 90px;
+}
+
+/* Header */
+.ranking-tool__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 32px;
+}
+
+.ranking-tool__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+}
+
+.ranking-tool__subtitle {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.ranking-tool__link {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color var(--transition-fast);
+}
+
+.ranking-tool__link:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Grid */
+.ranking-tool__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.live-update-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-success);
+    background-color: rgba(16, 185, 129, 0.1);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    margin-left: 12px;
+    vertical-align: middle;
+}
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-success);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Card */
+.ranking-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg-base);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.ranking-card:hover {
+    border-color: var(--color-border-focus);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.1);
+}
+
+:root[data-theme="dark"] .ranking-card:hover {
+    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.5);
+}
+
+.ranking-card__rank {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-extrabold);
+    color: var(--color-text-muted);
+    width: 48px;
+    flex-shrink: 0;
+}
+
+/* Rank 1 special color */
+.ranking-card:nth-child(1) .ranking-card__rank {
+    color: #f59e0b;
+    /* Orange/Gold for #1 */
+}
+
+/* Rank 2 & 3 slightly darker */
+.ranking-card:nth-child(2) .ranking-card__rank,
+.ranking-card:nth-child(3) .ranking-card__rank {
+    color: var(--color-text-subtle);
+}
+
+.ranking-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ranking-card__name {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-dark);
+    margin: 0;
+}
+
+.ranking-card__desc {
+    font-size: 1rem;
+    color: #000;
+    margin: 0;
+}
+
+.ranking-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+.ranking-card__score {
+    background-color: #5b21b6;
+    /* Purple matching design */
+    color: #ffffff;
+    font-weight: var(--font-weight-bold);
+    font-size: 0.875rem;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:root[data-theme="dark"] .ranking-card__score {
+    background-color: #7c3aed;
+}
+
+.ranking-card__btn {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-dark);
+    background: transparent;
+    border: 1px solid var(--color-border-focus);
+    padding: 6px 16px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.ranking-card:hover .ranking-card__btn {
+    background-color: var(--color-bg-muted);
+    border-color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .ranking-tool__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .ranking-tool {
+        padding: 48px 0;
+    }
+
+    .ranking-tool__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .ranking-card {
+        padding: 16px;
+    }
+
+    .ranking-card__rank {
+        width: 32px;
+        font-size: 1.25rem;
+    }
+
+    .ranking-card__actions {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+}

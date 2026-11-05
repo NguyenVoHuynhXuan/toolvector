@@ -1,0 +1,417 @@
+/* src/style/home/browse-category.css */
+/* CanhCam Architectural Grid with Large, Unblocked Images */
+
+.browse-category {
+  scroll-margin-top: 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.browse-category__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Header */
+.browse-category__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.browse-category__title-group {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.browse-category__eyebrow {
+  display: inline-block;
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.browse-category__title-group .section-title {
+  text-align: left;
+  margin: 0 0 10px 0;
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: -0.04em;
+  color: var(--color-text-dark);
+}
+
+.browse-category__title-group .section-subtitle {
+  text-align: left;
+  margin: 0;
+  max-width: 600px;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.browse-category__link {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background-color: var(--color-bg-primary-subtle);
+  border: 1px solid var(--color-border-primary-subtle);
+  transition: all var(--transition-fast);
+}
+
+.browse-category__link:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.browse-category__link svg {
+  transition: transform var(--transition-fast);
+}
+
+.browse-category__link:hover svg {
+  transform: translateX(3px);
+}
+
+/* ========================================================
+   CANHCAM SIGNATURE ARCHITECTURAL GRID
+   ======================================================== */
+:root {
+  --canhcam-grid-border: rgba(228, 230, 242, 0.55);
+}
+
+:root[data-theme="dark"] {
+  --canhcam-grid-border: rgba(255, 255, 255, 0.12);
+}
+
+.browse-category__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--canhcam-grid-border);
+  border-left: 1px solid var(--canhcam-grid-border);
+  position: relative;
+  background-color: var(--color-bg-base);
+}
+
+/* Entrance Keyframe (Smooth CanhCam cubic-bezier curve) */
+@keyframes canhcam-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Category Grid Item */
+.category-item {
+  position: relative;
+  border-right: 1px solid var(--canhcam-grid-border);
+  border-bottom: 1px solid var(--canhcam-grid-border);
+  overflow: hidden;
+  background-color: #080e1c;
+  opacity: 0; /* Animated by IntersectionObserver */
+  will-change: transform, opacity;
+}
+
+.category-item.is-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-item {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+.category-item__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  color: inherit;
+}
+
+/* ========================================================
+   IMAGE RATIO & SIZING (Taller aspect ratio, NOT cropped)
+   ======================================================== */
+.category-item__media {
+  position: relative;
+  width: 100%;
+  height: 0;
+  /* 78% padding-top creates a taller, more expansive ratio (~4:3.1) */
+  padding-top: 78%;
+  overflow: hidden;
+  background-color: #0b1120;
+}
+
+.category-item__ratio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.category-item__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* object-position center 18% ensures faces, heads and key subjects are NEVER cut off */
+  object-position: center 18%;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Subtle zoom on hover */
+.category-item:hover .category-item__img {
+  transform: scale(1.07);
+}
+
+/* ========================================================
+   UNBLOCKED BOTTOM GRADIENT INFO (Image stays clear & unblocked)
+   ======================================================== */
+.category-item__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px 22px 20px;
+  /* Subtle bottom-only gradient: top 60% of image is 100% crystal clear! */
+  background: linear-gradient(
+    to top,
+    rgba(6, 11, 24, 0.94) 0%,
+    rgba(6, 11, 24, 0.72) 42%,
+    rgba(6, 11, 24, 0.2) 75%,
+    transparent 100%
+  );
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: background 0.35s ease;
+}
+
+.category-item:hover .category-item__info {
+  background: linear-gradient(
+    to top,
+    rgba(6, 11, 24, 0.98) 0%,
+    rgba(6, 11, 24, 0.82) 48%,
+    rgba(6, 11, 24, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+.category-item__badge-row {
+  margin-bottom: 6px;
+}
+
+.category-item__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  letter-spacing: 0.02em;
+}
+
+.category-item__title {
+  color: #ffffff !important;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.category-item__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-primary-light);
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.9;
+  transform: translateX(0);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-item:hover .category-item__action {
+  color: #ffffff;
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+.category-item__action svg {
+  transition: transform 0.25s ease;
+}
+
+.category-item:hover .category-item__action svg {
+  transform: translateX(3px);
+}
+
+/* ========================================================
+   12th ITEM: Explore All Categories Card
+   ======================================================== */
+.category-item--view-all {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.06) 0%, rgba(56, 189, 248, 0.02) 100%);
+}
+
+:root[data-theme="dark"] .category-item--view-all {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(10, 16, 32, 0.85) 100%);
+}
+
+.category-item__link--more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  padding: 32px 24px;
+}
+
+.category-item__more-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.category-item__more-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-bg-primary-subtle);
+  border: 1px solid var(--color-border-primary-subtle);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+.category-item--view-all:hover .category-item__more-icon {
+  background: var(--color-primary);
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 10px 26px rgba(2, 132, 199, 0.35);
+}
+
+.category-item--view-all .category-item__title {
+  color: var(--color-text-dark) !important;
+  text-shadow: none;
+  font-size: 1.4rem;
+}
+
+:root[data-theme="dark"] .category-item--view-all .category-item__title {
+  color: #ffffff !important;
+}
+
+.category-item--view-all .category-item__count {
+  color: var(--color-text-muted) !important;
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.category-item__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: #ffffff !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 6px;
+  transition: all 0.25s ease;
+}
+
+.category-item--view-all:hover .category-item__btn {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+/* ========================================================
+   RESPONSIVE DESIGN
+   ======================================================== */
+@media (max-width: 1024px) {
+  .browse-category__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-item__media {
+    padding-top: 72%;
+  }
+
+  .category-item__title {
+    font-size: 1.25rem;
+  }
+
+  .category-item__link--more {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .browse-category {
+    padding: 36px 0;
+  }
+
+  .browse-category__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .browse-category__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-item__media {
+    padding-top: 64%;
+  }
+
+  .category-item__link--more {
+    min-height: 220px;
+    padding: 32px 16px;
+  }
+}

@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleFeedCard from './ArticleFeedCard.astro';
+import '../../style/home/editor-choice.css';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf());
+---
+
+<section class="section editor-choice">
+  <div class="container">
+    <div class="section-header editor-choice__header">
+      <div class="editor-choice__title-group">
+        <h2 class="section-title">Editor's Choice</h2>
+        <p class="section-subtitle editor-choice__subtitle">Our full review library while curated picks are being prepared.</p>
+      </div>
+      <a href="/blog/" class="editor-choice__link">Explore the library &rarr;</a>
+    </div>
+    <div class="article-feed-grid">
+      {posts.map((post) => <ArticleFeedCard post={post} />)}
+    </div>
+  </div>
+</section>

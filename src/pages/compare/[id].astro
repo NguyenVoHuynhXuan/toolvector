@@ -1,0 +1,92 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layout/Layout.astro';
+import TableOfContents from '../../components/ui/TableOfContents.astro';
+import '../../style/pages/article.css';
+import travelpayoutsBgPic2 from '../../assets/blog/travelpayouts/travelpayouts_bg_pic2.webp';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('compare');
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const category = post.data.serviceType || post.data.foodType || 'Independent review';
+const publishedDate = post.data.date
+  ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(`${post.data.date}T00:00:00`))
+  : undefined;
+const readingTime = Math.max(3, Math.ceil((post.body?.replace(/<[^>]*>/g, ' ').match(/\S+/g)?.length || 600) / 220));
+const facts = [
+  ['Starting price', post.data.startingPrice],
+  ['Founded', post.data.founded?.toString()],
+  ['Based in', post.data.origin],
+  ['Reviews analyzed', post.data.reviewsCount?.toLocaleString()],
+].filter(([, value]) => value);
+---
+
+<Layout
+  title={`${post.data.name} review | ToolVector`}
+  description={post.data.metaDescription || post.data.description || ''}
+  ogImage={post.data.logo?.src}
+>
+  <main class="article-page">
+    <section class="article-hero">
+      <div class="container article-hero__inner">
+        <a href="/blog/" class="article-hero__back"><span>←</span> All reviews</a>
+
+        <header class="article-hero__copy">
+          <h1>{post.data.name} review: is it worth it in 2026?</h1>
+          <p>{post.data.description}</p>
+
+          <div class="article-hero__meta">
+            <span class="article-hero__author-mark">TV</span>
+            <span><b>ToolVector Editorial</b><small>Independent product research</small></span>
+            <i></i>
+            {publishedDate && <span>Updated {publishedDate}</span>}
+            <i></i>
+            <span>{readingTime} min read</span>
+          </div>
+        </header>
+
+      </div>
+    </section>
+
+    <section class="article-layout container">
+      <article class="article-content">
+        {facts.length > 0 && (
+          <section class="article-facts" aria-label="At a glance">
+            <div class="article-facts__intro"><span>AT A GLANCE</span><strong>{post.data.name}</strong></div>
+            <div class="article-facts__items">
+              {facts.map(([label, value]) => <div><span>{label}</span><strong>{value}</strong></div>)}
+            </div>
+          </section>
+        )}
+        <div class="prose"><Content /></div>
+      </article>
+
+      <aside class="article-sidebar">
+        <TableOfContents headings={headings} />
+        {post.id === 'travelpayouts' ? (
+          <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="travelpayouts-special-cta" style={`background-image: url('${travelpayoutsBgPic2.src}')`}>
+            <div class="travelpayouts-badge-wrapper">
+              <span class="travelpayouts-badge">Monetize smarter</span>
+              <svg class="travelpayouts-cursor" width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.93747 3.99692C2.70908 3.0408 3.67025 2.23427 4.57219 2.62523L28.4692 12.9837C29.4833 13.4233 29.4059 14.8865 28.3511 15.2167L18.9676 18.1537C17.5695 18.5913 16.404 19.5692 15.7303 20.8701L11.2085 29.601C10.7001 30.5825 9.2457 30.4046 8.9889 29.3296L2.93747 3.99692Z" fill="white" stroke="#1D2939" stroke-width="4.30095"/>
+              </svg>
+            </div>
+            <p>Try Drive — an AI system that handles monetization while you focus on content.</p>
+          </a>
+        ) : (
+          <section class="article-sidebar__cta">
+            <span>READY TO TRY IT?</span>
+            <h2>Explore {post.data.name}</h2>
+            <p>{post.data.promo || 'Visit the official website to see current plans and features.'}</p>
+            {post.data.link && <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored">Visit website <b>→</b></a>}
+          </section>
+        )}
+      </aside>
+    </section>
+  </main>
+</Layout>

@@ -1,0 +1,61 @@
+---
+// src/components/home/TrustMarquee.astro
+import '../../style/home/trust-marquee.css';
+
+import salesforceSvg from '../../assets/brands/salesforce.svg?raw';
+import harvardSvg from '../../assets/brands/harvard.svg?raw';
+import nbcSvg from '../../assets/brands/nbcuniversal.svg?raw';
+import amazonSvg from '../../assets/brands/amazon.svg?raw';
+import ibmSvg from '../../assets/brands/ibm.svg?raw';
+import grantThorntonSvg from '../../assets/brands/grant-thornton.svg?raw';
+
+const logos = [
+  { name: 'Salesforce', classModifier: 'salesforce', svg: salesforceSvg },
+  { name: 'Harvard University', classModifier: 'harvard', svg: harvardSvg },
+  { name: 'NBCUniversal', classModifier: 'nbc', svg: nbcSvg },
+  { name: 'Amazon', classModifier: 'amazon', svg: amazonSvg },
+  { name: 'IBM', classModifier: 'ibm', svg: ibmSvg },
+  { name: 'Grant Thornton', classModifier: 'grant-thornton', svg: grantThorntonSvg },
+];
+
+// Double the items in each group so it spans wide/ultrawide displays seamlessly
+const marqueeItems = [...logos, ...logos];
+---
+
+<section class="trusted-teams" aria-label="Trusted by innovative teams worldwide">
+  <div class="trusted-teams__header">
+    <p class="trusted-teams__title">TRUSTED BY INNOVATIVE TEAMS WORLDWIDE</p>
+  </div>
+
+  <div class="trusted-teams__marquee-wrapper">
+    <div class="trusted-teams__track">
+      <!-- Group 1 -->
+      <div class="trusted-teams__group">
+        {
+          marqueeItems.map((logo) => (
+            <div
+              class={`trusted-teams__item trusted-teams__item--${logo.classModifier}`}
+              title={logo.name}
+              aria-label={logo.name}
+              set:html={logo.svg}
+            />
+          ))
+        }
+      </div>
+
+      <!-- Group 2 (Duplicate for continuous seamless loop) -->
+      <div class="trusted-teams__group" aria-hidden="true">
+        {
+          marqueeItems.map((logo) => (
+            <div
+              class={`trusted-teams__item trusted-teams__item--${logo.classModifier}`}
+              title={logo.name}
+              tabindex="-1"
+              set:html={logo.svg}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

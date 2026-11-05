@@ -1,0 +1,204 @@
+/* src/style/home/trust-marquee.css */
+/* Trusted by Innovative Teams Worldwide - Running Marquee */
+
+.trusted-teams {
+  position: relative;
+  width: 100%;
+  padding: 52px 0 58px;
+  background: var(--color-bg-base, #ffffff);
+  border-top: 1px solid var(--color-border-subtle, #f1f5f9);
+  border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  overflow: hidden;
+}
+
+:root[data-theme="dark"] .trusted-teams {
+  background: var(--color-bg-base, #0a0f1d);
+  border-top-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.trusted-teams__header {
+  max-width: 1200px;
+  margin: 0 auto 34px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.trusted-teams__title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #64748b;
+  line-height: 1.4;
+  user-select: none;
+}
+
+:root[data-theme="dark"] .trusted-teams__title {
+  color: #94a3b8;
+}
+
+/* Marquee Outer Container with Edge Soft Fade */
+.trusted-teams__marquee-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  user-select: none;
+  /* Premium Edge Soft Fade */
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+/* Fallback side fades */
+.trusted-teams__marquee-wrapper::before,
+.trusted-teams__marquee-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.trusted-teams__marquee-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg-base, #ffffff) 0%, transparent 100%);
+}
+
+.trusted-teams__marquee-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg-base, #ffffff) 0%, transparent 100%);
+}
+
+/* Continuous Sliding Track */
+.trusted-teams__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: trusted-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+.trusted-teams__marquee-wrapper:hover .trusted-teams__track {
+  animation-play-state: paused;
+}
+
+.trusted-teams__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 64px;
+  padding-right: 64px; /* equal spacing between group ends */
+}
+
+.trusted-teams__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2b2d42;
+  opacity: 0.85;
+  transition: transform 0.25s ease, opacity 0.25s ease, color 0.25s ease;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.trusted-teams__item:hover {
+  opacity: 1;
+  color: #0f172a;
+  transform: translateY(-2px) scale(1.04);
+}
+
+:root[data-theme="dark"] .trusted-teams__item {
+  color: #e2e8f0;
+  opacity: 0.85;
+}
+
+:root[data-theme="dark"] .trusted-teams__item:hover {
+  color: #ffffff;
+  opacity: 1;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+}
+
+.trusted-teams__item svg {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+
+/* Individual logo height tunings for optical alignment */
+.trusted-teams__item--salesforce svg {
+  height: 38px;
+}
+
+.trusted-teams__item--harvard svg {
+  height: 32px;
+}
+
+.trusted-teams__item--nbc svg {
+  height: 34px;
+}
+
+.trusted-teams__item--amazon svg {
+  height: 28px;
+}
+
+.trusted-teams__item--ibm svg {
+  height: 27px;
+}
+
+.trusted-teams__item--grant-thornton svg {
+  height: 25px;
+}
+
+/* Keyframe for continuous horizontal glide */
+@keyframes trusted-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trusted-teams {
+    padding: 38px 0 44px;
+  }
+
+  .trusted-teams__header {
+    margin-bottom: 24px;
+  }
+
+  .trusted-teams__title {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  .trusted-teams__track {
+    animation-duration: 26s;
+  }
+
+  .trusted-teams__group {
+    gap: 44px;
+    padding-right: 44px;
+  }
+
+  .trusted-teams__item--salesforce svg { height: 32px; }
+  .trusted-teams__item--harvard svg { height: 27px; }
+  .trusted-teams__item--nbc svg { height: 29px; }
+  .trusted-teams__item--amazon svg { height: 24px; }
+  .trusted-teams__item--ibm svg { height: 23px; }
+  .trusted-teams__item--grant-thornton svg { height: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trusted-teams__track {
+    animation: none;
+  }
+}

@@ -1,0 +1,253 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layout/Layout.astro';
+import TableOfContents from '../../components/ui/TableOfContents.astro';
+import '../../style/pages/article.css';
+import travelpayoutsBgPic2 from '../../assets/blog/travelpayouts/travelpayouts_bg_pic2.webp';
+
+const svgAssets = import.meta.glob<{ default: { src: string } }>('../../assets/**/*.svg', { eager: true });
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const resolvedLogoSrc = typeof post.data.logo === 'string' ? (svgAssets[post.data.logo]?.default?.src || svgAssets[post.data.logo]?.default || post.data.logo) : post.data.logo?.src;
+const { Content, headings } = await render(post);
+const category = post.data.category || post.data.serviceType || post.data.foodType || 'Software Review';
+const publishedDate = post.data.date
+  ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(`${post.data.date}T00:00:00`))
+  : undefined;
+const readingTime = Math.max(3, Math.ceil((post.body?.replace(/<[^>]*>/g, ' ').match(/\S+/g)?.length || 600) / 220));
+
+// Extract H1 from markdown headings if present, otherwise fallback
+const mdxTitle = headings.find((h) => h.depth === 1)?.text;
+const articleTitle = mdxTitle || `${post.data.name} Review 2026: Is It Worth It?`;
+
+const heroImage = post.data.thumbnail || post.data.logo;
+
+const rawPrice = post.data.startingPrice;
+const cleanPrice = rawPrice ? rawPrice.replace(/^from\s+/i, '') : null;
+
+const pageUrl = Astro.url.href;
+const pageTitle = encodeURIComponent(articleTitle);
+
+// Related articles query (matches category/serviceType, sorted by date, top 3)
+const allPosts = await getCollection('blog');
+const otherPosts = allPosts.filter((p) => p.id !== post.id);
+const relatedPosts = otherPosts
+  .sort((a, b) => {
+    const aMatch = (a.data.category && a.data.category === post.data.category) || (a.data.serviceType && a.data.serviceType === post.data.serviceType) ? 1 : 0;
+    const bMatch = (b.data.category && b.data.category === post.data.category) || (b.data.serviceType && b.data.serviceType === post.data.serviceType) ? 1 : 0;
+    if (bMatch !== aMatch) return bMatch - aMatch;
+    return new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf();
+  })
+  .slice(0, 3);
+---
+
+<Layout
+  title={`${articleTitle} | ToolVector`}
+  description={post.data.metaDescription || post.data.description || ''}
+  ogImage={resolvedLogoSrc}
+>
+  <main class="article-page">
+
+    <!-- Breadcrumb -->
+    <div class="article-breadcrumb container">
+      <nav aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="article-breadcrumb__sep">&gt;</span>
+        <a href="/blog/">Blog</a>
+        <span class="article-breadcrumb__sep">&gt;</span>
+        <span class="article-breadcrumb__current">{articleTitle}</span>
+      </nav>
+    </div>
+
+    <!-- Full-width Featured Thumbnail -->
+    {heroImage && (
+      <div class="article-thumb container">
+        {typeof heroImage === 'string' ? (
+          <img src={heroImage} alt={`${post.data.name} hero thumbnail`} class="article-thumb__img" width="1200" height="630" loading="eager" />
+        ) : (
+          <Image src={heroImage} alt={`${post.data.name} hero thumbnail`} class="article-thumb__img" width={1200} height={630} loading="eager" />
+        )}
+      </div>
+    )}
+
+    <!-- Main 2-column layout -->
+    <section class="article-layout container">
+
+      <!-- Left: Article content -->
+      <article class="article-content">
+
+        <!-- Category tag + Social Share row -->
+        <div class="article-meta-row">
+          <span class="article-category-tag">{category}</span>
+          <div class="article-share">
+            <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${pageTitle}`} target="_blank" rel="noopener noreferrer" aria-label="Share on X" class="article-share__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" class="article-share__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+            </a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" class="article-share__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2.5c0-1.07.33-1.8 1.83-1.8H17.5V1.65c-.66-.09-1.92-.15-3.32-.15-3.29 0-5.54 2-5.54 5.7V9.5H5.5v4h3.14V23h5.36V13.5z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Article title & subtle byline -->
+        <header class="article-header">
+          <h1>{articleTitle}</h1>
+          <div class="article-byline">
+            <span>By <strong>ToolVector Editorial</strong></span>
+            {publishedDate && (
+              <>
+                <span class="article-byline__sep">·</span>
+                <span>Updated {publishedDate}</span>
+              </>
+            )}
+            <span class="article-byline__sep">·</span>
+            <span>{readingTime} min read</span>
+          </div>
+        </header>
+
+        <div class="prose"><Content /></div>
+      </article>
+
+      <!-- Right: Sticky sidebar -->
+      <aside class="article-sidebar">
+
+        <!-- Table of Contents -->
+        <TableOfContents headings={headings} />
+
+        <!-- Promo / Affiliate Banner below TOC -->
+        {post.id === 'travelpayouts' ? (
+          <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="travelpayouts-special-cta" style={`background-image: url('${travelpayoutsBgPic2.src}')`}>
+            <div class="travelpayouts-badge-wrapper">
+              <span class="travelpayouts-badge">Monetize smarter</span>
+              <svg class="travelpayouts-cursor" width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.93747 3.99692C2.70908 3.0408 3.67025 2.23427 4.57219 2.62523L28.4692 12.9837C29.4833 13.4233 29.4059 14.8865 28.3511 15.2167L18.9676 18.1537C17.5695 18.5913 16.404 19.5692 15.7303 20.8701L11.2085 29.601C10.7001 30.5825 9.2457 30.4046 8.9889 29.3296L2.93747 3.99692Z" fill="white" stroke="#1D2939" stroke-width="4.30095"/>
+              </svg>
+            </div>
+            <p>Try Drive — an AI system that handles monetization while you focus on content.</p>
+          </a>
+        ) : post.data.banner ? (
+          <div class="sidebar-ad-card">
+            <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-ad-card__link" aria-label={`Explore ${post.data.name}`}>
+              {typeof post.data.banner === 'string' ? (
+                <img src={post.data.banner} alt={`${post.data.name} ad banner`} width="1080" height="1080" class="sidebar-ad-card__img" />
+              ) : (
+                <Image src={post.data.banner} alt={`${post.data.name} ad banner`} width={1080} height={1080} class="sidebar-ad-card__img" />
+              )}
+            </a>
+            <p class="sidebar-promo-banner__disclaimer">Affiliate link — we may earn a commission</p>
+          </div>
+        ) : (
+          <div class="sidebar-promo-banner">
+            <div class="sidebar-promo-banner__header">
+              {post.data.logo && (
+                typeof post.data.logo === 'string' ? (
+                  <img src={resolvedLogoSrc} alt={`${post.data.name} logo`} width="44" height="44" class="sidebar-promo-banner__logo" />
+                ) : (
+                  <Image src={post.data.logo} alt={`${post.data.name} logo`} width={44} height={44} class="sidebar-promo-banner__logo" />
+                )
+              )}
+              <div>
+                <span class="sidebar-promo-banner__eyebrow">FEATURED TOOL</span>
+                <p class="sidebar-promo-banner__name">{post.data.name}</p>
+              </div>
+            </div>
+
+            {cleanPrice && (
+              <div class="sidebar-promo-banner__price">
+                <span>From</span>
+                <strong>{cleanPrice}</strong>
+              </div>
+            )}
+
+            <p class="sidebar-promo-banner__desc">
+              {post.data.promo || post.data.description || `Visit the official website to see current plans and features.`}
+            </p>
+
+            {post.data.pros && post.data.pros.length > 0 && (
+              <div class="sidebar-promo-banner__tags">
+                {post.data.pros.slice(0, 2).map((pro) => (
+                  <span class="sidebar-promo-banner__tag">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {pro}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {post.data.link && (
+              <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-promo-banner__cta">
+                Try {post.data.name} free
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            )}
+
+            <p class="sidebar-promo-banner__disclaimer">Affiliate link — we may earn a commission</p>
+          </div>
+        )}
+
+      </aside>
+    </section>
+
+    <!-- Related articles -->
+    {relatedPosts.length > 0 && (
+      <section class="related-section container">
+        <div class="related-section__header">
+          <h2 class="related-section__title">Related articles</h2>
+          <a href="/blog/" class="related-section__view-all">View all</a>
+        </div>
+
+        <div class="related-grid">
+          {relatedPosts.map((relPost) => {
+            const relHero = relPost.data.thumbnail || relPost.data.logo;
+            const relDate = relPost.data.date
+              ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(`${relPost.data.date}T00:00:00`))
+              : '';
+            const relCategory = relPost.data.category || relPost.data.serviceType || 'Travel Tips';
+            const relTitle = relPost.data.name.toLowerCase().includes('review')
+              ? relPost.data.name
+              : `${relPost.data.name} Review 2026: Is It Worth It?`;
+            const relInitials = (relPost.data.name || 'TV').slice(0, 2).toUpperCase();
+
+            return (
+              <a href={`/blog/${relPost.id}/`} class="related-card">
+                <div class="related-card__thumb">
+                  {relHero ? (
+                    typeof relHero === 'string' ? (
+                      <img src={relHero} alt={relPost.data.name} class="related-card__img" width="400" height="250" loading="lazy" />
+                    ) : (
+                      <Image src={relHero} alt={relPost.data.name} class="related-card__img" width={400} height={250} loading="lazy" />
+                    )
+                  ) : (
+                    <div class="related-card__placeholder" />
+                  )}
+                </div>
+
+                <div class="related-card__body">
+                  <span class="related-card__tag">{relCategory}</span>
+                  <h3 class="related-card__title">{relTitle}</h3>
+
+                  <div class="related-card__footer">
+                    <div class="related-card__author">
+                      <span class="related-card__avatar">{relInitials}</span>
+                      <span>by ToolVector Editorial</span>
+                    </div>
+                    {relDate && <span class="related-card__date">{relDate}</span>}
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>

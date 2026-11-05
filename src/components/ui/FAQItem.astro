@@ -1,0 +1,17 @@
+---
+interface Props {
+  question: string;
+}
+const { question } = Astro.props;
+---
+<details class="faq-item">
+  <summary class="faq-item__summary">
+    <span class="faq-item__question">{question}</span>
+    <span class="faq-item__icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </span>
+  </summary>
+  <div class="faq-item__content">
+    <slot />
+  </div>
+</details>

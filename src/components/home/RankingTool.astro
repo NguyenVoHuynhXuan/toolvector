@@ -1,0 +1,106 @@
+---
+import "../../style/home/ranking-tool.css";
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const topPosts = posts
+  .sort((a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf())
+  .slice(0, 4);
+
+const rankingData = topPosts.map((post, index) => ({
+  rank: `#${index + 1}`,
+  name: post.data.name,
+  description: post.data.promo || post.data.description,
+  score: (9.8 - index * 0.3).toFixed(1),
+  link: `/blog/${post.id}/`
+}));
+---
+
+<section class="section ranking-tool" id="best-software">
+    <div class="container">
+        <!-- Header -->
+        <div class="section-header ranking-tool__header">
+            <div class="ranking-tool__title-group">
+                <h2 class="section-title">
+                    Best Software 2026
+                    <span class="live-update-badge">
+                        <span class="live-dot"></span> Live
+                    </span>
+                </h2>
+                <p class="section-subtitle ranking-tool__subtitle">
+                    Ranked by accuracy, output quality, pricing and support.
+                </p>
+            </div>
+            <a href="#" class="ranking-tool__link">Full ranking &rarr;</a>
+        </div>
+
+        <!-- Grid -->
+        <div class="ranking-tool__grid">
+            {
+                rankingData.map((item) => (
+                    <a href={item.link} class="ranking-card">
+                        <div class="ranking-card__rank">{item.rank}</div>
+
+                        <div class="ranking-card__info">
+                            <h3 class="ranking-card__name">{item.name}</h3>
+                            <p class="ranking-card__desc">{item.description}</p>
+                        </div>
+
+                        <div class="ranking-card__actions">
+                            <span class="ranking-card__score">
+                                {item.score}
+                            </span>
+                            <span class="ranking-card__btn">Review</span>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+  function setupLiveRanking() {
+    const grid = document.querySelector('.ranking-tool__grid');
+    if (!grid) return;
+    
+    // Auto-rotate items every 4 seconds
+    setInterval(() => {
+      const last = grid.lastElementChild;
+      if (last) {
+        // Fade out slightly
+        last.style.opacity = '0';
+        last.style.transform = 'translateY(10px)';
+        
+        setTimeout(() => {
+          grid.prepend(last);
+          
+          // Re-assign ranks based on new order
+          const cards = grid.children;
+          for (let i = 0; i < cards.length; i++) {
+            const rankEl = cards[i].querySelector('.ranking-card__rank');
+            if (rankEl) {
+              rankEl.textContent = '#' + (i + 1);
+            }
+          }
+          
+          // Fade back in
+          last.style.transition = 'all 0.4s ease';
+          last.style.opacity = '1';
+          last.style.transform = 'translateY(0)';
+          
+          // Remove inline styles after animation to restore hover
+          setTimeout(() => {
+            last.style.transition = '';
+            last.style.opacity = '';
+            last.style.transform = '';
+          }, 400);
+          
+        }, 300);
+      }
+    }, 4000);
+  }
+
+  setupLiveRanking();
+  document.addEventListener('astro:page-load', setupLiveRanking);
+</script>

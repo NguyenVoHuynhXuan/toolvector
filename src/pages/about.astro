@@ -1,0 +1,563 @@
+---
+import Layout from '../layout/Layout.astro';
+import '../style/pages/about.css';
+---
+
+<Layout
+  title="About ToolVector — Independent Software Reviews & Comparisons"
+  description="Learn about ToolVector's journey, mission, team, and philosophy of delivering independent, transparent software reviews."
+>
+  <main class="about-page">
+
+    <!-- 1. Page Banner Main (CanhCam Style) -->
+    <section class="page-banner-main" aria-label="About ToolVector Banner">
+      <div class="page-banner-main__bg">
+        <img
+          src="/images/about/hero-banner.jpg"
+          alt="ToolVector Team & Vision"
+          class="page-banner-main__img"
+        />
+        <div class="page-banner-main__overlay"></div>
+      </div>
+
+      <!-- Architectural Grid Lines Overlay -->
+      <div class="banner-grid-lines" aria-hidden="true">
+        <div class="container banner-grid-lines__container">
+          <div class="banner-grid-lines__lanes">
+            <div></div><div></div><div></div><div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container page-banner-main__container">
+        <div class="page-banner-main__content reveal">
+          <h1 class="page-banner-main__title">About Us</h1>
+          <p class="page-banner-main__subtitle">
+            Committed to delivering independent, transparent software reviews and optimal solutions for your business
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Background Blueprint Lanes (Running through the whole page) -->
+    <div class="page-architectural-lanes" aria-hidden="true">
+      <div class="container lanes-container">
+        <div class="lanes-track">
+          <div class="lane"></div>
+          <div class="lane"></div>
+          <div class="lane"></div>
+          <div class="lane"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. We are CanhCam / We are ToolVector (Intro Statement) -->
+    <section class="section-about-intro" id="intro-section">
+      <div class="container">
+        <div class="intro-statement-box reveal">
+          <h2 class="intro-statement-box__title">We are ToolVector</h2>
+          <p class="intro-statement-box__lead">
+            Every review on ToolVector is based on <strong>real research</strong>: from features, security, and pricing to the <strong>limitations vendors rarely mention</strong>. We openly share our evaluation methodology, keep our content continuously updated, and give you the honest pros and cons, so you can confidently <strong>choose the right tool for your team</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Tổng quan / Overview -->
+    <section class="section-about-overview" id="overview-section">
+      <div class="container">
+        <div class="overview-grid">
+          <div class="overview-content reveal">
+            <span class="section-badge-eyebrow">OUR MISSION</span>
+            <h2 class="overview-title">Transparency, so every choice has a solid basis</h2>
+            <div class="overview-body">
+              <p>
+                A review is only valuable if you can trust it. That is why ToolVector’s mission is to turn choosing software into a decision based on clear information, rather than on a vendor’s advertising.
+              </p>
+              <p>
+                Every analysis presents both strengths and limitations: features, real-world pricing, security and privacy, and alternatives worth considering. We say plainly what needs to be said, so you save time and avoid costly choices.
+              </p>
+            </div>
+          </div>
+
+          <div class="overview-media reveal">
+            <div class="overview-media__wrap">
+              <img
+                src="/images/about/overview.jpg"
+                alt="Đội ngũ ToolVector cùng trao đổi và phân tích phần mềm trên máy tính"
+                class="overview-media__img"
+              />
+              <div class="overview-media__caption">
+                <strong>4,200+ software tools</strong> independently evaluated and vetted
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Lịch sử phát triển / Milestones (Interactive Timeline) -->
+    <section class="section-about-history" id="history">
+      <div class="container">
+        <div class="section-heading-center reveal">
+          <span class="section-badge-eyebrow">OUR JOURNEY</span>
+          <h2 class="history-main-title">Milestones & Growth</h2>
+          <p class="history-main-subtitle">
+            Key milestones marking the growth and continuous evolution of ToolVector's data ecosystem.
+          </p>
+        </div>
+
+        <!-- History Journey Banner (Phía trên timeline) -->
+        <div class="history-banner reveal">
+          <img
+            src="/images/about/history.jpg"
+            alt="ToolVector team standing together looking towards future milestones"
+            class="history-banner__img"
+          />
+        </div>
+
+        <!-- Timeline Slide Container -->
+        <div class="history-showcase reveal">
+          <!-- Slide 2022 -->
+          <div class="history-slide active" data-year="2022">
+            <div class="history-slide__media">
+              <img
+                src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80"
+                alt="ToolVector Foundation 2022"
+                class="history-slide__img"
+              />
+            </div>
+            <div class="history-slide__details">
+              <div class="history-slide__date">2022</div>
+              <p class="history-slide__desc">
+                ToolVector began with a simple need: bringing information about software tools into one place, so users no longer had to search across scattered sources.
+              </p>
+            </div>
+          </div>
+
+          <!-- Slide 2023 -->
+          <div class="history-slide" data-year="2023">
+            <div class="history-slide__media">
+              <img
+                src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80"
+                alt="Category System 2023"
+                class="history-slide__img"
+              />
+            </div>
+            <div class="history-slide__details">
+              <div class="history-slide__date">2023</div>
+              <p class="history-slide__desc">
+                We built our first category system, organizing tools into groups such as AI software, SEO & Marketing, and business services.
+              </p>
+            </div>
+          </div>
+
+          <!-- Slide 2024 -->
+          <div class="history-slide" data-year="2024">
+            <div class="history-slide__media">
+              <img
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+                alt="In-Depth Reviews 2024"
+                class="history-slide__img"
+              />
+            </div>
+            <div class="history-slide__details">
+              <div class="history-slide__date">2024</div>
+              <p class="history-slide__desc">
+                Our first in-depth reviews launched, focusing on features, real pricing, security, and the drawbacks of each tool.
+              </p>
+            </div>
+          </div>
+
+          <!-- Slide 2025 -->
+          <div class="history-slide" data-year="2025">
+            <div class="history-slide__media">
+              <img
+                src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80"
+                alt="Side-by-side Comparisons & Standardized Scoring 2025"
+                class="history-slide__img"
+              />
+            </div>
+            <div class="history-slide__details">
+              <div class="history-slide__date">2025</div>
+              <p class="history-slide__desc">
+                Head-to-head comparisons let readers place tools side by side and evaluate them against the same criteria. We standardized our review process and made our scoring criteria public, so every verdict can be verified.
+              </p>
+            </div>
+          </div>
+
+          <!-- Slide 2026 -->
+          <div class="history-slide" data-year="2026">
+            <div class="history-slide__media">
+              <img
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
+                alt="Global Tool Ecosystem 2026"
+                class="history-slide__img"
+              />
+            </div>
+            <div class="history-slide__details">
+              <div class="history-slide__date">2026</div>
+              <p class="history-slide__desc">
+                ToolVector now indexes 4,200+ tools, backed by 318k+ verified signals and 1,940+ head-to-head comparisons, with content updated every year.
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline Navigation Track -->
+          <div class="history-timeline-nav">
+            <div class="history-timeline-line"></div>
+            <div class="history-timeline-nodes">
+              <button class="history-node active" data-target="2022" aria-label="View 2022 milestone">
+                <span class="history-node__dot"></span>
+                <span class="history-node__label">2022</span>
+              </button>
+              <button class="history-node" data-target="2023" aria-label="View 2023 milestone">
+                <span class="history-node__dot"></span>
+                <span class="history-node__label">2023</span>
+              </button>
+              <button class="history-node" data-target="2024" aria-label="View 2024 milestone">
+                <span class="history-node__dot"></span>
+                <span class="history-node__label">2024</span>
+              </button>
+              <button class="history-node" data-target="2025" aria-label="View 2025 milestone">
+                <span class="history-node__dot"></span>
+                <span class="history-node__label">2025</span>
+              </button>
+              <button class="history-node" data-target="2026" aria-label="View 2026 milestone">
+                <span class="history-node__dot"></span>
+                <span class="history-node__label">2026</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Sứ mệnh & Tầm nhìn (Mission & Vision) -->
+    <section class="section-about-mission-vision" id="mission-vision">
+      <div class="container">
+        <!-- Story Feature Banner with Media -->
+        <div class="mission-banner reveal">
+          <img
+            src="/images/about/mission-vision.jpg"
+            alt="Workspace with software analysts reviewing SaaS platforms"
+            class="mission-banner__img"
+          />
+          <div class="mission-banner__overlay">
+            <h3 class="mission-banner__heading">
+              Building a new standard for independent software reviews
+            </h3>
+          </div>
+        </div>
+
+        <!-- 2 Columns: Sứ mệnh vs Tầm nhìn -->
+        <div class="mission-vision-grid">
+          <div class="mv-card reveal">
+            <div class="mv-card__header">
+              <span class="mv-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </span>
+              <h3 class="mv-card__title">Our Mission</h3>
+            </div>
+            <p class="mv-card__text">
+              Using a research-driven, multi-angle evaluation method, we cut through misleading information in the SaaS market. Our goal is to help teams save hours of searching and avoid costly software choices, one transparent review at a time.
+            </p>
+          </div>
+
+          <div class="mv-card reveal">
+            <div class="mv-card__header">
+              <span class="mv-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </span>
+              <h3 class="mv-card__title">Our Vision</h3>
+            </div>
+            <p class="mv-card__text">
+              To become the most trusted library for comparing and reviewing software tools: clear, accurate, and independent. We want to support every business on its digital journey, from its first tool to a fully built stack.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Triết lý & Giá trị cốt lõi (Alternating Editorial Blocks) -->
+    <section class="section-about-values" id="core-values">
+      <div class="container">
+        <div class="values-block reveal">
+          <div class="values-block__content">
+            <span class="section-badge-eyebrow">TRIẾT LÝ NỘI DUNG</span>
+            <h3 class="values-block__title">Nội dung là trái tim của nền tảng</h3>
+            <p>
+              Rất nhiều website tổng hợp công cụ phần mềm hiện nay chỉ sao chép mô tả quảng cáo từ trang chủ của nhà sản xuất. Tại ToolVector, mọi bài viết review và so sánh đều được biên soạn kỹ lưỡng bởi các chuyên gia công nghệ và dữ liệu thực tế.
+            </p>
+            <p>
+              Chúng tôi kiểm nghiệm giao diện, tính năng, hiệu năng, phân tích kỹ bảng giá và chỉ rõ những nhược điểm mà nhà cung cấp thường không công khai.
+            </p>
+          </div>
+          <div class="values-block__media">
+            <img
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+              alt="Data Analysis & Review Research"
+              class="values-block__img"
+            />
+          </div>
+        </div>
+
+        <div class="values-block values-block--reverse reveal">
+          <div class="values-block__content">
+            <span class="section-badge-eyebrow">CAM KẾT MINH BẠCH</span>
+            <h3 class="values-block__title">Khách quan và minh bạch 100%</h3>
+            <p>
+              Mặc dù ToolVector có thể nhận hoa hồng liên kết (affiliate commission) từ một số đối tác, nhưng điều này <strong>tuyệt đối không bao giờ</strong> ảnh hưởng đến điểm số đánh giá, thứ hạng hay nội dung nhận xét của chúng tôi.
+            </p>
+            <p>
+              Nếu một công cụ có giá quá đắt, bảo mật kém hoặc dịch vụ hỗ trợ chậm, chúng tôi luôn thẳng thắn nêu rõ để bảo vệ quyền lợi người dùng.
+            </p>
+          </div>
+          <div class="values-block__media">
+            <img
+              src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80"
+              alt="100% Transparency and Independent Score"
+              class="values-block__img"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Meet Our Leaders / Leadership Team (CanhCam 5-Column Blueprint) -->
+    <section class="section-about-leader" id="our-leader">
+      <div class="container">
+        <div class="section-heading-left reveal">
+          <span class="section-badge-eyebrow">OUR LEADERSHIP</span>
+          <h2 class="leader-main-title">Meet Our Leaders</h2>
+          <p class="leader-main-subtitle">
+            Experienced industry experts driving research integrity and the continuous evolution of the ToolVector platform.
+          </p>
+        </div>
+
+        <div class="leader-grid">
+          <!-- Leader 1 -->
+          <div class="leader-card reveal">
+            <div class="leader-card__media">
+              <img
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80"
+                alt="Alex Nguyen - Co-Founder & CEO"
+                class="leader-card__img"
+              />
+            </div>
+            <div class="leader-card__info">
+              <h3 class="leader-card__name">Mr. Alex Nguyen</h3>
+              <p class="leader-card__role">Co-Founder & CEO</p>
+              <p class="leader-card__quote">
+                Bringing global technology standards to every growing enterprise
+              </p>
+              <span class="leader-card__line"></span>
+            </div>
+          </div>
+
+          <!-- Leader 2 -->
+          <div class="leader-card reveal">
+            <div class="leader-card__media">
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"
+                alt="Sarah Tran - Chief Technology Officer"
+                class="leader-card__img"
+              />
+            </div>
+            <div class="leader-card__info">
+              <h3 class="leader-card__name">Mrs. Sarah Tran</h3>
+              <p class="leader-card__role">Chief Technology Officer</p>
+              <p class="leader-card__quote">
+                Advancing data precision and automated comparison intelligence
+              </p>
+              <span class="leader-card__line"></span>
+            </div>
+          </div>
+
+          <!-- Leader 3 -->
+          <div class="leader-card reveal">
+            <div class="leader-card__media">
+              <img
+                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80"
+                alt="David Le - Head of Research"
+                class="leader-card__img"
+              />
+            </div>
+            <div class="leader-card__info">
+              <h3 class="leader-card__name">Mr. David Le</h3>
+              <p class="leader-card__role">Head of Product Research</p>
+              <p class="leader-card__quote">
+                Rigorous hands-on testing with user best-interest at the core
+              </p>
+              <span class="leader-card__line"></span>
+            </div>
+          </div>
+
+          <!-- Leader 4 -->
+          <div class="leader-card reveal">
+            <div class="leader-card__media">
+              <img
+                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80"
+                alt="Emily Pham - Editorial Director"
+                class="leader-card__img"
+              />
+            </div>
+            <div class="leader-card__info">
+              <h3 class="leader-card__name">Mrs. Emily Pham</h3>
+              <p class="leader-card__role">Editorial & Content Director</p>
+              <p class="leader-card__quote">
+                Championing clarity, honesty, and transparency in every review
+              </p>
+              <span class="leader-card__line"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Key Numbers (CanhCam Red Gradient Banner) -->
+    <section class="section-home-outstanding" id="numbers">
+      <div class="container">
+        <div class="outstanding-header reveal">
+          <h2 class="outstanding-title">Key Numbers</h2>
+          <p class="outstanding-desc">
+            ToolVector is a leading independent software comparison platform. Our dedicated and specialized research team delivers transparent, verified intelligence that exceeds expectations.
+          </p>
+        </div>
+
+        <div class="outstanding-grid">
+          <div class="outstanding-item reveal">
+            <div class="outstanding-number">100%</div>
+            <p class="outstanding-label">Independent & Transparent</p>
+          </div>
+
+          <div class="outstanding-item reveal">
+            <div class="outstanding-number">4,200+</div>
+            <p class="outstanding-label">Evaluated Software Tools</p>
+          </div>
+
+          <div class="outstanding-item reveal">
+            <div class="outstanding-number">50+</div>
+            <p class="outstanding-label">Specialized Categories</p>
+          </div>
+
+          <div class="outstanding-item reveal">
+            <div class="outstanding-number">318k+</div>
+            <p class="outstanding-label">Trusted User Decisions</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Technologies & Tools / Hệ sinh thái công nghệ -->
+    <section class="section-about-technologies" id="technology">
+      <div class="container">
+        <div class="tech-header reveal">
+          <span class="section-badge-eyebrow">CÔNG CỤ & CÔNG NGHỆ</span>
+          <h2 class="tech-title">Technologies & Tools</h2>
+          <p class="tech-desc">
+            Để tạo ra nền tảng so sánh mượt mà, tốc độ cao và dữ liệu chuẩn xác, ToolVector ứng dụng những công nghệ hiện đại hàng đầu thế giới.
+          </p>
+        </div>
+
+        <div class="tech-clusters reveal">
+          <!-- Cluster 1: AI & Data Analysis -->
+          <div class="tech-cluster">
+            <h4 class="tech-cluster__title">AI & Intelligence Engines</h4>
+            <div class="tech-badges">
+              <span class="tech-badge">Claude 3.7</span>
+              <span class="tech-badge">GPT-4o</span>
+              <span class="tech-badge">DeepSeek V3</span>
+              <span class="tech-badge">Gemini Pro</span>
+              <span class="tech-badge">Llama 3</span>
+            </div>
+          </div>
+
+          <!-- Cluster 2: Modern Web & Cloud Infrastructure -->
+          <div class="tech-cluster">
+            <h4 class="tech-cluster__title">Modern Frameworks & Architecture</h4>
+            <div class="tech-badges">
+              <span class="tech-badge">Astro 7.1</span>
+              <span class="tech-badge">TypeScript</span>
+              <span class="tech-badge">MDX Layer</span>
+              <span class="tech-badge">Node.js</span>
+              <span class="tech-badge">Cloudflare Edge</span>
+            </div>
+          </div>
+
+          <!-- Cluster 3: Analytics & Auditing Tools -->
+          <div class="tech-cluster">
+            <h4 class="tech-cluster__title">Auditing & Security Benchmark</h4>
+            <div class="tech-badges">
+              <span class="tech-badge">Google Search Console</span>
+              <span class="tech-badge">Lighthouse 100/100</span>
+              <span class="tech-badge">Ahrefs API</span>
+              <span class="tech-badge">Semrush API</span>
+              <span class="tech-badge">SOC2 Compliance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Call to Action / Bạn đã sẵn sàng -->
+    <section class="section-follow-us" aria-label="Kêu gọi hành động">
+      <div class="container">
+        <div class="cta-inner reveal">
+          <h2 class="cta-title">Bạn đã sẵn sàng lựa chọn công cụ tối ưu cho đội ngũ của mình?</h2>
+          <p class="cta-desc">
+            Khám phá hơn 4.200+ phần mềm được đánh giá độc lập hoặc liên hệ để được tư vấn lộ trình công nghệ phù hợp nhất.
+          </p>
+          <div class="cta-actions">
+            <a href="/category/ai-software-and-ai-agents/" class="cta-btn cta-btn--primary">
+              Khám phá danh mục công cụ &rarr;
+            </a>
+            <a href="/contact/" class="cta-btn cta-btn--outline">
+              Liên hệ hợp tác
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<script>
+  // Interactive Timeline Switching (CanhCam Style)
+  function setupHistoryTimeline() {
+    const nodes = document.querySelectorAll('.history-node');
+    const slides = document.querySelectorAll('.history-slide');
+
+    if (!nodes.length || !slides.length) return;
+
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        const targetYear = node.getAttribute('data-target');
+
+        // Toggle active node
+        nodes.forEach(n => n.classList.remove('active'));
+        node.classList.add('active');
+
+        // Toggle active slide
+        slides.forEach(slide => {
+          if (slide.getAttribute('data-year') === targetYear) {
+            slide.classList.add('active');
+          } else {
+            slide.classList.remove('active');
+          }
+        });
+      });
+    });
+  }
+
+  setupHistoryTimeline();
+  document.addEventListener('astro:page-load', setupHistoryTimeline);
+</script>

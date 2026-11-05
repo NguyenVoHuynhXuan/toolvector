@@ -1,0 +1,42 @@
+---
+---
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <!-- SEO -->
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+        <title>Redirecting to RankYak...</title>
+
+        <!-- Performance -->
+        <link rel="preconnect" href="https://rankyak.com/" />
+        <link rel="dns-prefetch" href="https://rankyak.com/" />
+
+        <!-- JavaScript Redirect -->
+        <script>
+            window.location.replace("https://rankyak.com/");
+        </script>
+
+        <!-- Fallback nếu JavaScript bị tắt -->
+        <noscript>
+            <meta
+                http-equiv="refresh"
+                content="0;url=https://rankyak.com/"
+            />
+        </noscript>
+    </head>
+
+    <body style="display: none;">
+        <noscript>
+            <p>
+                Redirecting to
+                <a href="https://rankyak.com/" rel="nofollow">
+                    RankYak
+                </a>
+            </p>
+        </noscript>
+    </body>
+</html>

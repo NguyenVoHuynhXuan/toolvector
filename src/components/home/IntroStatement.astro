@@ -1,0 +1,74 @@
+---
+// src/components/home/IntroStatement.astro
+import '../../style/home/intro-statement.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+const {
+  title = "ToolVector: Independent & Transparent Software Reviews",
+  description = "Honest, research-based software reviews covering features, security, pricing, and real drawbacks. Choose the right tool for your team with confidence.",
+  ctaText = "Read more",
+  ctaLink = "/about/"
+} = Astro.props;
+---
+
+<section class="intro-statement" id="intro-statement" aria-label="About ToolVector Reviews">
+  <!-- Subtle Architectural Grid Lanes matching Hero and agency style -->
+  <div class="intro-statement__lanes-wrapper" aria-hidden="true">
+    <div class="container intro-statement__lanes-container">
+      <div class="intro-statement__lanes">
+        <div class="intro-statement__lane"></div>
+        <div class="intro-statement__lane"></div>
+        <div class="intro-statement__lane"></div>
+        <div class="intro-statement__lane"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container intro-statement__container">
+    <div class="intro-statement__content intro-statement-reveal">
+      <h2 class="intro-statement__title">
+        {title}
+      </h2>
+      
+      <p class="intro-statement__desc">
+        Honest, research-based software reviews covering <strong>features</strong>, <strong>security</strong>, <strong>pricing</strong>, and <strong>real drawbacks</strong>. Choose the right tool for your team with <strong>confidence</strong>.
+      </p>
+
+      <div class="intro-statement__cta-wrap">
+        <a href={ctaLink} class="intro-statement__cta">
+          <span class="intro-statement__cta-text">{ctaText}</span>
+          <span class="intro-statement__cta-bar" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupIntroReveal() {
+    const targets = document.querySelectorAll('.intro-statement-reveal');
+    if (!targets.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    targets.forEach(target => observer.observe(target));
+  }
+
+  setupIntroReveal();
+  document.addEventListener('astro:page-load', setupIntroReveal);
+</script>

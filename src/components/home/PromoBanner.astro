@@ -1,0 +1,92 @@
+---
+import bgBlogHome from "../../assets/bg_blog_home.jpg";
+---
+
+<section class="section promo-banner">
+  <div class="container">
+    <div 
+      class="promo-banner__inner" 
+      style={`background-image: url('${bgBlogHome.src}');`}
+    >
+      <div class="promo-banner__overlay"></div>
+      <div class="promo-banner__content">
+        <h2 class="promo-banner__title">Unlock Your Potential</h2>
+        <p class="promo-banner__subtitle">
+          Join thousands of professionals finding the perfect software stack.
+        </p>
+        <a href="#" class="promo-banner__btn">Explore More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .promo-banner {
+    padding-top: 0;
+  }
+  .promo-banner__inner {
+    position: relative;
+    border-radius: var(--radius-xl);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Parallax effect */
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .promo-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.3) 100%);
+    z-index: 1;
+  }
+  .promo-banner__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #ffffff;
+    padding: 0 24px;
+  }
+  .promo-banner__title {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-extrabold);
+    margin: 0 0 16px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  .promo-banner__subtitle {
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto 32px;
+    color: #e2e8f0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  .promo-banner__btn {
+    display: inline-block;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-weight: var(--font-weight-semibold);
+    padding: 12px 32px;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-primary-glow);
+  }
+  .promo-banner__btn:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .promo-banner__inner {
+      height: 280px;
+      background-attachment: scroll; /* Disable parallax on mobile for better perf */
+    }
+    .promo-banner__title {
+      font-size: 2rem;
+    }
+  }
+</style>

@@ -1,0 +1,247 @@
+---
+import Layout from "../layout/Layout.astro";
+import "../style/pages/contact.css";
+---
+
+<Layout
+  title="Contact Us | ToolVector"
+  description="Have a question, feedback, or want to partner with ToolVector? We'd love to hear from you."
+>
+  <main class="contact-page">
+    <div class="contact-page__hero">
+      <div class="container contact-page__hero-inner">
+        <div class="contact-page__badge">Contact Us</div>
+        <h1>Get in Touch with ToolVector</h1>
+        <p class="contact-page__lead">
+          Have a question, feedback, or want to partner with ToolVector? We'd
+          love to hear from you.
+        </p>
+      </div>
+    </div>
+
+    <div class="container contact-page__body">
+      <div class="contact-grid">
+        <!-- Left Column: Contact Info -->
+        <div class="contact-info">
+          <div class="contact-info__header">
+            <h2>Contact Channels by Purpose</h2>
+            <p>Organizing requests by purpose helps us route them faster.</p>
+          </div>
+
+          <div class="contact-channels">
+            <div class="channel-card">
+              <div class="channel-card__icon">💬</div>
+              <div class="channel-card__content">
+                <h3>1. General Support / User Questions</h3>
+                <p>
+                  For questions about reviews, product comparisons, Smart Match,
+                  accounts, etc.
+                </p>
+                <a href="mailto:thachhuynhphat@gmail.com" class="email-link"
+                  >thachhuynhphat@gmail.com</a
+                >
+                <div class="channel-note">
+                  "Can't find the tool you're looking for? Let us know — our
+                  team will research it and add it to our directory."
+                </div>
+              </div>
+            </div>
+
+            <div class="channel-card">
+              <div class="channel-card__icon">🚀</div>
+              <div class="channel-card__content">
+                <h3>2. List a Software Product</h3>
+                <p>For vendors who want to list their tool on ToolVector.</p>
+                <a href="mailto:thachhuynhphat@gmail.com" class="email-link"
+                  >thachhuynhphat@gmail.com</a
+                >
+                <div class="channel-note">
+                  "Want to get your product in front of thousands of potential
+                  buyers? Submit your product via the 'List your tool' form or
+                  reach out directly."
+                </div>
+                <a href="#contact-form" class="btn-channel">List your tool</a>
+              </div>
+            </div>
+
+            <div class="channel-card">
+              <div class="channel-card__icon">🤝</div>
+              <div class="channel-card__content">
+                <h3>3. Advertising & Partnerships</h3>
+                <p>
+                  For partners interested in advertising, sponsored content, or
+                  business partnerships.
+                </p>
+                <a href="mailto:thachhuynhphat@gmail.com" class="email-link"
+                  >thachhuynhphat@gmail.com</a
+                >
+                <div class="channel-note">
+                  "Interested in promoting your brand on ToolVector? Learn more
+                  about our sponsorship and advertising packages."
+                </div>
+              </div>
+            </div>
+
+            <div class="channel-card">
+              <div class="channel-card__icon">📰</div>
+              <div class="channel-card__content">
+                <h3>4. Press / Media</h3>
+                <p>For press inquiries, interviews, and media assets.</p>
+                <a href="mailto:thachhuynhphat@gmail.com" class="email-link"
+                  >thachhuynhphat@gmail.com</a
+                >
+              </div>
+            </div>
+
+            <div class="channel-card">
+              <div class="channel-card__icon">⚖️</div>
+              <div class="channel-card__content">
+                <h3>5. Legal / Privacy</h3>
+                <p>
+                  For requests related to personal data, copyright claims, etc.
+                </p>
+                <a href="mailto:thachhuynhphat@gmail.com" class="email-link"
+                  >thachhuynhphat@gmail.com</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="additional-info">
+            <h4>Additional Info</h4>
+            <ul class="additional-info__list">
+              <li>
+                <span class="info-icon">⏱️</span>
+                <strong>Expected response time:</strong> We typically respond within
+                24–48 hours (business days).
+              </li>
+              <li>
+                <span class="info-icon">🏢</span>
+                <strong>Office address:</strong> 123 Tech Lane, Innovation City, 94000
+              </li>
+            </ul>
+
+            <div class="quick-links">
+              <a href="/#faq">FAQ</a>
+              <a href="#contact-form">List your tool</a>
+              <a href="mailto:thachhuynhphat@gmail.com">Advertise with us</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Form -->
+        <div class="contact-form-wrapper">
+          <div class="form-card" id="contact-form">
+            <h2>Send us a Message</h2>
+            <p class="form-card__subtitle">
+              Fill out the form below and we'll get back to you shortly.
+            </p>
+
+            <form class="contact-form" action="#" method="POST">
+              <div class="form-group">
+                <label for="name"
+                  >Full name <span class="required">*</span></label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  placeholder="Jane Doe"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email"
+                  >Email address <span class="required">*</span></label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="jane@example.com"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="subject"
+                  >Subject <span class="required">*</span></label
+                >
+                <div class="select-wrapper">
+                  <select id="subject" name="subject" required>
+                    <option value="" disabled selected>Select a topic...</option
+                    >
+                    <option value="General Support">General Support</option>
+                    <option value="List a Tool">List a Tool</option>
+                    <option value="Advertising">Advertising</option>
+                    <option value="Press">Press</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="company"
+                  >Company <span class="optional">(optional)</span></label
+                >
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  placeholder="Your Company Ltd."
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="message"
+                  >Message <span class="required">*</span></label
+                >
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  required
+                  placeholder="How can we help you?"></textarea>
+              </div>
+
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="opt-in" name="opt-in" />
+                <label for="opt-in"
+                  >I agree to the <a href="/privacy-policy/">Privacy Policy</a
+                  >.</label
+                >
+              </div>
+
+              <button type="submit" class="btn-submit">
+                <span>Send Message</span>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 12H19M19 12L12 5M19 12L12 19"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="legal-links text-center">
+            <a href="/privacy-policy/">Privacy Policy</a>
+            <span class="separator">•</span>
+            <a href="/terms-of-service/">Terms of Service</a>
+            <span class="separator">•</span>
+            <a href="/affiliate-disclosure/">Affiliate Disclosure</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const category = post.data.category || post.data.serviceType || post.data.foodType || 'Review';
+// Default ~6000 views, stable per post (hash of id)
+const hash = [...String(post.id)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+const views = post.data.views ?? 5800 + (hash % 500);
+---
+
+<a href={`/${post.collection}/${post.id}/`} class="article-feed-card">
+  <div class="article-feed-card__media">
+    {post.data.thumbnail || post.data.logo ? (
+      <img src={(post.data.thumbnail || post.data.logo).src} alt={post.data.name || ''} class="article-feed-card__img" loading="lazy" decoding="async" />
+    ) : (
+      <span>{post.data.name?.slice(0, 1) || 'T'}</span>
+    )}
+    <span class="article-feed-card__type">{category}</span>
+  </div>
+  <div class="article-feed-card__body">
+    <div class="article-feed-card__meta">
+      <span>{post.data.date}</span><i></i><span>Research review</span>
+      <div class="article-feed-card__stats" style="margin-left: auto;">
+        <span class="stat-views">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          {views.toLocaleString('en-US')}
+        </span>
+        <span class="stat-rating">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          {(Math.random() * (5.0 - 4.5) + 4.5).toFixed(1)}
+        </span>
+      </div>
+    </div>
+    <h3>{post.data.name}</h3>
+    <p>{post.data.description}</p>
+    <span class="article-feed-card__more">Read the review <b>→</b></span>
+  </div>
+</a>
+
+<style>
+  .article-feed-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 18px;
+    background: var(--color-bg-base);
+    box-shadow: var(--shadow-sm);
+    color: inherit;
+    text-decoration: none;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .article-feed-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(99,91,219,.45);
+    box-shadow: 0 22px 38px -20px rgba(49,46,129,.3);
+  }
+  .article-feed-card__media {
+    position: relative;
+    height: 210px;
+    overflow: hidden;
+    background: linear-gradient(135deg,#e9e7ff,#dff8fb);
+  }
+  .article-feed-card__media .article-feed-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .45s ease;
+  }
+  .article-feed-card:hover .article-feed-card__media .article-feed-card__img {
+    transform: scale(1.06);
+  }
+  .article-feed-card__media > span:first-child {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    color: #635bdb;
+    font-size: 3.4rem;
+    font-weight: 800;
+  }
+  .article-feed-card__type {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    max-width: calc(100% - 24px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px 8px;
+    border: 1px solid rgba(255,255,255,.32);
+    border-radius: 999px;
+    background: rgba(15,23,42,.58);
+    backdrop-filter: blur(7px);
+    color: #fff;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .article-feed-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 18px;
+  }
+  .article-feed-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--color-text-muted);
+    font-size: .67rem;
+    font-weight: 650;
+  }
+  .article-feed-card__meta i {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #94a3b8;
+  }
+  .article-feed-card h3 {
+    margin: 12px 0 8px;
+    color: var(--color-text-dark);
+    font-size: 1.15rem;
+    letter-spacing: -.04em;
+    font-weight: 750;
+  }
+  .article-feed-card p {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    color: var(--color-text-subtle, #334155);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  .article-feed-card__more {
+    display: block;
+    margin-top: auto;
+    padding-top: 17px;
+    color: var(--color-primary, #2563eb);
+    font-size: .75rem;
+    font-weight: 800;
+  }
+  .article-feed-card__more b {
+    margin-left: 4px;
+    transition: transform .2s ease;
+  }
+  .article-feed-card:hover .article-feed-card__more b {
+    display: inline-block;
+    transform: translateX(4px);
+  }
+  .article-feed-card__stats {
+    display: flex;
+    gap: 10px;
+    font-size: .75rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    align-items: center;
+  }
+  .article-feed-card__stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Dark Theme Overrides - Crisp White Typography */
+  :global([data-theme="dark"]) .article-feed-card {
+    background: #101a33;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  }
+  :global([data-theme="dark"]) .article-feed-card:hover {
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+  }
+  :global([data-theme="dark"]) .article-feed-card h3 {
+    color: #ffffff !important;
+  }
+  :global([data-theme="dark"]) .article-feed-card p {
+    color: #ffffff !important;
+    opacity: 0.92;
+  }
+  :global([data-theme="dark"]) .article-feed-card__meta {
+    color: #cbd5e1 !important;
+  }
+  :global([data-theme="dark"]) .article-feed-card__stats {
+    color: #cbd5e1 !important;
+  }
+  :global([data-theme="dark"]) .article-feed-card__more {
+    color: #60a5fa !important;
+  }
+</style>

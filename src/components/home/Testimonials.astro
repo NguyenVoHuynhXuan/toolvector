@@ -1,0 +1,92 @@
+---
+import '../../style/home/testimonials.css';
+
+const testimonials = [
+  {
+    name: "David Chen",
+    role: "Software Developer",
+    quote: "\"What I love is they don't just list features — they actually test the tools with real tasks and point out the weaknesses too. That honesty is rare in this space.\"",
+    image: "https://i.pravatar.cc/300?img=11"
+  },
+  {
+    name: "Sarah Nguyen",
+    role: "Small Business Owner",
+    quote: "\"As a small business owner, I don't have time to try every AI tool myself. Their reviews break things down clearly, even for someone non-technical like me.\"",
+    image: "https://i.pravatar.cc/300?img=32"
+  },
+  {
+    name: "James Park",
+    role: "Freelance Designer",
+    quote: "\"I used to just trust whatever AI tool had the flashiest ads. Now I check this site first — the reviews are detailed enough that I actually know what I'm paying for before I subscribe.\"",
+    image: "https://i.pravatar.cc/300?img=12"
+  }
+];
+---
+
+<section class="section testimonials">
+  <div class="container">
+    <div class="testimonials__header">
+      <h2 class="testimonials__title">Why customers <span>love working with us —</span></h2>
+    </div>
+    
+    <div class="testimonials__track">
+      {testimonials.map((item) => (
+        <div class="testimonial-card">
+          <div class="testimonial-card__image-wrap">
+            <img src={item.image} alt={item.name} class="testimonial-card__img" loading="lazy" />
+          </div>
+          <div class="testimonial-card__content">
+            <p class="testimonial-card__quote">{item.quote}</p>
+            <div class="testimonial-card__author">
+              <div class="testimonial-card__name">{item.name}</div>
+              <div class="testimonial-card__role">{item.role}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="testimonials__pagination">
+      <button class="testimonials__dot active" aria-label="Go to slide 1"></button>
+      <button class="testimonials__dot" aria-label="Go to slide 2"></button>
+      <button class="testimonials__dot" aria-label="Go to slide 3"></button>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupTestimonials() {
+    const track = document.querySelector('.testimonials__track');
+    const dots = document.querySelectorAll('.testimonials__dot');
+    const cards = document.querySelectorAll('.testimonial-card');
+    
+    if (!track || dots.length === 0 || cards.length === 0) return;
+
+    track.addEventListener('scroll', () => {
+      const scrollLeft = track.scrollLeft;
+      const cardWidth = cards[0].clientWidth + 24; // width + gap
+      const activeIndex = Math.round(scrollLeft / cardWidth);
+      
+      dots.forEach((dot, index) => {
+        if (index === activeIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        const cardWidth = cards[0].clientWidth + 24;
+        track.scrollTo({
+          left: index * cardWidth,
+          behavior: 'smooth'
+        });
+      });
+    });
+  }
+
+  setupTestimonials();
+  document.addEventListener('astro:page-load', setupTestimonials);
+</script>

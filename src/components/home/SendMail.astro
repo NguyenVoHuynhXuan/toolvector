@@ -1,0 +1,26 @@
+---
+import "../../style/home/send-mail.css";
+import bgImage from "../../assets/bg_blog_home.jpg";
+---
+
+<section class="section send-mail">
+    <div class="container">
+        <div class="send-mail__banner" style={`background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('${bgImage.src}'); background-size: cover; background-position: center;`}>
+            <h2 class="send-mail__title">Get the weekly software digest</h2>
+            <p class="send-mail__subtitle">
+                New reviews, price drops and tool launches &mdash; every
+                Thursday. No spam.
+            </p>
+
+            <form class="send-mail__form" onsubmit="event.preventDefault();">
+                <input
+                    type="email"
+                    placeholder="you@company.com"
+                    class="send-mail__input"
+                    required
+                />
+                <button type="submit" class="send-mail__btn">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>

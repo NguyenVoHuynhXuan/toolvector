@@ -1,0 +1,25 @@
+---
+const criteria = [
+  ['01', 'Real-world value', 'Pricing and outcomes that make sense for your team.'],
+  ['02', 'Ease of adoption', 'How quickly people can get useful work done.'],
+  ['03', 'Integration depth', 'Whether it fits naturally into your current stack.'],
+  ['04', 'Support quality', 'The human help you get when the stakes are high.'],
+];
+---
+
+<section class="methodology section">
+  <div class="container">
+    <div class="methodology__intro">
+      <div><span class="eyebrow">THE TOOLVECTOR STANDARD</span><h2>How we turn noise<br />into confidence.</h2></div>
+      <p>Every recommendation starts with a practical question: will this make your team better next week, not just look impressive in a demo?</p>
+    </div>
+    <div class="methodology__grid">
+      {criteria.map(([number, title, text]) => <article class="methodology__card"><span>{number}</span><h3>{title}</h3><p>{text}</p><i>↗</i></article>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .methodology { background:#101735; color:#fff; position:relative; overflow:hidden; }.methodology::before { content:""; position:absolute; width:600px; height:600px; top:-420px; right:-120px; border-radius:50%; background:radial-gradient(circle,#635bdb,transparent 67%); opacity:.45; }.methodology__intro { position:relative; z-index:1; display:flex; justify-content:space-between; gap:40px; align-items:end; margin-bottom:44px; }.methodology h2 { margin:0; color:#fff; font-size:clamp(2.2rem,3.8vw,3.8rem); line-height:.98; letter-spacing:-.065em; }.methodology__intro p { max-width:430px; margin:0; color:#b6c2d7; line-height:1.7; font-size:.96rem; }.methodology__grid { position:relative; z-index:1; display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid rgba(226,232,240,.18); }.methodology__card { position:relative; min-height:210px; padding:23px 26px 20px 0; border-right:1px solid rgba(226,232,240,.18); transition:.25s ease; }.methodology__card:not(:first-child) { padding-left:26px; }.methodology__card:last-child { border-right:0; }.methodology__card > span { display:block; color:#71e5d4; font-size:.68rem; font-weight:800; letter-spacing:.1em; }.methodology__card h3 { margin:38px 0 9px; color:#fff; font-size:1.05rem; letter-spacing:-.025em; }.methodology__card p { margin:0; max-width:220px; color:#9eabc1; font-size:.8rem; line-height:1.65; }.methodology__card i { position:absolute; bottom:20px; color:#a5b4fc; font-style:normal; opacity:0; transition:.25s ease; }.methodology__card:hover { transform:translateY(-7px); }.methodology__card:hover i { opacity:1; transform:translateX(4px); }
+  @media(max-width:750px) { .methodology__intro { display:block; }.methodology__intro p { margin-top:22px; }.methodology__grid { grid-template-columns:repeat(2,1fr); }.methodology__card { min-height:180px; padding:20px !important; border-bottom:1px solid rgba(226,232,240,.18); }.methodology__card:nth-child(2) { border-right:0; } } @media(max-width:440px) { .methodology__grid { grid-template-columns:1fr; }.methodology__card { border-right:0; } }
+</style>

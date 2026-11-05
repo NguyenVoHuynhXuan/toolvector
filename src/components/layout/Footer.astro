@@ -1,0 +1,104 @@
+---
+import "../../style/layout/footer.css";
+import { Image } from "astro:assets";
+import logoImg from "../../assets/logo_website.png";
+
+const currentPath = Astro.url.pathname;
+const isActive = (path) => {
+    if (path === '#') return false;
+    const normalize = (p) => p.replace(/\/$/, '');
+    return normalize(currentPath) === normalize(path);
+};
+---
+
+<footer class="footer">
+    <div class="container footer__container">
+        <!-- Main Grid -->
+        <div class="footer__grid">
+            <!-- Brand -->
+            <div class="footer__brand">
+                <a href="/" class="footer__logo">
+                    <div class="footer__logo-icon">
+                        <Image
+                            src={logoImg}
+                            alt="ToolVector Logo"
+                            width={28}
+                            height={28}
+                        />
+                    </div>
+                    <span class="footer__logo-text">ToolVector</span>
+                </a>
+                <p class="footer__desc">
+                    Independent reviews and comparisons to help you choose
+                    software with confidence.
+                </p>
+                <a href="mailto:thachhuynhphat@gmail.com" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--color-text-base); font-size: 0.85rem; text-decoration: none; font-weight: 500;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    thachhuynhphat@gmail.com
+                </a>
+            </div>
+
+
+            <!-- Company -->
+            <div class="footer__links-group">
+                <h3 class="footer__links-title">Company</h3>
+                <ul class="footer__links-list">
+                    <li><a href="/about/" class:list={["footer__link", { "footer__link--active": isActive("/about/") }]}>About</a></li>
+                    <li><a href="/contact/" class:list={["footer__link", { "footer__link--active": isActive("/contact/") }]}>Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal -->
+            <div class="footer__links-group">
+                <h3 class="footer__links-title">Legal</h3>
+                <ul class="footer__links-list">
+                    <li><a href="/privacy-policy/" class:list={["footer__link", { "footer__link--active": isActive("/privacy-policy/") }]}>Privacy Policy</a></li>
+                    <li><a href="/terms-of-service/" class:list={["footer__link", { "footer__link--active": isActive("/terms-of-service/") }]}>Terms of Service</a></li>
+                    <li><a href="/affiliate-disclosure/" class:list={["footer__link", { "footer__link--active": isActive("/affiliate-disclosure/") }]}>Affiliate Disclosure</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer__bottom">
+            <p class="footer__copyright">
+                &copy; 2026 ToolVector. All rights reserved.
+            </p>
+            <div class="footer__socials">
+                <a href="#" class="footer__social-btn" aria-label="X (Twitter)">
+                    <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        ><path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                        ></path></svg
+                    >
+                </a>
+                <a href="#" class="footer__social-btn" aria-label="LinkedIn">
+                    <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        ><path
+                            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                        ></path></svg
+                    >
+                </a>
+                <a href="#" class="footer__social-btn" aria-label="YouTube">
+                    <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        ><path
+                            d="M21.582,6.186c-0.23-1.22-1-2.21-2.26-2.47C17.3,3.316,12,3.316,12,3.316s-5.3,0-7.322,0.4C3.418,3.976,2.648,4.966,2.418,6.186C2,8.606,2,12.006,2,12.006s0,3.4,0.418,5.82c0.23,1.22,1,2.21,2.26,2.47c2.022,0.4,7.322,0.4,7.322,0.4s5.3,0,7.322-0.4c1.26-0.26,2.03-1.25,2.26-2.47C22,15.406,22,12.006,22,12.006S22,8.606,21.582,6.186z M9.996,15.006l0-6l5.73,3L9.996,15.006z"
+                        ></path></svg
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>

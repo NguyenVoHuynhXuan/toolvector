@@ -1,0 +1,135 @@
+/* src/style/home/send-mail.css */
+/* Utilizes global .section, .container classes */
+
+.send-mail__banner {
+    background-color: #0f172a;
+    /* Dark navy */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Adds visible edge against dark background */
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.4);
+    border-radius: var(--radius-xl);
+    padding: 64px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle glow at the top center */
+.send-mail__banner::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 150px;
+    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0) 70%);
+    pointer-events: none;
+}
+
+.send-mail__title {
+    font-size: 2.25rem;
+    font-weight: var(--font-weight-extrabold);
+    color: #ffffff;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+}
+
+.send-mail__subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    /* Slate-400 */
+    margin: 0 0 32px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Form Styles */
+.send-mail__form {
+    display: flex;
+    width: 100%;
+    max-width: 480px;
+    background-color: #1e293b;
+    /* Slightly lighter navy for input */
+    border: 1px solid #334155;
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    position: relative;
+    z-index: 1;
+    transition: all var(--transition-fast);
+}
+
+.send-mail__form:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.send-mail__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 10px 16px;
+}
+
+.send-mail__input::placeholder {
+    color: #64748b;
+    /* Slate-500 */
+}
+
+.send-mail__btn {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.875rem;
+    padding: 10px 24px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.send-mail__btn:hover {
+    box-shadow: var(--shadow-primary-glow);
+    background-color: var(--color-primary-dark);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .send-mail__banner {
+        padding: 48px 24px;
+    }
+
+    .send-mail__title {
+        font-size: 1.75rem;
+    }
+
+    .send-mail__form {
+        flex-direction: column;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        gap: 12px;
+    }
+
+    .send-mail__input {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        border-radius: var(--radius-md);
+        width: 100%;
+        padding: 12px 16px;
+    }
+
+    .send-mail__btn {
+        width: 100%;
+        padding: 12px 24px;
+    }
+}
