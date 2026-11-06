@@ -229,37 +229,72 @@
 .additional-info__list li {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   color: var(--color-text-subtle);
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .info-icon {
-  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(99, 91, 219, 0.1);
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 .additional-info__list strong {
   color: var(--color-text-dark);
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.info-content span {
+  color: var(--color-text-subtle);
+  font-size: 0.92rem;
+  line-height: 1.55;
 }
 
 .quick-links {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-top: 4px;
 }
 
 .quick-links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--color-bg-offset);
+  border: 1px solid var(--color-border-base);
   color: var(--color-primary);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .quick-links a:hover {
-  text-decoration: underline;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-1px);
 }
 
 /* ── Form ── */

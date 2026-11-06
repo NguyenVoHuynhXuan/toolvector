@@ -2,344 +2,857 @@
 // src/components/home/AffiliateRankings.astro
 import '../../style/home/affiliate-rankings.css';
 
-interface AffiliateItem {
+import priorityEngineLogo from '../../assets/blog/ai-email-prioritization-system/logo.png';
+import babyLoveGrowthLogo from '../../assets/blog/babylovegrowth/logo.jpg';
+import codeRabbitLogo from '../../assets/blog/coderabbit-review/logo.svg';
+import gojiberryLogo from '../../assets/blog/gojiberry/logo.png';
+import leadfeederLogo from '../../assets/blog/leadfeeder/logo.png';
+import livechatLogo from '../../assets/blog/livechat/logo.png';
+import pixelcutLogo from '../../assets/blog/pixelcut/logo.png';
+import rankyakLogo from '../../assets/blog/rankyak/logo.svg';
+import runableLogo from '../../assets/blog/runable-review/logo.png';
+import sailyLogo from '../../assets/blog/saily/logo.png';
+import siderLogo from '../../assets/blog/slider/logo.jpg';
+import taplioLogo from '../../assets/blog/taplio/logo.png';
+
+type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-';
+
+interface RankedTool {
   id: string;
   name: string;
-  verified: string;
+  subtitle: string;
   score: number;
-  grade: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-';
+  grade: Grade;
   url: string;
-  isInternal?: boolean;
-  svg: string;
+  isReviewed?: boolean;
+  logoSrc?: string;
+  svg?: string;
 }
 
-interface CategoryGroup {
+interface NicheCategory {
   id: string;
   name: string;
-  countLabel: string;
-  items: AffiliateItem[];
+  slug: string;
+  items: RankedTool[];
 }
 
-const categories: CategoryGroup[] = [
+const DEFAULT_VISIBLE = 6;
+
+const categories: NicheCategory[] = [
   {
-    id: "enterprise",
-    name: "Enterprise & Global",
-    countLabel: "5 RANKED",
+    id: 'ai-software',
+    name: 'AI Software & AI Agents',
+    slug: 'ai-software-and-ai-agents',
     items: [
       {
-        id: "awin",
-        name: "Awin",
-        verified: "Verified 2026-10-24",
-        score: 100,
-        grade: "A+",
-        url: "https://www.awin.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0c1829"/><path d="M12 28L18 12L22 21L17 28H12Z" fill="#ff4d42"/><path d="M28 28L22 12L18 21L23 28H28Z" fill="#00d1b2"/></svg>`
-      },
-      {
-        id: "impact",
-        name: "Impact",
-        verified: "Verified 2026-10-23",
-        score: 100,
-        grade: "A+",
-        url: "https://impact.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#fff5f2"/><path d="M20 10L28 25H12L20 10Z" fill="#f95c3a"/><circle cx="20" cy="27" r="2.5" fill="#ff7a59"/></svg>`
-      },
-      {
-        id: "cj-affiliate",
-        name: "CJ Affiliate",
-        verified: "Verified 2026-10-22",
+        id: 'chatgpt',
+        name: 'ChatGPT',
+        subtitle: 'Multimodal AI Assistant · OpenAI',
         score: 99,
-        grade: "A+",
-        url: "https://www.cj.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#e8f8f0"/><path d="M14 20C14 15.5 17 12 21.5 12H27V16H21.5C18.5 16 17.5 17.8 17.5 20C17.5 22.2 18.5 24 21.5 24H27V28H21.5C17 28 14 24.5 14 20Z" fill="#00a859"/></svg>`
+        grade: 'A+',
+        url: 'https://chatgpt.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#10a37f"/><circle cx="20" cy="20" r="9.5" stroke="#ffffff" stroke-width="2.4"/><path d="M20 10.5V29.5M11.8 15.2L28.2 24.8M28.2 15.2L11.8 24.8" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
       },
       {
-        id: "rakuten",
-        name: "Rakuten Advertising",
-        verified: "Verified 2026-10-20",
+        id: 'claude',
+        name: 'Claude',
+        subtitle: 'Coding & Reasoning AI · Anthropic',
+        score: 98,
+        grade: 'A+',
+        url: 'https://claude.ai/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#d97757"/><path d="M20 10L22.4 17.6L30 20L22.4 22.4L20 30L17.6 22.4L10 20L17.6 17.6L20 10Z" fill="#fff7ed"/></svg>`,
+      },
+      {
+        id: 'elevenlabs',
+        name: 'ElevenLabs',
+        subtitle: 'AI Voice & Dubbing Studio',
+        score: 97,
+        grade: 'A+',
+        url: '/blog/elevenlabs-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0f172a"/><rect x="14" y="11" width="4" height="18" rx="1.5" fill="#ffffff"/><rect x="22" y="11" width="4" height="18" rx="1.5" fill="#ffffff"/></svg>`,
+      },
+      {
+        id: 'priorityengine',
+        name: 'PriorityEngine',
+        subtitle: 'AI Business Email Prioritization',
         score: 96,
-        grade: "A+",
-        url: "https://rakutenadvertising.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#bf0000"/><circle cx="20" cy="20" r="13" fill="#ffffff" fill-opacity="0.16"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="19" fill="#ffffff">R</text></svg>`
+        grade: 'A+',
+        url: '/blog/ai-email-prioritization-system/',
+        isReviewed: true,
+        logoSrc: priorityEngineLogo.src,
       },
       {
-        id: "partnerize",
-        name: "Partnerize",
-        verified: "Verified 2026-10-18",
+        id: 'perplexity',
+        name: 'Perplexity AI',
+        subtitle: 'Real-Time AI Research Engine',
+        score: 95,
+        grade: 'A',
+        url: 'https://www.perplexity.ai/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#111827"/><path d="M20 10V30M12 14L28 26M28 14L12 26M13 20H27" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'runable',
+        name: 'Runable',
+        subtitle: 'All-in-One AI Deliverable Agent',
         score: 94,
-        grade: "A",
-        url: "https://partnerize.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0a192f"/><circle cx="20" cy="20" r="10" stroke="#00d287" stroke-width="3.5" stroke-dasharray="26 10"/><circle cx="20" cy="20" r="3.5" fill="#00d287"/></svg>`
-      }
-    ]
-  },
-  {
-    id: "saas",
-    name: "SaaS & B2B",
-    countLabel: "5 RANKED",
-    items: [
-      {
-        id: "partnerstack",
-        name: "PartnerStack",
-        verified: "Verified 2026-10-25",
-        score: 100,
-        grade: "A+",
-        url: "https://partnerstack.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#4f46e5"/><path d="M14 11H22C25.3 11 28 13.7 28 17C28 20.3 25.3 23 22 23H18.5V29H14V11Z" fill="#ffffff"/><path d="M18.5 15H22C23.1 15 24 15.9 24 17C24 18.1 23.1 19 22 19H18.5V15Z" fill="#4f46e5"/></svg>`
+        grade: 'A',
+        url: '/blog/runable-review/',
+        isReviewed: true,
+        logoSrc: runableLogo.src,
       },
       {
-        id: "rewardful",
-        name: "Rewardful",
-        verified: "Verified 2026-10-23",
-        score: 100,
-        grade: "A+",
-        url: "https://www.rewardful.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#2563eb"/><path d="M14 12H21C24 12 26 14 26 16.5C26 18.5 24.5 20.2 22.5 20.7L26.5 28H22L18.5 21.5H18V28H14V12ZM18 18.5H21C22.2 18.5 23 17.7 23 16.5C23 15.3 22.2 14.5 21 14.5H18V18.5Z" fill="#ffffff"/></svg>`
+        id: 'sider',
+        name: 'Sider AI',
+        subtitle: 'Multi-Model Browser AI Copilot',
+        score: 93,
+        grade: 'A',
+        url: '/blog/sider-ai-review/',
+        isReviewed: true,
+        logoSrc: siderLogo.src,
       },
       {
-        id: "firstpromoter",
-        name: "FirstPromoter",
-        verified: "Verified 2026-10-21",
-        score: 98,
-        grade: "A+",
-        url: "https://firstpromoter.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0284c7"/><path d="M20 10L27 24L20 21L13 24L20 10Z" fill="#ffffff"/><circle cx="20" cy="27" r="2.5" fill="#38bdf8"/></svg>`
-      },
-      {
-        id: "tolt",
-        name: "Tolt",
-        verified: "Verified 2026-10-19",
-        score: 94,
-        grade: "A",
-        url: "https://tolt.io/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#18181b"/><path d="M21 11L13 22H20L19 29L27 18H20L21 11Z" fill="#a855f7"/></svg>`
-      },
-      {
-        id: "getredius",
-        name: "Reditus",
-        verified: "Verified 2026-10-15",
+        id: 'pixelcut',
+        name: 'Pixelcut',
+        subtitle: 'AI Product Photo & Video Studio',
         score: 92,
-        grade: "A-",
-        url: "https://www.getreditus.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#1e3a8a"/><circle cx="20" cy="20" r="10" stroke="#60a5fa" stroke-width="3"/><circle cx="20" cy="20" r="4" fill="#38bdf8"/></svg>`
-      }
-    ]
+        grade: 'A-',
+        url: '/blog/pixelcut-review/',
+        isReviewed: true,
+        logoSrc: pixelcutLogo.src,
+      },
+      {
+        id: 'magnific',
+        name: 'Magnific AI',
+        subtitle: 'Precision AI Image Upscaler',
+        score: 91,
+        grade: 'A-',
+        url: '/blog/magnific-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#1e1b4b"/><path d="M11 27L16.5 14L20 22L23.5 14L29 27" stroke="#c084fc" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'higgsfield',
+        name: 'Higgsfield AI',
+        subtitle: 'Cinematic AI Video Generation',
+        score: 90,
+        grade: 'A-',
+        url: '/blog/higgsfield/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#09090b"/><path d="M13 12V28M27 12V28M13 20H27" stroke="#facc15" stroke-width="3" stroke-linecap="round"/></svg>`,
+      },
+    ],
   },
   {
-    id: "creators",
-    name: "Digital & Creators",
-    countLabel: "5 RANKED",
+    id: 'seo-marketing',
+    name: 'SEO & Marketing',
+    slug: 'seo-and-marketing',
     items: [
       {
-        id: "clickbank",
-        name: "ClickBank",
-        verified: "Verified 2026-10-24",
-        score: 100,
-        grade: "A+",
-        url: "https://www.clickbank.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#e11d48"/><circle cx="16" cy="20" r="7" stroke="#ffffff" stroke-width="3" fill="none"/><path d="M22 13H26V27H22V13Z" fill="#ffffff"/></svg>`
+        id: 'ahrefs',
+        name: 'Ahrefs',
+        subtitle: 'Backlink Index & Search Intelligence',
+        score: 99,
+        grade: 'A+',
+        url: 'https://ahrefs.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#1d4ed8"/><text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="20" fill="#ff8800">a</text></svg>`,
       },
       {
-        id: "digistore24",
-        name: "Digistore24",
-        verified: "Verified 2026-10-22",
+        id: 'semrush',
+        name: 'Semrush',
+        subtitle: 'All-in-One SEO & Visibility Suite',
         score: 98,
-        grade: "A+",
-        url: "https://www.digistore24.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0369a1"/><path d="M20 11L28 15.5V24.5L20 29L12 24.5V15.5L20 11Z" stroke="#38bdf8" stroke-width="2.5" fill="none"/><path d="M20 20L28 15.5M20 20V29M20 20L12 15.5" stroke="#38bdf8" stroke-width="2.5"/></svg>`
+        grade: 'A+',
+        url: 'https://www.semrush.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#ff642d"/><circle cx="18" cy="20" r="6" fill="#ffffff"/><path d="M22 14C26 14 29 16.8 29 20C29 23.2 26 26 22 26" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/></svg>`,
       },
       {
-        id: "avangate",
-        name: "Avangate",
-        verified: "Verified 2026-10-20",
+        id: 'rankyak',
+        name: 'RankYak',
+        subtitle: 'Automated Daily SEO Content Engine',
+        score: 95,
+        grade: 'A',
+        url: '/blog/rankyak-review/',
+        isReviewed: true,
+        logoSrc: rankyakLogo.src,
+      },
+      {
+        id: 'leadfeeder',
+        name: 'Leadfeeder',
+        subtitle: 'B2B Website Visitor Identification',
+        score: 94,
+        grade: 'A',
+        url: '/blog/leadfeeder-review/',
+        isReviewed: true,
+        logoSrc: leadfeederLogo.src,
+      },
+      {
+        id: 'taplio',
+        name: 'Taplio',
+        subtitle: 'AI LinkedIn Growth & Scheduling',
+        score: 93,
+        grade: 'A',
+        url: '/blog/taplio-review/',
+        isReviewed: true,
+        logoSrc: taplioLogo.src,
+      },
+      {
+        id: 'waalaxy',
+        name: 'Waalaxy',
+        subtitle: 'LinkedIn & Cold Email Automation',
+        score: 92,
+        grade: 'A-',
+        url: '/blog/waalaxy-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#4f46e5"/><path d="M11 14L15.5 26L20 17L24.5 26L29 14" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'babylovegrowth',
+        name: 'BabyLoveGrowth',
+        subtitle: 'AI SEO & Organic Backlink Exchange',
+        score: 91,
+        grade: 'A-',
+        url: '/blog/babylovegrowth-review/',
+        isReviewed: true,
+        logoSrc: babyLoveGrowthLogo.src,
+      },
+      {
+        id: 'lemlist',
+        name: 'Lemlist',
+        subtitle: 'Multichannel B2B Cold Outreach',
+        score: 91,
+        grade: 'A-',
+        url: '/blog/waalaxy-vs-lemlist-vs-expandi/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#2563eb"/><path d="M15 12V27H26" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="16" r="3" fill="#93c5fd"/></svg>`,
+      },
+      {
+        id: 'aimfox',
+        name: 'Aimfox',
+        subtitle: 'Cloud LinkedIn Outreach Campaigns',
+        score: 90,
+        grade: 'A-',
+        url: '/blog/aimfox-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0f172a"/><path d="M13 27L20 12L27 27H23L20 20L17 27H13Z" fill="#38bdf8"/></svg>`,
+      },
+      {
+        id: 'warmy',
+        name: 'Warmy.io',
+        subtitle: 'AI Domain & Inbox Warm-Up',
+        score: 89,
+        grade: 'B+',
+        url: '/blog/warmy/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#f97316"/><path d="M20 11C23.5 15 26 18 26 22C26 25.3 23.3 28 20 28C16.7 28 14 25.3 14 22C14 18 16.5 15 20 11Z" fill="#ffffff"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'website-developer',
+    name: 'Website & Developer',
+    slug: 'website-and-developer',
+    items: [
+      {
+        id: 'cursor',
+        name: 'Cursor',
+        subtitle: 'AI-First Code Editor for Teams',
+        score: 99,
+        grade: 'A+',
+        url: 'https://www.cursor.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#111827"/><path d="M13 11L28 20L20.5 22.2L17.5 29L13 11Z" fill="#ffffff"/></svg>`,
+      },
+      {
+        id: 'vercel',
+        name: 'Vercel',
+        subtitle: 'Frontend Cloud & Edge Deployment',
+        score: 98,
+        grade: 'A+',
+        url: 'https://vercel.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#000000"/><path d="M20 11L30 28H10L20 11Z" fill="#ffffff"/></svg>`,
+      },
+      {
+        id: 'coderabbit',
+        name: 'CodeRabbit',
+        subtitle: 'AI Pull Request Code Review',
         score: 96,
-        grade: "A+",
-        url: "https://www.2checkout.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#047857"/><path d="M14 20L19 15L24 20M14 25L19 20L24 25" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        grade: 'A+',
+        url: '/blog/coderabbit-review/',
+        isReviewed: true,
+        logoSrc: codeRabbitLogo.src,
       },
       {
-        id: "dub",
-        name: "Dub",
-        verified: "Verified 2026-10-18",
-        score: 94,
-        grade: "A",
-        url: "/go/dubdub/",
-        isInternal: true,
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#000000"/><path d="M14 28V12H21C24.3 12 27 14.7 27 18C27 20.3 25.7 22.3 23.8 23.3L27.5 28H23L19.5 23.5H17.5V28H14Z" fill="#ffffff"/><circle cx="21" cy="18" r="2.5" fill="#000000"/></svg>`
-      },
-      {
-        id: "affonso",
-        name: "Affonso",
-        verified: "Verified 2026-10-14",
-        score: 90,
-        grade: "A-",
-        url: "https://affonso.io/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#7c3aed"/><path d="M20 12L22.5 17.5L28 18.5L24 22.5L25 28L20 25L15 28L16 22.5L12 18.5L17.5 17.5L20 12Z" fill="#ffffff"/></svg>`
-      }
-    ]
-  },
-  {
-    id: "tracking",
-    name: "Tracking & Attribution",
-    countLabel: "4 RANKED",
-    items: [
-      {
-        id: "tune",
-        name: "TUNE",
-        verified: "Verified 2026-10-23",
-        score: 98,
-        grade: "A+",
-        url: "https://www.tune.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#ea580c"/><rect x="12" y="18" width="3" height="10" rx="1.5" fill="#ffffff"/><rect x="17" y="13" width="3" height="15" rx="1.5" fill="#ffffff"/><rect x="22" y="10" width="3" height="18" rx="1.5" fill="#ffffff"/><rect x="27" y="16" width="3" height="12" rx="1.5" fill="#ffffff"/></svg>`
-      },
-      {
-        id: "everflow",
-        name: "Everflow",
-        verified: "Verified 2026-10-22",
+        id: 'supabase',
+        name: 'Supabase',
+        subtitle: 'Open-Source Postgres & Auth Cloud',
         score: 96,
-        grade: "A+",
-        url: "https://www.everflow.io/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#059669"/><path d="M15 16C12.8 16 11 17.8 11 20C11 22.2 12.8 24 15 24C17.5 24 19 22 21 20C23 18 24.5 16 27 16C29.2 16 31 17.8 31 20C31 22.2 29.2 24 27 24C24.5 24 23 22 21 20C19 18 17.5 16 15 16Z" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`
+        grade: 'A+',
+        url: 'https://supabase.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#12181f"/><path d="M21.5 10L12 22H20L18.5 30L28 18H20L21.5 10Z" fill="#3ecf8e"/></svg>`,
       },
       {
-        id: "post-affiliate-pro",
-        name: "Post Affiliate Pro",
-        verified: "Verified 2026-10-18",
-        score: 92,
-        grade: "A-",
-        url: "https://www.postaffiliatepro.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#dc2626"/><path d="M20 11L28 14.5V20.5C28 25 24.5 28.5 20 30C15.5 28.5 12 25 12 20.5V14.5L20 11Z" fill="#ffffff" fill-opacity="0.2"/><path d="M17 20L19.5 22.5L24 17.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        id: 'cloudflare',
+        name: 'Cloudflare',
+        subtitle: 'Global CDN, DNS & Edge Workers',
+        score: 95,
+        grade: 'A',
+        url: 'https://www.cloudflare.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#fff7ed"/><path d="M13 25H27.5C29.4 25 31 23.4 31 21.5C31 19.7 29.6 18.2 27.8 18C27.1 14.6 24.1 12 20.5 12C16.8 12 13.7 14.7 13.1 18.3C11.3 18.7 10 20.3 10 22.2C10 23.8 11.3 25 13 25Z" fill="#f38020"/></svg>`,
       },
       {
-        id: "trackdesk",
-        name: "Trackdesk",
-        verified: "Verified 2026-10-16",
-        score: 90,
-        grade: "A-",
-        url: "https://trackdesk.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#581c87"/><path d="M13 25C13 18.5 16 14 20 14C24 14 27 18.5 27 25" stroke="#c084fc" stroke-width="3" stroke-linecap="round" fill="none"/><line x1="20" y1="23" x2="24" y2="18" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="23" r="2.5" fill="#ffffff"/></svg>`
-      }
-    ]
+        id: 'common-ninja',
+        name: 'Common Ninja',
+        subtitle: 'No-Code Interactive Website Widgets',
+        score: 91,
+        grade: 'A-',
+        url: '/blog/common-ninja/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#1e293b"/><rect x="11" y="15" width="18" height="10" rx="5" fill="#38bdf8"/><circle cx="16.5" cy="20" r="2" fill="#0f172a"/><circle cx="23.5" cy="20" r="2" fill="#0f172a"/></svg>`,
+      },
+    ],
   },
   {
-    id: "ecommerce",
-    name: "Ecommerce & Retail",
-    countLabel: "4 RANKED",
+    id: 'business-services',
+    name: 'Business & Professional Services',
+    slug: 'business-and-professional-services',
     items: [
       {
-        id: "refersion",
-        name: "Refersion",
-        verified: "Verified 2026-10-24",
+        id: 'notion',
+        name: 'Notion',
+        subtitle: 'Connected Docs, Wiki & Projects',
         score: 98,
-        grade: "A+",
-        url: "https://www.refersion.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#4338ca"/><circle cx="16" cy="16" r="3.5" fill="#818cf8"/><circle cx="24" cy="16" r="3.5" fill="#818cf8"/><circle cx="20" cy="24" r="3.5" fill="#ffffff"/><line x1="16" y1="16" x2="20" y2="24" stroke="#818cf8" stroke-width="2"/><line x1="24" y1="16" x2="20" y2="24" stroke="#818cf8" stroke-width="2"/></svg>`
+        grade: 'A+',
+        url: 'https://www.notion.so/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#ffffff"/><rect x="8" y="8" width="24" height="24" rx="4" stroke="#0f172a" stroke-width="2.2"/><path d="M15 26V14L25 26V14" stroke="#0f172a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
       },
       {
-        id: "flexoffers",
-        name: "FlexOffers",
-        verified: "Verified 2026-10-21",
-        score: 94,
-        grade: "A",
-        url: "https://www.flexoffers.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#f97316"/><path d="M14 13H24V17H18V19H23V23H18V27H14V13Z" fill="#ffffff"/><circle cx="26" cy="25" r="2.5" fill="#ffffff"/></svg>`
+        id: 'hubspot',
+        name: 'HubSpot CRM',
+        subtitle: 'Unified Sales, Service & GTM Suite',
+        score: 97,
+        grade: 'A+',
+        url: 'https://www.hubspot.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#ff7a59"/><circle cx="21" cy="21" r="5.5" stroke="#ffffff" stroke-width="2.5"/><circle cx="21" cy="11" r="2" fill="#ffffff"/><circle cx="12" cy="26" r="2" fill="#ffffff"/><path d="M21 13V15.5M16.2 23.8L13.8 25.2" stroke="#ffffff" stroke-width="2.2"/></svg>`,
       },
       {
-        id: "tapfiliate",
-        name: "Tapfiliate",
-        verified: "Verified 2026-10-19",
-        score: 90,
-        grade: "A-",
-        url: "https://tapfiliate.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#15803d"/><path d="M20 12L27 19L20 26L13 19L20 12Z" fill="#4ade80"/><path d="M20 16L24 20L20 24L16 20L20 16Z" fill="#ffffff"/></svg>`
+        id: 'linear',
+        name: 'Linear',
+        subtitle: 'High-Velocity Product Planning',
+        score: 96,
+        grade: 'A+',
+        url: 'https://linear.app/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#18181b"/><circle cx="20" cy="20" r="9.5" stroke="#818cf8" stroke-width="2.3"/><path d="M13 25L25 13" stroke="#818cf8" stroke-width="2.3"/></svg>`,
       },
       {
-        id: "linkconnector",
-        name: "LinkConnector",
-        verified: "Verified 2026-10-15",
-        score: 86,
-        grade: "B",
-        url: "https://www.linkconnector.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0284c7"/><path d="M18 16H15C13 16 11 18 11 20C11 22 13 24 15 24H18" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M22 16H25C27 16 29 18 29 20C29 22 27 24 25 24H22" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/><line x1="16" y1="20" x2="24" y2="20" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/></svg>`
-      }
-    ]
+        id: 'livechat',
+        name: 'LiveChat',
+        subtitle: 'Real-Time Customer Support Suite',
+        score: 95,
+        grade: 'A',
+        url: '/blog/livechat-review/',
+        isReviewed: true,
+        logoSrc: livechatLogo.src,
+      },
+      {
+        id: 'gojiberry',
+        name: 'Gojiberry AI',
+        subtitle: 'AI Buyer-Intent SDR & Outreach',
+        score: 93,
+        grade: 'A',
+        url: '/blog/gojiberry-ai-review/',
+        isReviewed: true,
+        logoSrc: gojiberryLogo.src,
+      },
+      {
+        id: 'breezy-hr',
+        name: 'Breezy HR',
+        subtitle: 'Visual Hiring & Applicant Tracking',
+        score: 91,
+        grade: 'A-',
+        url: '/blog/breezy-hr-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0284c7"/><path d="M14 12H21.5C24 12 25.8 13.6 25.8 15.8C25.8 17.4 24.8 18.7 23.3 19.3C25.2 19.9 26.5 21.4 26.5 23.5C26.5 26 24.5 28 21.5 28H14V12Z" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+      },
+    ],
   },
   {
-    id: "regional",
-    name: "Niche & Regional",
-    countLabel: "4 RANKED",
+    id: 'travel-connectivity',
+    name: 'Travel & Connectivity',
+    slug: 'travel-and-connectivity',
     items: [
       {
-        id: "travelpayouts",
-        name: "Travelpayouts",
-        verified: "Verified 2026-10-25",
-        score: 100,
-        grade: "A+",
-        url: "/reviews/travelpayouts/",
-        isInternal: true,
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0080ff"/><path d="M12 22L28 13L21 27L19 22L12 22Z" fill="#ffffff"/><path d="M19 22L23 17" stroke="#0080ff" stroke-width="1.5"/></svg>`
+        id: 'airalo',
+        name: 'Airalo',
+        subtitle: '200+ Country Travel eSIM Store',
+        score: 97,
+        grade: 'A+',
+        url: 'https://www.airalo.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0f172a"/><path d="M11 24C14 17 26 17 29 24" stroke="#f43f5e" stroke-width="2.6" stroke-linecap="round"/><path d="M14 20C16.5 15 23.5 15 26 20" stroke="#fbbf24" stroke-width="2.6" stroke-linecap="round"/><circle cx="20" cy="25" r="2.4" fill="#38bdf8"/></svg>`,
       },
       {
-        id: "tradedoubler",
-        name: "Tradedoubler",
-        verified: "Verified 2026-10-22",
+        id: 'saily',
+        name: 'Saily eSIM',
+        subtitle: 'Global Travel eSIM by Nord Security',
+        score: 96,
+        grade: 'A+',
+        url: '/blog/saily-review/',
+        isReviewed: true,
+        logoSrc: sailyLogo.src,
+      },
+      {
+        id: 'holafly',
+        name: 'Holafly',
+        subtitle: 'Unlimited International Data eSIM',
+        score: 95,
+        grade: 'A',
+        url: 'https://esim.holafly.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#ef4444"/><path d="M14 12V28M26 12V28M14 20H26" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'yesim',
+        name: 'Yesim',
+        subtitle: 'Global Data eSIM & Virtual Numbers',
         score: 94,
-        grade: "A",
-        url: "https://www.tradedoubler.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#1e40af"/><circle cx="16" cy="20" r="5" fill="#60a5fa"/><circle cx="24" cy="20" r="5" fill="#ffffff" fill-opacity="0.8"/></svg>`
+        grade: 'A',
+        url: '/blog/yesim/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#059669"/><path d="M13 13L20 21L27 13M20 21V28" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
       },
       {
-        id: "tradetracker",
-        name: "TradeTracker",
-        verified: "Verified 2026-10-19",
+        id: 'gigsky',
+        name: 'GigSky',
+        subtitle: 'Cruise, In-Flight & Land Travel eSIM',
+        score: 93,
+        grade: 'A',
+        url: '/blog/gigsky/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0369a1"/><circle cx="20" cy="20" r="8.5" stroke="#ffffff" stroke-width="2.4"/><path d="M20 20H26V25" stroke="#7dd3fc" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'travelpayouts',
+        name: 'Travelpayouts',
+        subtitle: 'Travel Monetization & Booking APIs',
         score: 92,
-        grade: "A-",
-        url: "https://tradetracker.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#be123c"/><circle cx="20" cy="20" r="9" stroke="#ffffff" stroke-width="2.5" fill="none"/><path d="M20 15L23 20H17L20 15Z" fill="#ffffff"/><path d="M20 25L17 20H23L20 25Z" fill="#ffffff"/></svg>`
+        grade: 'A-',
+        url: '/blog/travelpayouts/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0085ff"/><path d="M11 20L28 12L21 29L18.5 21.5L11 20Z" fill="#ffffff"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'vpn-hosting',
+    name: 'VPN & Hosting',
+    slug: 'vpn-and-hosting',
+    items: [
+      {
+        id: 'nordvpn',
+        name: 'NordVPN',
+        subtitle: 'High-Speed NordLynx WireGuard VPN',
+        score: 98,
+        grade: 'A+',
+        url: 'https://nordvpn.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#4687ff"/><path d="M10 27L17 15L21 21L24 16L30 27H10Z" fill="#ffffff"/></svg>`,
       },
       {
-        id: "webgains",
-        name: "Webgains",
-        verified: "Verified 2026-10-14",
-        score: 88,
-        grade: "B+",
-        url: "https://www.webgains.com/",
-        svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="8" fill="#0e7490"/><circle cx="17" cy="20" r="6" stroke="#22d3ee" stroke-width="3" fill="none"/><circle cx="23" cy="20" r="6" stroke="#ffffff" stroke-width="3" fill="none"/></svg>`
-      }
-    ]
-  }
+        id: 'kinsta',
+        name: 'Kinsta',
+        subtitle: 'Managed Cloud & WordPress Hosting',
+        score: 97,
+        grade: 'A+',
+        url: 'https://kinsta.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#5333ed"/><path d="M14 11V29M14 20L25 11M18 17L26 29" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'cloudways',
+        name: 'Cloudways',
+        subtitle: 'Managed AWS & DigitalOcean Stack',
+        score: 95,
+        grade: 'A',
+        url: 'https://www.cloudways.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#2c39bd"/><path d="M25 14C22.8 12.6 19.6 12.5 17 14.2C14 16.2 13.2 20.2 15.2 23.2C17.2 26.2 21.2 27 24.5 25" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'mullvad',
+        name: 'Mullvad VPN',
+        subtitle: 'Zero-Account Audited Privacy VPN',
+        score: 95,
+        grade: 'A',
+        url: 'https://mullvad.net/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#192e45"/><circle cx="20" cy="20" r="8" fill="#facc15"/><circle cx="18" cy="18.5" r="1.5" fill="#192e45"/><circle cx="22.5" cy="18.5" r="1.5" fill="#192e45"/></svg>`,
+      },
+      {
+        id: 'hostinger',
+        name: 'Hostinger',
+        subtitle: 'LiteSpeed Web & VPS Cloud Hosting',
+        score: 93,
+        grade: 'A',
+        url: 'https://www.hostinger.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#673de6"/><path d="M13 11V29M27 11V29M13 20L27 16" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'surfshark',
+        name: 'Surfshark',
+        subtitle: 'Unlimited-Device VPN & CleanWeb',
+        score: 92,
+        grade: 'A-',
+        url: 'https://surfshark.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#178bf1"/><path d="M13 25C15 17 21 13 28 14C24 18 24 22 26 26C21 26 16 26 13 25Z" fill="#ffffff"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'cybersecurity-privacy',
+    name: 'Cybersecurity & Privacy',
+    slug: 'cybersecurity-and-privacy',
+    items: [
+      {
+        id: '1password',
+        name: '1Password',
+        subtitle: 'Enterprise & Team Access Security',
+        score: 99,
+        grade: 'A+',
+        url: 'https://1password.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0a2540"/><circle cx="20" cy="20" r="9.5" stroke="#38bdf8" stroke-width="2.6"/><rect x="18.5" y="15" width="3" height="10" rx="1.5" fill="#ffffff"/></svg>`,
+      },
+      {
+        id: 'proton',
+        name: 'Proton Suite',
+        subtitle: 'Encrypted Mail, Drive & Pass',
+        score: 97,
+        grade: 'A+',
+        url: 'https://proton.me/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#6d4aff"/><path d="M14 28V12H21.5C24.8 12 27 14.1 27 17.2C27 20.3 24.8 22.4 21.5 22.4H14" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'bitwarden',
+        name: 'Bitwarden',
+        subtitle: 'Open-Source Password & Secrets Vault',
+        score: 96,
+        grade: 'A+',
+        url: 'https://bitwarden.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#175ddc"/><path d="M20 10L28 13.5V20.5C28 25.2 24.6 28.8 20 30.5C15.4 28.8 12 25.2 12 20.5V13.5L20 10Z" stroke="#ffffff" stroke-width="2.4"/><path d="M20 10V30" stroke="#93c5fd" stroke-width="2"/></svg>`,
+      },
+      {
+        id: 'crowdstrike',
+        name: 'CrowdStrike Falcon',
+        subtitle: 'AI-Native Endpoint & Cloud Defense',
+        score: 95,
+        grade: 'A',
+        url: 'https://www.crowdstrike.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#dc2626"/><path d="M11 23L27 13L22 21L29 21L14 28L18 22L11 23Z" fill="#ffffff"/></svg>`,
+      },
+      {
+        id: 'vanta',
+        name: 'Vanta',
+        subtitle: 'Automated SOC 2 & ISO Compliance',
+        score: 94,
+        grade: 'A',
+        url: 'https://www.vanta.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#2e1065"/><path d="M12 13L20 28L28 13" stroke="#c4b5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'malwarebytes',
+        name: 'Malwarebytes',
+        subtitle: 'Real-Time Malware & Identity Shield',
+        score: 91,
+        grade: 'A-',
+        url: 'https://www.malwarebytes.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0d3ecc"/><path d="M12 26V14L20 21L28 14V26" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'education-elearning',
+    name: 'Education & E-learning',
+    slug: 'education-and-e-learning',
+    items: [
+      {
+        id: 'coursera',
+        name: 'Coursera',
+        subtitle: 'University Certificates & AI Tracks',
+        score: 97,
+        grade: 'A+',
+        url: 'https://www.coursera.org/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0056d2"/><path d="M25.5 15.5C24.1 14 22.2 13.2 20 13.2C15.9 13.2 12.8 16.2 12.8 20C12.8 23.8 15.9 26.8 20 26.8C22.2 26.8 24.1 26 25.5 24.5" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'leetcode',
+        name: 'LeetCode',
+        subtitle: 'Algorithms & Tech Interview Prep',
+        score: 96,
+        grade: 'A+',
+        url: '/blog/coddy-vs-codecademy-vs-leetcode/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#18181b"/><path d="M22 12L14 20L22 28" stroke="#f59e0b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 20H27" stroke="#e4e4e7" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'coddy',
+        name: 'Coddy.tech',
+        subtitle: 'Daily Bite-Sized Coding Challenges',
+        score: 94,
+        grade: 'A',
+        url: '/blog/coddy-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#7c3aed"/><path d="M16 15L11 20L16 25M24 15L29 20L24 25" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'codecademy',
+        name: 'Codecademy',
+        subtitle: 'Interactive Career Software Paths',
+        score: 93,
+        grade: 'A',
+        url: '/blog/coddy-vs-codecademy-vs-leetcode/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#10162f"/><rect x="10" y="12" width="14" height="16" rx="2" stroke="#ffffff" stroke-width="2.2"/><path d="M26 26H31" stroke="#ffd300" stroke-width="2.8" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'brilliant',
+        name: 'Brilliant',
+        subtitle: 'Interactive Math, Data & AI Labs',
+        score: 93,
+        grade: 'A',
+        url: 'https://brilliant.org/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#facc15"/><circle cx="20" cy="18" r="6.5" stroke="#0f172a" stroke-width="2.5"/><path d="M17 27H23" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'duolingo',
+        name: 'Duolingo',
+        subtitle: 'Gamified Global Language Learning',
+        score: 91,
+        grade: 'A-',
+        url: 'https://www.duolingo.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#58cc02"/><circle cx="16" cy="19" r="3.2" fill="#ffffff"/><circle cx="24" cy="19" r="3.2" fill="#ffffff"/><path d="M18 24L20 26L22 24" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'ecommerce-products',
+    name: 'E-commerce & Consumer Products',
+    slug: 'e-commerce-and-consumer-products',
+    items: [
+      {
+        id: 'shopify',
+        name: 'Shopify',
+        subtitle: 'Global Unified Commerce Platform',
+        score: 99,
+        grade: 'A+',
+        url: 'https://www.shopify.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#95bf47"/><path d="M14 15L26 13.5L27.5 28H12.5L14 15Z" fill="#ffffff"/><path d="M17 15C17 12.5 18.3 11 20 11C21.7 11 23 12.5 23 15" stroke="#ffffff" stroke-width="2"/></svg>`,
+      },
+      {
+        id: 'stripe',
+        name: 'Stripe',
+        subtitle: 'Global Checkout & Billing Infrastructure',
+        score: 99,
+        grade: 'A+',
+        url: 'https://stripe.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#635bff"/><text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="21" fill="#ffffff">S</text></svg>`,
+      },
+      {
+        id: 'klaviyo',
+        name: 'Klaviyo',
+        subtitle: 'E-commerce Email & SMS Lifecycle',
+        score: 95,
+        grade: 'A',
+        url: 'https://www.klaviyo.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#111827"/><path d="M11 13H29L24 20L29 27H11V13Z" fill="#2dd4bf"/></svg>`,
+      },
+      {
+        id: 'gorgias',
+        name: 'Gorgias',
+        subtitle: 'AI Helpdesk for DTC Brands',
+        score: 93,
+        grade: 'A',
+        url: 'https://www.gorgias.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#ff9671"/><rect x="12" y="12" width="16" height="16" rx="5" stroke="#0f172a" stroke-width="2.5"/></svg>`,
+      },
+      {
+        id: 'tiptrans',
+        name: 'Tiptrans',
+        subtitle: 'Global Package Forwarding & Warehouses',
+        score: 92,
+        grade: 'A-',
+        url: '/blog/tiptrans-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0284c7"/><path d="M12 15L20 11L28 15V25L20 29L12 25V15Z" stroke="#ffffff" stroke-width="2.3" stroke-linejoin="round"/><path d="M12 15L20 19L28 15M20 19V29" stroke="#bae6fd" stroke-width="2"/></svg>`,
+      },
+      {
+        id: 'printful',
+        name: 'Printful',
+        subtitle: 'On-Demand Fulfillment & Merch API',
+        score: 90,
+        grade: 'A-',
+        url: 'https://www.printful.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#e11d48"/><path d="M13 26L20 12L27 26H13Z" fill="#ffffff"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'health-wellness',
+    name: 'Health, Wellness & Fitness',
+    slug: 'health-wellness-and-fitness',
+    items: [
+      {
+        id: 'oura',
+        name: 'Oura Ring',
+        subtitle: 'Precision Sleep & Readiness Biometrics',
+        score: 97,
+        grade: 'A+',
+        url: 'https://ouraring.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#1c1917"/><circle cx="20" cy="21" r="8" stroke="#f5f5f4" stroke-width="2.6"/><path d="M16 10H24" stroke="#f5f5f4" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'whoop',
+        name: 'WHOOP',
+        subtitle: '24/7 Recovery, Strain & Coaching',
+        score: 96,
+        grade: 'A+',
+        url: 'https://www.whoop.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#09090b"/><path d="M10 14L15 26L20 16L25 26L30 14" stroke="#10b981" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'heidi-health',
+        name: 'Heidi Health',
+        subtitle: 'Ambient AI Medical Scribe for Clinicians',
+        score: 95,
+        grade: 'A',
+        url: '/blog/hedi_headth/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#fef3c7"/><path d="M20 12V28M12 20H28" stroke="#0f766e" stroke-width="3.4" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'strava',
+        name: 'Strava',
+        subtitle: 'Running, Cycling & GPS Performance',
+        score: 94,
+        grade: 'A',
+        url: 'https://www.strava.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#fc4c02"/><path d="M18 11L12 23H17L18 20L19.5 23H24L18 11Z" fill="#ffffff"/><path d="M23 29L27 21H23.5L23 22L22 21H19L23 29Z" fill="#fed7aa"/></svg>`,
+      },
+      {
+        id: 'myfitnesspal',
+        name: 'MyFitnessPal',
+        subtitle: 'Macro, Calorie & Nutrition Database',
+        score: 91,
+        grade: 'A-',
+        url: 'https://www.myfitnesspal.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0066ee"/><circle cx="20" cy="14" r="3" fill="#ffffff"/><path d="M13 19C17 20.5 23 20.5 27 19M20 19.5V29M20 24L15 29M20 24L25 29" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'headspace',
+        name: 'Headspace',
+        subtitle: 'Guided Mindfulness, Focus & Sleep',
+        score: 90,
+        grade: 'A-',
+        url: 'https://www.headspace.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#fff7ed"/><circle cx="20" cy="20" r="9.5" fill="#f97316"/></svg>`,
+      },
+    ],
+  },
+  {
+    id: 'gaming-entertainment',
+    name: 'Gaming & Entertainment',
+    slug: 'gaming-and-entertainment',
+    items: [
+      {
+        id: 'steam',
+        name: 'Steam',
+        subtitle: 'Global PC Gaming Store & Ecosystem',
+        score: 99,
+        grade: 'A+',
+        url: 'https://store.steampowered.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#171a21"/><circle cx="24" cy="16" r="4.5" stroke="#66c0f4" stroke-width="2.4"/><circle cx="15" cy="25" r="3.5" fill="#66c0f4"/><path d="M16.5 23.5L21.5 18.5" stroke="#66c0f4" stroke-width="3" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'discord',
+        name: 'Discord',
+        subtitle: 'Low-Latency Voice & Community Hubs',
+        score: 97,
+        grade: 'A+',
+        url: 'https://discord.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#5865f2"/><rect x="10" y="13" width="20" height="14" rx="7" fill="#ffffff"/><circle cx="16.5" cy="20" r="2" fill="#5865f2"/><circle cx="23.5" cy="20" r="2" fill="#5865f2"/></svg>`,
+      },
+      {
+        id: 'geforce-now',
+        name: 'GeForce NOW',
+        subtitle: 'RTX 4080 Cloud Gaming · NVIDIA',
+        score: 95,
+        grade: 'A',
+        url: 'https://www.nvidia.com/en-us/geforce-now/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#111827"/><path d="M11 20C14 14 23 13 29 19C24 25 15 25 11 20Z" stroke="#76b900" stroke-width="2.6"/><circle cx="20" cy="19.5" r="2.6" fill="#76b900"/></svg>`,
+      },
+      {
+        id: 'obs-studio',
+        name: 'OBS Studio',
+        subtitle: 'Open-Source Live Broadcast & Capture',
+        score: 95,
+        grade: 'A',
+        url: 'https://obsproject.com/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#1e293b"/><circle cx="20" cy="20" r="9.5" stroke="#ffffff" stroke-width="2.2"/><path d="M20 11C23 14 23 18 20 20C17 22 14 21 12 18" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      },
+      {
+        id: 'beam-eye-tracker',
+        name: 'Beam Eye Tracker',
+        subtitle: 'Webcam Head & Eye Tracking for Sims',
+        score: 93,
+        grade: 'A',
+        url: '/blog/beam-eye-tracker-review/',
+        isReviewed: true,
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0f172a"/><path d="M9 20C12.5 14 27.5 14 31 20C27.5 26 12.5 26 9 20Z" stroke="#38bdf8" stroke-width="2.3"/><circle cx="20" cy="20" r="3.5" fill="#38bdf8"/></svg>`,
+      },
+      {
+        id: 'twitch',
+        name: 'Twitch',
+        subtitle: 'Live Gaming & Creator Streaming',
+        score: 91,
+        grade: 'A-',
+        url: 'https://www.twitch.tv/',
+        svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#9146ff"/><path d="M13 11H28V22L23 27H18L15 30V27H13V11Z" fill="#ffffff"/><rect x="18" y="15" width="2.2" height="6" fill="#9146ff"/><rect x="22.5" y="15" width="2.2" height="6" fill="#9146ff"/></svg>`,
+      },
+    ],
+  },
 ];
 
-function getGradeClass(grade: string): string {
+const totalToolsCount = categories.reduce((sum, cat) => sum + cat.items.length, 0);
+
+function getGradeClass(grade: Grade): string {
   switch (grade) {
-    case 'A+': return 'grade-badge--aplus';
-    case 'A': return 'grade-badge--a';
-    case 'A-': return 'grade-badge--aminus';
-    case 'B+': return 'grade-badge--bplus';
-    case 'B': return 'grade-badge--b';
-    case 'B-': return 'grade-badge--bminus';
-    default: return 'grade-badge--a';
+    case 'A+':
+      return 'grade-badge--aplus';
+    case 'A':
+      return 'grade-badge--a';
+    case 'A-':
+      return 'grade-badge--aminus';
+    case 'B+':
+      return 'grade-badge--bplus';
+    case 'B':
+      return 'grade-badge--b';
+    case 'B-':
+      return 'grade-badge--bminus';
+    default:
+      return 'grade-badge--a';
   }
 }
 ---
 
-<section class="section affiliate-rankings" id="affiliate-rankings" aria-label="Affiliate program rankings">
+<section class="section affiliate-rankings" id="affiliate-rankings" aria-labelledby="rankings-heading">
   <div class="container">
-    <!-- Header Area matching reference image -->
+    <!-- Header Area -->
     <div class="aff-rankings__header">
       <div class="aff-rankings__title-wrap">
-        <h2 class="aff-rankings__title">Affiliate program rankings</h2>
+        <h2 class="aff-rankings__title" id="rankings-heading">Top software rankings by niche</h2>
         <p class="aff-rankings__subtitle">
-          Independent benchmarks across 27 verified affiliate networks and tracking platforms, evaluated on tracking accuracy, payout reliability, and publisher reputation.
+          Independent benchmarks across all {categories.length} catalog niches — ranking {totalToolsCount} market-leading platforms alongside hands-on ToolVector editorial evaluations.
         </p>
       </div>
 
       <!-- Share Button -->
-      <button 
-        type="button" 
-        class="aff-rankings__share-btn" 
-        id="shareRankingsBtn" 
-        aria-label="Share affiliate program rankings"
+      <button
+        type="button"
+        class="aff-rankings__share-btn"
+        id="shareRankingsBtn"
+        aria-label="Share software rankings"
         title="Copy share link"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -351,61 +864,72 @@ function getGradeClass(grade: string): string {
       </button>
     </div>
 
-    <!-- Category Filter Tabs -->
-    <div class="aff-rankings__filters" role="tablist" aria-label="Filter rankings by category">
+    <!-- Niche Filter Tabs (Matching Catalog Categories) -->
+    <div class="aff-rankings__filters" role="tablist" aria-label="Filter rankings by catalog niche">
       <button type="button" class="aff-rankings__filter-btn is-active" data-filter="all" role="tab" aria-selected="true">
-        All Networks (27)
+        All Niches ({totalToolsCount})
       </button>
-      {categories.map((cat) => (
-        <button type="button" class="aff-rankings__filter-btn" data-filter={cat.id} role="tab" aria-selected="false">
-          {cat.name} ({cat.items.length})
-        </button>
-      ))}
-    </div>
-
-    <!-- 3-Column Grid -->
-    <div class="aff-rankings__grid" id="affRankingsGrid">
       {
         categories.map((cat) => (
-          <div class="aff-category-card" data-category={cat.id}>
-            <!-- Category Header -->
-            <div class="aff-category-card__header">
-              <h3 class="aff-category-card__name">{cat.name}</h3>
-              <a href="#affiliate-rankings" class="aff-category-card__count" title={`View ${cat.name} rankings`}>
-                <span>{cat.countLabel}</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </a>
-            </div>
+          <button type="button" class="aff-rankings__filter-btn" data-filter={cat.id} role="tab" aria-selected="false">
+            {cat.name} ({cat.items.length})
+          </button>
+        ))
+      }
+    </div>
 
-            <!-- Ranked List Items -->
-            <div class="aff-category-card__list">
-              {
-                cat.items.map((item, index) => {
+    <!-- 3-Column Leaderboard Grid -->
+    <div class="aff-rankings__grid" id="affRankingsGrid">
+      {
+        categories.map((cat) => {
+          const extraCount = Math.max(0, cat.items.length - DEFAULT_VISIBLE);
+          return (
+            <div class="aff-category-card" data-category={cat.id}>
+              <!-- Category Header linking to Catalog page -->
+              <div class="aff-category-card__header">
+                <h3 class="aff-category-card__name">{cat.name}</h3>
+                <a href={`/category/${cat.slug}/`} class="aff-category-card__count" title={`Explore ${cat.name} category`}>
+                  <span>{cat.items.length} RANKED</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Ranked Tools List -->
+              <div class="aff-category-card__list">
+                {cat.items.map((item, index) => {
                   const rank = index + 1;
                   const gradeClass = getGradeClass(item.grade);
+                  const isExtra = index >= DEFAULT_VISIBLE;
                   return (
-                    <a 
-                      href={item.url} 
-                      class="aff-item-row"
-                      target={item.isInternal ? "_self" : "_blank"}
-                      rel={item.isInternal ? "" : "noopener noreferrer"}
-                      title={`View ${item.name} (${item.verified})`}
+                    <a
+                      href={item.url}
+                      class:list={['aff-item-row', { 'is-extra': isExtra }]}
+                      target={item.isReviewed ? '_self' : '_blank'}
+                      rel={item.isReviewed ? undefined : 'noopener noreferrer'}
+                      title={item.isReviewed ? `Read our full ${item.name} review` : `Visit ${item.name}`}
                     >
                       <!-- Rank Number -->
                       <span class="aff-item-row__rank">{rank}</span>
 
                       <!-- Logo Icon -->
-                      <div class="aff-item-row__logo" aria-hidden="true" set:html={item.svg} />
+                      {item.logoSrc ? (
+                        <div class="aff-item-row__logo">
+                          <img src={item.logoSrc} alt={item.name} width="36" height="36" loading="lazy" />
+                        </div>
+                      ) : (
+                        <div class="aff-item-row__logo" aria-hidden="true" set:html={item.svg} />
+                      )}
 
                       <!-- Info -->
                       <div class="aff-item-row__info">
                         <div class="aff-item-row__name-wrap">
                           <span class="aff-item-row__name">{item.name}</span>
+                          {item.isReviewed && <span class="aff-item-row__review-pill">Reviewed</span>}
                         </div>
-                        <span class="aff-item-row__verified">{item.verified}</span>
+                        <span class="aff-item-row__verified">{item.subtitle}</span>
                       </div>
 
                       <!-- Score & Grade Badge -->
@@ -415,12 +939,46 @@ function getGradeClass(grade: string): string {
                       </div>
                     </a>
                   );
-                })
-              }
+                })}
+              </div>
+
+              {extraCount > 0 && (
+                <button
+                  type="button"
+                  class="aff-category-card__more"
+                  data-expand-card
+                  data-more-label={`Show +${extraCount} more in ${cat.name}`}
+                  data-less-label="Show top 6"
+                >
+                  <span>Show +{extraCount} more in {cat.name}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              )}
             </div>
-          </div>
-        ))
+          );
+        })
       }
+
+      <!-- 12th Card (Completes 3x4 Desktop Grid when viewing All Niches) -->
+      <div class="aff-category-card aff-category-card--cta" data-category="__summary">
+        <div class="aff-category-card__cta-box">
+          <span class="aff-category-card__cta-badge">Scoring Methodology</span>
+          <h3 class="aff-category-card__cta-title">How ToolVector Scores Every Tool</h3>
+          <p class="aff-category-card__cta-desc">
+            Rankings combine real workflow benchmarks, pricing transparency, data-privacy controls, and reliability signals. Tools marked <strong>Reviewed</strong> include a full hands-on teardown on ToolVector.
+          </p>
+          <div class="aff-category-card__cta-links">
+            <a href="/blog/" class="aff-category-card__cta-btn aff-category-card__cta-btn--primary">
+              Browse All Reviews &rarr;
+            </a>
+            <a href="/contact/" class="aff-category-card__cta-btn aff-category-card__cta-btn--ghost">
+              Submit Your Project
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -436,6 +994,10 @@ function getGradeClass(grade: string): string {
 
 <script>
   function setupAffiliateRankings() {
+    const grid = document.getElementById('affRankingsGrid');
+    if (!grid || grid.dataset.initialized === 'true') return;
+    grid.dataset.initialized = 'true';
+
     // 1. Share button
     const shareBtn = document.getElementById('shareRankingsBtn');
     const toast = document.getElementById('affRankingsToast');
@@ -445,8 +1007,8 @@ function getGradeClass(grade: string): string {
       shareBtn.addEventListener('click', async () => {
         const shareUrl = window.location.origin + window.location.pathname + '#affiliate-rankings';
         const shareData = {
-          title: 'Affiliate Program & Network Rankings | ToolVector',
-          text: 'Check out the top 27 verified affiliate networks & tracking platforms on ToolVector.',
+          title: 'Top Software Rankings by Niche | ToolVector',
+          text: 'Explore independent rankings across all 11 software niches on ToolVector.',
           url: shareUrl,
         };
 
@@ -454,8 +1016,8 @@ function getGradeClass(grade: string): string {
           try {
             await navigator.share(shareData);
             return;
-          } catch (err) {
-            // User dismissed or fallback to clipboard
+          } catch {
+            // Fallback to clipboard
           }
         }
 
@@ -466,45 +1028,59 @@ function getGradeClass(grade: string): string {
           toastTimeout = setTimeout(() => {
             toast.classList.remove('is-visible');
           }, 2400);
-        } catch (err) {
-          // Fallback alert
+        } catch {
           prompt('Copy this link:', shareUrl);
         }
       });
     }
 
-    // 2. Category filter tabs
+    // 2. Expand/collapse cards with >6 ranked tools
+    const expandButtons = grid.querySelectorAll<HTMLButtonElement>('[data-expand-card]');
+    expandButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.aff-category-card');
+        if (!card) return;
+        const expanded = card.classList.toggle('is-expanded');
+        const labelSpan = btn.querySelector('span');
+        if (labelSpan) {
+          labelSpan.textContent = expanded
+            ? btn.dataset.lessLabel || 'Show less'
+            : btn.dataset.moreLabel || 'Show more';
+        }
+      });
+    });
+
+    // 3. Category filter tabs
     const filterButtons = document.querySelectorAll<HTMLButtonElement>('.aff-rankings__filter-btn');
-    const categoryCards = document.querySelectorAll<HTMLElement>('.aff-category-card');
+    const categoryCards = grid.querySelectorAll<HTMLElement>('.aff-category-card');
 
-    if (filterButtons.length && categoryCards.length) {
-      filterButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const filter = btn.getAttribute('data-filter') || 'all';
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter') || 'all';
 
-          // Update active button state
-          filterButtons.forEach((b) => {
-            b.classList.remove('is-active');
-            b.setAttribute('aria-selected', 'false');
-          });
-          btn.classList.add('is-active');
-          btn.setAttribute('aria-selected', 'true');
+        filterButtons.forEach((b) => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
 
-          // Filter category cards
-          categoryCards.forEach((card) => {
-            const cardCat = card.getAttribute('data-category');
-            if (filter === 'all' || cardCat === filter) {
-              card.classList.remove('is-hidden');
-            } else {
-              card.classList.add('is-hidden');
-            }
-          });
+        grid.classList.toggle('is-single-niche', filter !== 'all');
+
+        categoryCards.forEach((card) => {
+          const cardCat = card.getAttribute('data-category');
+          if (filter === 'all') {
+            card.classList.remove('is-hidden');
+          } else if (cardCat === filter) {
+            card.classList.remove('is-hidden');
+          } else {
+            card.classList.add('is-hidden');
+          }
         });
       });
-    }
+    });
   }
 
-  // Run on first load & after view transitions
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupAffiliateRankings);
   } else {
