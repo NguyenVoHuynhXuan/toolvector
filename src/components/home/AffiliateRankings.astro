@@ -3,17 +3,25 @@
 import '../../style/home/affiliate-rankings.css';
 
 import priorityEngineLogo from '../../assets/blog/ai-email-prioritization-system/logo.png';
+import adskullLogo from '../../assets/blog/adskull/logo.png';
 import babyLoveGrowthLogo from '../../assets/blog/babylovegrowth/logo.jpg';
+import chartprimeLogo from '../../assets/blog/chartprime/logo.png';
 import codeRabbitLogo from '../../assets/blog/coderabbit-review/logo.svg';
+import dupdubLogo from '../../assets/blog/dupdub/logo.png';
+import fotorLogo from '../../assets/blog/fotor/logo.png';
 import gojiberryLogo from '../../assets/blog/gojiberry/logo.png';
+import greengeeksLogo from '../../assets/blog/greengeeks/logo.png';
 import leadfeederLogo from '../../assets/blog/leadfeeder/logo.png';
 import livechatLogo from '../../assets/blog/livechat/logo.png';
 import pixelcutLogo from '../../assets/blog/pixelcut/logo.png';
 import rankyakLogo from '../../assets/blog/rankyak/logo.svg';
+import revidLogo from '../../assets/blog/revid/logo.png';
 import runableLogo from '../../assets/blog/runable-review/logo.png';
 import sailyLogo from '../../assets/blog/saily/logo.png';
+import seobilityLogo from '../../assets/blog/seobility/logo.png';
 import siderLogo from '../../assets/blog/slider/logo.jpg';
 import taplioLogo from '../../assets/blog/taplio/logo.png';
+import tradvioLogo from '../../assets/blog/tradvio/logo.png';
 
 type Grade = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-';
 
@@ -112,6 +120,16 @@ const categories: NicheCategory[] = [
         logoSrc: siderLogo.src,
       },
       {
+        id: 'fotor',
+        name: 'Fotor',
+        subtitle: 'All-in-One AI Photo, Video & Design Suite',
+        score: 93,
+        grade: 'A',
+        url: '/blog/fotor-review/',
+        isReviewed: true,
+        logoSrc: fotorLogo.src,
+      },
+      {
         id: 'pixelcut',
         name: 'Pixelcut',
         subtitle: 'AI Product Photo & Video Studio',
@@ -122,6 +140,26 @@ const categories: NicheCategory[] = [
         logoSrc: pixelcutLogo.src,
       },
       {
+        id: 'dupdub',
+        name: 'DupDub',
+        subtitle: 'AI Voiceover, Avatar & Dubbing Studio',
+        score: 92,
+        grade: 'A-',
+        url: '/blog/dupdub-review/',
+        isReviewed: true,
+        logoSrc: dupdubLogo.src,
+      },
+      {
+        id: 'revid',
+        name: 'Revid AI',
+        subtitle: 'Viral AI Short-Form & Music Video Studio',
+        score: 92,
+        grade: 'A-',
+        url: '/blog/revid-ai-review/',
+        isReviewed: true,
+        logoSrc: revidLogo.src,
+      },
+      {
         id: 'magnific',
         name: 'Magnific AI',
         subtitle: 'Precision AI Image Upscaler',
@@ -130,6 +168,16 @@ const categories: NicheCategory[] = [
         url: '/blog/magnific-review/',
         isReviewed: true,
         svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#1e1b4b"/><path d="M11 27L16.5 14L20 22L23.5 14L29 27" stroke="#c084fc" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      },
+      {
+        id: 'tradvio',
+        name: 'Tradvio',
+        subtitle: 'AI Chart Analysis, Pine Script & Trade Coach',
+        score: 91,
+        grade: 'A-',
+        url: '/blog/tradvio-review/',
+        isReviewed: true,
+        logoSrc: tradvioLogo.src,
       },
       {
         id: 'higgsfield',
@@ -167,6 +215,16 @@ const categories: NicheCategory[] = [
         svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#ff642d"/><circle cx="18" cy="20" r="6" fill="#ffffff"/><path d="M22 14C26 14 29 16.8 29 20C29 23.2 26 26 22 26" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/></svg>`,
       },
       {
+        id: 'seobility',
+        name: 'Seobility',
+        subtitle: 'Technical SEO Audit & Rank Suite',
+        score: 96,
+        grade: 'A+',
+        url: '/blog/seobility-review/',
+        isReviewed: true,
+        logoSrc: seobilityLogo.src,
+      },
+      {
         id: 'rankyak',
         name: 'RankYak',
         subtitle: 'Automated Daily SEO Content Engine',
@@ -185,6 +243,16 @@ const categories: NicheCategory[] = [
         url: '/blog/leadfeeder-review/',
         isReviewed: true,
         logoSrc: leadfeederLogo.src,
+      },
+      {
+        id: 'adskull',
+        name: 'AdSkull',
+        subtitle: 'AI Media Buyer for Meta, TikTok & Snap',
+        score: 93,
+        grade: 'A',
+        url: '/blog/adskull-review/',
+        isReviewed: true,
+        logoSrc: adskullLogo.src,
       },
       {
         id: 'taplio',
@@ -354,6 +422,16 @@ const categories: NicheCategory[] = [
         logoSrc: livechatLogo.src,
       },
       {
+        id: 'chartprime',
+        name: 'ChartPrime',
+        subtitle: 'Institutional SMC & Quant TradingView Suite',
+        score: 94,
+        grade: 'A',
+        url: '/blog/chartprime-review/',
+        isReviewed: true,
+        logoSrc: chartprimeLogo.src,
+      },
+      {
         id: 'gojiberry',
         name: 'Gojiberry AI',
         subtitle: 'AI Buyer-Intent SDR & Outreach',
@@ -480,6 +558,16 @@ const categories: NicheCategory[] = [
         grade: 'A',
         url: 'https://mullvad.net/',
         svg: `<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#192e45"/><circle cx="20" cy="20" r="8" fill="#facc15"/><circle cx="18" cy="18.5" r="1.5" fill="#192e45"/><circle cx="22.5" cy="18.5" r="1.5" fill="#192e45"/></svg>`,
+      },
+      {
+        id: 'greengeeks',
+        name: 'GreenGeeks',
+        subtitle: '300% Green LiteSpeed & NVMe Hosting',
+        score: 94,
+        grade: 'A',
+        url: '/blog/greengeeks-review/',
+        isReviewed: true,
+        logoSrc: greengeeksLogo.src,
       },
       {
         id: 'hostinger',
