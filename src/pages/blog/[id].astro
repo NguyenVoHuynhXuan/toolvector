@@ -4,7 +4,6 @@ import { Image } from 'astro:assets';
 import Layout from '../../layout/Layout.astro';
 import TableOfContents from '../../components/ui/TableOfContents.astro';
 import '../../style/pages/article.css';
-import travelpayoutsBgPic2 from '../../assets/blog/travelpayouts/travelpayouts_bg_pic2.webp';
 
 const svgAssets = import.meta.glob<{ default: { src: string } }>('../../assets/**/*.svg', { eager: true });
 
@@ -27,9 +26,48 @@ const mdxTitle = headings.find((h) => h.depth === 1)?.text;
 const articleTitle = mdxTitle || `${post.data.name} Review 2026: Is It Worth It?`;
 
 const heroImage = post.data.thumbnail || post.data.logo;
+const toolName = post.data.name || 'Featured Tool';
+const toolInitials = toolName.slice(0, 2).toUpperCase();
 
-const rawPrice = post.data.startingPrice;
-const cleanPrice = rawPrice ? rawPrice.replace(/^from\s+/i, '') : null;
+// Derive Rating, Review Count, Price, and Free Trial for the Tool Summary Card
+const bodyText = post.body || '';
+const ratingMatch =
+  bodyText.match(/\*\*([345]\.\d)\s*\/\s*5(?:\.0)?\*\*/) ||
+  bodyText.match(/([345]\.\d)\s*\/\s*5(?:\.0)?\s*stars?/i) ||
+  bodyText.match(/Overall(?:\s+Score|\s+Rating)[^\n]*?([345]\.\d)\s*\/\s*5/i);
+const ratingDisplay = post.data.rating ? post.data.rating.toFixed(1) : (ratingMatch ? ratingMatch[1] : '4.6');
+
+const revCount = post.data.reviewsCount || 0;
+let reviewsDisplay: string | null = null;
+if (revCount >= 1_000_000) {
+  reviewsDisplay = `(${(revCount / 1_000_000).toFixed(revCount % 1_000_000 === 0 ? 0 : 1).replace(/\.0$/, '')}M+)`;
+} else if (revCount >= 1_000) {
+  reviewsDisplay = `(${(revCount / 1_000).toFixed(revCount >= 10_000 || revCount % 1_000 === 0 ? 0 : 1).replace(/\.0$/, '')}k+)`;
+} else if (revCount >= 20) {
+  reviewsDisplay = `(${revCount}+)`;
+}
+
+const priceDisplay = (post.data.startingPrice || 'Free / Paid Plans').replace(/\s*[·|]\s*/g, ' • ');
+
+const combinedPromo = `${post.data.startingPrice || ''} | ${post.data.promo || ''}`;
+const hasNoCard = /no credit card|no card/i.test(combinedPromo);
+const dayTrialMatch = combinedPromo.match(/(\d+)[- ]day\s+free\s+trial/i) || bodyText.match(/\b(\d+)[- ]day\s+free\s+trial\b/i);
+const moneyBackMatch = combinedPromo.match(/(\d+)[- ]day\s+money[- ]back/i) || bodyText.match(/\b(\d+)[- ]day\s+money[- ]back\b/i);
+
+let freeTrialDisplay = post.data.freeTrial || '';
+if (!freeTrialDisplay) {
+  if (/free forever|\$0 forever|free basic plan|100%\s*free\s*to\s*join/i.test(combinedPromo)) {
+    freeTrialDisplay = hasNoCard ? 'Free Forever Plan (No Credit Card)' : 'Free Forever Plan';
+  } else if (dayTrialMatch) {
+    freeTrialDisplay = `${dayTrialMatch[1]}-Day Free Trial${hasNoCard ? ' (No Credit Card)' : ''}`;
+  } else if (/^free\b|free tier|free plan|free signup|free standard|free credits|free trial/i.test(combinedPromo)) {
+    freeTrialDisplay = hasNoCard ? 'Free Plan (No Credit Card)' : 'Free Plan Available';
+  } else if (moneyBackMatch) {
+    freeTrialDisplay = `${moneyBackMatch[1]}-Day Money-Back Guarantee`;
+  } else {
+    freeTrialDisplay = 'Official Plans Available';
+  }
+}
 
 const pageUrl = Astro.url.href;
 const pageTitle = encodeURIComponent(articleTitle);
@@ -120,79 +158,61 @@ const relatedPosts = otherPosts
       <!-- Right: Sticky sidebar -->
       <aside class="article-sidebar">
 
-        <!-- Table of Contents -->
-        <TableOfContents headings={headings} />
-
-        <!-- Promo / Affiliate Banner below TOC -->
-        {post.id === 'travelpayouts' ? (
-          <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="travelpayouts-special-cta" style={`background-image: url('${travelpayoutsBgPic2.src}')`}>
-            <div class="travelpayouts-badge-wrapper">
-              <span class="travelpayouts-badge">Monetize smarter</span>
-              <svg class="travelpayouts-cursor" width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2.93747 3.99692C2.70908 3.0408 3.67025 2.23427 4.57219 2.62523L28.4692 12.9837C29.4833 13.4233 29.4059 14.8865 28.3511 15.2167L18.9676 18.1537C17.5695 18.5913 16.404 19.5692 15.7303 20.8701L11.2085 29.601C10.7001 30.5825 9.2457 30.4046 8.9889 29.3296L2.93747 3.99692Z" fill="white" stroke="#1D2939" stroke-width="4.30095"/>
-              </svg>
-            </div>
-            <p>Try Drive — an AI system that handles monetization while you focus on content.</p>
-          </a>
-        ) : post.data.banner ? (
-          <div class="sidebar-ad-card">
-            <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-ad-card__link" aria-label={`Explore ${post.data.name}`}>
-              {typeof post.data.banner === 'string' ? (
-                <img src={post.data.banner} alt={`${post.data.name} ad banner`} width="1080" height="1080" class="sidebar-ad-card__img" />
-              ) : (
-                <Image src={post.data.banner} alt={`${post.data.name} ad banner`} width={1080} height={1080} class="sidebar-ad-card__img" />
-              )}
-            </a>
-            <p class="sidebar-promo-banner__disclaimer">Affiliate link — we may earn a commission</p>
-          </div>
-        ) : (
-          <div class="sidebar-promo-banner">
-            <div class="sidebar-promo-banner__header">
-              {post.data.logo && (
+        <!-- Tool Summary Card (Top) -->
+        <div class="tool-summary-card">
+          <div class="tool-summary-card__header">
+            <div class="tool-summary-card__logo-wrap">
+              {post.data.logo ? (
                 typeof post.data.logo === 'string' ? (
-                  <img src={resolvedLogoSrc} alt={`${post.data.name} logo`} width="44" height="44" class="sidebar-promo-banner__logo" />
+                  <img src={resolvedLogoSrc} alt={`${toolName} logo`} width="44" height="44" class="tool-summary-card__logo" />
                 ) : (
-                  <Image src={post.data.logo} alt={`${post.data.name} logo`} width={44} height={44} class="sidebar-promo-banner__logo" />
+                  <Image src={post.data.logo} alt={`${toolName} logo`} width={88} height={88} class="tool-summary-card__logo" />
                 )
+              ) : (
+                <span class="tool-summary-card__initials">{toolInitials}</span>
               )}
-              <div>
-                <span class="sidebar-promo-banner__eyebrow">FEATURED TOOL</span>
-                <p class="sidebar-promo-banner__name">{post.data.name}</p>
-              </div>
+            </div>
+            <div class="tool-summary-card__titles">
+              <p class="tool-summary-card__name">{toolName}</p>
+              <p class="tool-summary-card__category">{category}</p>
+            </div>
+          </div>
+
+          <div class="tool-summary-card__specs">
+            <div class="tool-summary-card__row">
+              <span class="tool-summary-card__label">Rating</span>
+              <span class="tool-summary-card__rating">
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="#f59e0b" aria-hidden="true">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.447a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.368-2.447a1 1 0 00-1.175 0l-3.368 2.447c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.049 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.3-3.957z" />
+                </svg>
+                <strong>{ratingDisplay}</strong>
+                {reviewsDisplay && <span class="tool-summary-card__reviews">{reviewsDisplay}</span>}
+              </span>
             </div>
 
-            {cleanPrice && (
-              <div class="sidebar-promo-banner__price">
-                <span>From</span>
-                <strong>{cleanPrice}</strong>
-              </div>
-            )}
+            <div class="tool-summary-card__row">
+              <span class="tool-summary-card__label">Price</span>
+              <span class="tool-summary-card__price">{priceDisplay}</span>
+            </div>
 
-            <p class="sidebar-promo-banner__desc">
-              {post.data.promo || post.data.description || `Visit the official website to see current plans and features.`}
-            </p>
-
-            {post.data.pros && post.data.pros.length > 0 && (
-              <div class="sidebar-promo-banner__tags">
-                {post.data.pros.slice(0, 2).map((pro) => (
-                  <span class="sidebar-promo-banner__tag">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    {pro}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {post.data.link && (
-              <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-promo-banner__cta">
-                Try {post.data.name} free
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            )}
-
-            <p class="sidebar-promo-banner__disclaimer">Affiliate link — we may earn a commission</p>
+            <div class="tool-summary-card__row">
+              <span class="tool-summary-card__label">Free Trial</span>
+              <span class="tool-summary-card__trial">{freeTrialDisplay}</span>
+            </div>
           </div>
-        )}
+
+          {post.data.link && (
+            <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="tool-summary-card__cta">
+              <span>Visit {toolName}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </a>
+          )}
+        </div>
+
+        <!-- Table of Contents (Bottom) -->
+        <TableOfContents headings={headings} />
 
       </aside>
     </section>

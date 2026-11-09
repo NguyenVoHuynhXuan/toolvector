@@ -2,19 +2,30 @@
 interface Heading { depth: number; slug: string; text: string; }
 interface Props { headings: Heading[]; }
 const { headings } = Astro.props;
-const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4);
+
+const h2Headings = headings.filter((heading) => heading.depth === 2);
+const toc = h2Headings.length >= 2
+  ? h2Headings
+  : headings.filter((heading) => heading.depth === 3);
+
+const formatHeading = (text: string, index: number) => {
+  const cleaned = text.replace(/^\d+[\.\)]\s+/, '').trim();
+  return `${index + 1}. ${cleaned}`;
+};
 ---
 
 {toc.length > 0 && (
-  <nav class="toc" aria-label="Table of contents">
-    <h3 class="toc-title">Table of Contents</h3>
-    <ul class="toc-list">
-      {toc.map((heading) => (
-        <li class:list={['toc-item', `depth-${heading.depth}`]}>
-          <a href={`#${heading.slug}`}>{heading.text}</a>
+  <nav class="toc" aria-label="On this page">
+    <h3 class="toc-title">ON THIS PAGE</h3>
+    <ol class="toc-list">
+      {toc.map((heading, index) => (
+        <li class="toc-item">
+          <a href={`#${heading.slug}`} class:list={[{ active: index === 0 }]}>
+            {formatHeading(heading.text, index)}
+          </a>
         </li>
       ))}
-    </ul>
+    </ol>
   </nav>
 )}
 
@@ -23,36 +34,95 @@ const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4)
     const toc = document.querySelector<HTMLElement>('.toc');
     if (!toc || toc.dataset.ready) return;
     toc.dataset.ready = 'true';
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const id = entry.target.id;
-        toc.querySelectorAll('a').forEach((link) => {
-          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-        });
-      });
-    }, { rootMargin: '-18% 0px -72% 0px' });
-    document.querySelectorAll('.prose h2, .prose h3').forEach((heading) => observer.observe(heading));
+
+    const tocList = toc.querySelector<HTMLElement>('.toc-list');
+    const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a'));
+    const items = links
+      .map((link) => {
+        const href = link.getAttribute('href');
+        const id = href && href.startsWith('#') ? href.slice(1) : '';
+        const target = id ? document.getElementById(id) : null;
+        return target ? { link, target } : null;
+      })
+      .filter((entry): entry is { link: HTMLAnchorElement; target: HTMLElement } => Boolean(entry));
+
+    if (items.length === 0) return;
+
+    let currentActive: HTMLAnchorElement | null = items[0].link;
+
+    const setActive = (nextLink: HTMLAnchorElement) => {
+      if (currentActive === nextLink && nextLink.classList.contains('active')) return;
+      links.forEach((link) => link.classList.toggle('active', link === nextLink));
+      currentActive = nextLink;
+
+      if (tocList && tocList.scrollHeight > tocList.clientHeight) {
+        const linkTop = nextLink.offsetTop - tocList.offsetTop;
+        const linkBottom = linkTop + nextLink.offsetHeight;
+        if (linkTop < tocList.scrollTop + 8) {
+          tocList.scrollTop = Math.max(0, linkTop - 12);
+        } else if (linkBottom > tocList.scrollTop + tocList.clientHeight - 8) {
+          tocList.scrollTop = linkBottom - tocList.clientHeight + 12;
+        }
+      }
+    };
+
+    let ticking = false;
+    const updateOnScroll = () => {
+      ticking = false;
+      const offset = 148;
+      let activeItem = items[0];
+
+      for (const item of items) {
+        if (item.target.getBoundingClientRect().top <= offset) {
+          activeItem = item;
+        } else {
+          break;
+        }
+      }
+
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40) {
+        activeItem = items[items.length - 1];
+      }
+
+      setActive(activeItem.link);
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateOnScroll);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    links.forEach((link) => {
+      link.addEventListener('click', () => setActive(link));
+    });
+    updateOnScroll();
   }
+
   initToc();
   document.addEventListener('astro:page-load', initToc);
 </script>
 
 <style>
   .toc {
-    padding: 22px 20px;
-    border: 1px solid var(--color-border-base);
-    border-radius: 18px;
-    background: var(--color-bg-base);
-    box-shadow: var(--shadow-sm);
+    padding: 24px 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 2px 14px rgba(15, 23, 42, 0.035);
   }
 
   .toc-title {
-    margin: 0 0 16px;
-    font-size: 1.125rem;
+    margin: 0 0 14px;
+    padding: 0 4px;
+    font-size: 0.78rem;
     font-weight: 700;
-    color: var(--color-text-dark);
-    letter-spacing: -0.015em;
+    color: #64748b;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.3;
   }
 
   .toc-list {
@@ -62,7 +132,7 @@ const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4)
     margin: 0;
     padding: 0;
     list-style: none;
-    max-height: 320px;
+    max-height: 470px;
     overflow-y: auto;
     scrollbar-width: thin;
   }
@@ -72,33 +142,61 @@ const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4)
   }
 
   .toc-list::-webkit-scrollbar-thumb {
-    background: var(--color-border-base);
+    background: #cbd5e1;
     border-radius: 4px;
   }
 
   .toc-item a {
     display: block;
-    color: var(--color-text-muted);
-    font-size: 0.88rem;
-    line-height: 1.45;
-    text-decoration: none;
-    transition: color 0.15s ease, border-color 0.15s ease;
-    padding: 4px 0 4px 12px;
+    padding: 9px 14px;
+    border-radius: 10px;
     border-left: 3px solid transparent;
-  }
-
-  .toc-item.depth-3 a {
-    padding-left: 22px;
-    font-size: 0.82rem;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 450;
+    line-height: 1.48;
+    text-decoration: none;
+    transition: color 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
   }
 
   .toc-item a:hover {
-    color: var(--color-primary);
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.04);
   }
 
   .toc-item a.active {
-    color: var(--color-primary);
-    border-left-color: var(--color-primary);
+    background: #f5f6ff;
+    border-left-color: #4f46e5;
+    color: #4f46e5;
     font-weight: 600;
+  }
+
+  :global(:root[data-theme="dark"]) .toc {
+    background: #151e32;
+    border-color: rgba(148, 163, 184, 0.18);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
+  }
+
+  :global(:root[data-theme="dark"]) .toc-title {
+    color: #94a3b8;
+  }
+
+  :global(:root[data-theme="dark"]) .toc-list::-webkit-scrollbar-thumb {
+    background: #334155;
+  }
+
+  :global(:root[data-theme="dark"]) .toc-item a {
+    color: #cbd5e1;
+  }
+
+  :global(:root[data-theme="dark"]) .toc-item a:hover {
+    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.1);
+  }
+
+  :global(:root[data-theme="dark"]) .toc-item a.active {
+    background: rgba(99, 102, 241, 0.16);
+    border-left-color: #818cf8;
+    color: #a5b4fc;
   }
 </style>
