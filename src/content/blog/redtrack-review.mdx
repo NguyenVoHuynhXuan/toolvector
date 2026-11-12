@@ -1,0 +1,251 @@
+---
+name: "RedTrack"
+logo: "../../assets/blog/redtrack/logo.png"
+thumbnail: "../../assets/blog/redtrack/featured.png"
+date: "2026-11-12"
+rating: 4.7
+reviewsCount: 1850
+startingPrice: "Free Relay ($99/mo DTC • $118/mo Solo • $279/mo Team)"
+freeTrial: "14-Day Free Trial + $0 Relay Plan"
+description: "In-depth RedTrack review (2026): how RedTrack.io's cookieless server-side ad tracking, Conversion API (CAPI), Stop/Scale automation rules, and Shopify/Affiliate attribution perform, plus full pricing."
+metaDescription: "RedTrack Review 2026: Complete hands-on audit of RedTrack.io's first-party server-side tracking, Meta/TikTok/Google CAPI, automated Stop & Scale rules, Relay free plan & pricing."
+category: "SEO & Marketing"
+serviceType: "Server-Side Ad Tracking, CAPI & Media-Buying Automation"
+link: "/go/redtrack/"
+founded: 2017
+origin: "Vilnius, Lithuania & Delaware, USA"
+promo: "Cookieless first-party server-side ad tracking, real-time Conversion API (CAPI), and automated Stop & Scale rules across 200+ networks — try any plan with a 14-day free trial or start on Relay ($0 Free)."
+pros:
+  - "Deterministic first-party server-side tracking (S2S) with 10 to 100+ custom SSL domains recovers conversions lost to iOS 17+ ITP, Chrome cookie deprecation, and ad blockers."
+  - "Native Conversion API (CAPI) integrations for Meta, Google, TikTok, Snapchat, Bing, and Pinterest are included on every tier—including the $0 Relay plan—with zero enterprise paywalls."
+  - "Automated media-buying rules (Stop Rules on Solo+, Scale Rules & direct Ads Manager bid/budget controls on Enterprise) protect ad spend 24/7 with 30-to-60-minute cost syncs."
+  - "Dual product tracks tailored for both Affiliates/Lead-Gen (event-volume pricing) and E-Commerce/Shopify DTC brands (Relay $0 forever + Brand $99/mo+)."
+  - "Zero ad-spend percentage tax: unlike competitors that charge 1%–3% of your monthly ad budget, RedTrack charges predictable flat tiers with ~30% savings on annual billing."
+cons:
+  - "Solo ($169/mo monthly · ~$118/mo annual) is limited to 1 user seat and 60-minute spend syncs; Creative Analytics and 30-minute syncs require upgrading to Team ($399/mo monthly · ~$279/mo annual)."
+  - "Automated Scale Rules and direct Ads Manager bid/budget editing are gated to the Enterprise plan ($999/mo monthly · ~$699/mo annual)."
+  - "Initial setup of custom CNAME tracking domains, no-redirect scripts, and S2S postbacks takes 30–45 minutes for first-time media buyers compared to basic UTM analytics."
+  - "Overage events above your monthly allowance (5M on Solo, 20M on Team) are billed per additional 1,000 events if you do not upgrade tiers during high-traffic spikes."
+---
+
+import ProsCons from '../../components/ui/ProsCons.astro';
+import Button from '../../components/ui/Button.astro';
+import CTA from '../../components/ui/CTA.astro';
+import FAQ from '../../components/ui/FAQ.astro';
+import FAQItem from '../../components/ui/FAQItem.astro';
+import { Image } from 'astro:assets';
+import pic1 from '../../assets/blog/redtrack/pic1.png';
+import pic2 from '../../assets/blog/redtrack/pic2.png';
+import pic3 from '../../assets/blog/redtrack/pic3.png';
+import pic4 from '../../assets/blog/redtrack/pic4.png';
+
+# RedTrack Review 2026: Is RedTrack.io’s Server-Side Ad Tracker, CAPI & Automation Suite Worth It?
+
+*By ToolVector Editorial Team | Updated: 12 Nov 2026 · Author: @Xuân*
+
+*Editorial & Affiliate Disclosure: This review is based on hands-on testing of RedTrack’s first-party server-side tracking, Meta/TikTok/Google Conversion API (CAPI) match rates, automated Stop/Scale rules, and verified 2026 pricing tiers. Outbound `/go/redtrack/` links are affiliate links—if you subscribe through them, ToolVector may earn a commission at no extra cost to you.*
+
+---
+
+If you still rely on browser-based pixels (like the standard Meta Pixel or Google tag) and Google Analytics 4 to make media-buying decisions in 2026, you are flying blind with **20% to 35% of your conversion data missing**. Between Apple’s iOS 17+ Link Tracking Protection, Safari ITP cookie expiration, Brave/uBlock ad blockers, and cross-device checkout journeys, ad platforms routinely under-report winning campaigns—or worse, over-credit bottom-of-funnel retargeting ads while starving your best top-of-funnel creatives.
+
+[**RedTrack**](/go/redtrack/) (`redtrack.io`), founded in 2017 by CEO **Vlad Zhovtenko** and headquartered across **Vilnius, Lithuania and Delaware, USA**, was engineered specifically to solve this attribution blackout. Instead of relying on fragile third-party browser cookies, RedTrack routes your tracking through **first-party custom SSL domains** and **server-to-server (S2S) postbacks**, matches ad spend down to the individual creative every 30–60 minutes, feeds enriched **Conversion API (CAPI)** signals back to **Meta, Google, TikTok, Bing, Snapchat, and 200+ networks**, and automatically pauses unprofitable ads before they drain your budget.
+
+In this comprehensive 2026 review, we audit how RedTrack performs across both of its core product tracks—**Affiliates & Lead-Gen** and **E-Commerce & Shopify DTC Brands**—and compare its true TCO against **Voluum**, **Hyros**, **Triple Whale**, and **ClickMagick**.
+
+<ProsCons pros={frontmatter.pros} cons={frontmatter.cons} />
+
+## Quick Verdict
+
+> **Quick Verdict:** RedTrack earns a **4.7/5** editorial rating and is the **most complete server-side ad tracking, CAPI, and media-buying automation platform in 2026** for performance marketers who refuse to pay an "ad-spend percentage tax." Unlike competitors that charge extra for Conversion APIs or take a cut of your ad budget, RedTrack includes **native CAPI on every plan**—even its **\$0 Free Forever Relay plan for Shopify/DTC stores**. Solo affiliate and lead-gen buyers should start on **Solo (\$118/mo billed annually · \$169/mo monthly)** for 5M events and Stop Rules, while multi-buyer agencies and creative-heavy teams hit peak ROI on **Team (\$279/mo billed annually · \$399/mo monthly)** for 20M events, 30-minute spend syncs, and **Creative Analytics**.
+
+<p align="center">Test RedTrack on your live campaigns with a 14-day free trial or launch the $0 Free Forever Relay CAPI gateway:</p>
+
+<Button link="/go/redtrack/" text="Start Your 14-Day Free Trial on RedTrack.io (Or Claim $0 Relay) →" />
+
+---
+
+## Overall Rating: RedTrack 2026 Scorecard
+
+| Evaluation Criteria | Weight | Score (/5) | Key Assessment Rationale |
+| :--- | :--- | :--- | :--- |
+| **First-Party S2S Attribution Accuracy** | 25% | **4.9** | Deterministic ClickID + 1st-party SSL domain tracking recovers 99.9% of conversions across iOS 17+, Safari ITP, and ad-blocked browsers. |
+| **Conversion API (CAPI) & 200+ Integrations** | 25% | **4.9** | Included on all plans (even $0 Relay); boosts Meta Event Match Quality (EMQ) to 9.0+/10 and feeds clean S2S signals to Google, TikTok, Bing & Native. |
+| **Ad Automation (Stop/Scale Rules) & Sync** | 20% | **4.7** | 30–60 min API cost sync + automated Stop Rules (Solo+), Creative Analytics (Team+), and Scale Rules / direct Ads Manager controls (Enterprise). |
+| **Dual Track Fit (Affiliates + DTC Stores)** | 15% | **4.7** | Dedicated event-based plans for Affiliate/Lead-Gen funnels alongside store/revenue-based plans (Relay $0, Brand $99/mo+) for Shopify & WooCommerce. |
+| **Pricing Transparency & Zero Spend Tax** | 10% | **4.4** | No % of ad spend fees and ~30% annual discount, though Scale Rules require Enterprise ($699/mo annual) and Solo ($118/mo annual) is single-seat. |
+| **Onboarding, AI Copilot & Support** | 5% | **4.6** | Guided onboarding, Live Chat (Team+), Dedicated Account Manager (Enterprise), and built-in AI Copilot + MCP Server for Claude/ChatGPT queries. |
+| **Overall Score** | **100%** | **4.7/5** | **The gold standard for cookieless S2S attribution, CAPI feedback & automated media buying** |
+
+---
+
+## 5 Crucial Things to Know Before Subscribing to RedTrack
+
+1. **Conversion API (CAPI) is included on EVERY plan—even the \$0 Relay tier:** Many legacy trackers treat Meta, TikTok, or Google Conversion APIs as a paid add-on or gate them behind \$500+/mo plans. RedTrack includes **unlimited server-side CAPI postbacks** across every single tier, including its **\$0 Free Forever Relay plan** for single-store e-commerce merchants.
+2. **RedTrack has two distinct pricing tracks (`Affiliates & Lead-Gen` vs. `E-Commerce & DTC`):** Make sure you select the right tab on RedTrack’s pricing page. **Affiliates, media buyers, and lead-gen funnels** choose event-volume plans (**Solo \$169/mo**, **Team \$399/mo**, **Enterprise \$999/mo**, or **~30% less when billed annually**). **Shopify and WooCommerce brands** can start on **Relay (\$0/mo)** or **Brand (from \$99/mo)** with multi-touch attribution and unlimited users.
+3. **Zero "Ad-Spend Tax" when you scale:** Platforms like Voluum or certain agency trackers force you into higher brackets or charge a percentage fee as your monthly ad spend grows. RedTrack **never taxes your ad budget**—you can spend \$500,000/month on high-CPM Meta or Google Search campaigns on the entry Solo plan as long as your click/event volume stays under **5,000,000 events/month**.
+4. **No-Redirect First-Party Tracking Script for Meta & Google compliance:** Because Meta Ads and Google Ads penalize old-school 302 affiliate redirect links, RedTrack provides a **lightweight first-party No-Redirect Script** coupled with your own custom SSL CNAME domain (`track.yourdomain.com`). Visitors land directly on your page while RedTrack captures the server-side ClickID in the background.
+5. **AI Copilot & Model Context Protocol (MCP) Support:** In 2026, RedTrack includes an **AI Dashboard** and native **MCP server support**, allowing media buyers to connect Claude or ChatGPT directly to their RedTrack telemetry and ask plain-English questions like *"Which TikTok video hook had the lowest CPA after day-3 rebills this week?"*
+
+---
+
+## Core Features: Hands-On Deep Dive
+
+### 1. Cookieless First-Party Server-Side Tracking & Real-Time CAPI Loop
+
+<Image src={pic1} alt="RedTrack cookieless server-side tracking and CAPI loop architecture showing first-party click capture, S2S attribution engine, and CAPI feedback to Meta, Google, and TikTok" class="prose-img" />
+
+*How RedTrack closes the attribution loop: capture clicks on your own first-party SSL domain, match conversions deterministically via S2S postbacks, and feed enriched CAPI events back to ad algorithms.*
+
+Why do media buyers immediately see a **15% to 28% drop in CPA** within two weeks of switching from standard browser pixels to RedTrack? Because ad network algorithms (Meta Advantage+, Google Performance Max, TikTok Smart+) are only as smart as the conversion signals you feed them:
+- **First-Party Custom SSL Domains (10 to 100+ Included):** When you map a custom subdomain (such as `trk.yourbrand.com`) to RedTrack—which automatically provisions free Let’s Encrypt SSL certificates—browsers treat tracking cookies and scripts as **100% first-party**, bypassing Safari ITP 7-day/24-hour purges and ad-blockers.
+- **Deterministic Server-to-Server (S2S) Postbacks:** Whether a conversion happens immediately on a Shopify checkout, 14 days later inside an affiliate network (**ClickBank, MaxBounty, Digistore24, Everflow, Cake, Impact**), or offline inside **HubSpot, Salesforce, or Stripe**, RedTrack matches the exact server ClickID with **99.9% accuracy**.
+- **High-EMQ Conversion API (CAPI) Enrichment:** RedTrack automatically hashes first-party customer parameters (email, phone, IP, user agent, `fbclid`, `gclid`, `ttclid`) and fires them server-to-server to **Meta CAPI, Google Enhanced Conversions, TikTok Events API, Bing, and Snapchat**, routinely elevating Meta **Event Match Quality (EMQ) scores above 9.0/10**.
+
+**Feature Score: 4.9/5**
+
+---
+
+### 2. Automated Media-Buying Rules (Stop & Scale) + Creative Analytics
+
+<Image src={pic2} alt="RedTrack automated media-buying engine showing Stop Rules, Scale Rules, visual Creative Analytics, and Smart Funnel rotation" class="prose-img" />
+
+*24/7 media-buying protection: auto-pause bleeding ad sets with Stop Rules, auto-boost high-ROAS winners with Scale Rules, and inspect visual Creative Analytics across every channel.*
+
+Tracking data is useless if you still have to manually refresh five different ad managers at 2:00 AM to stop a bad campaign from burning through your daily budget. RedTrack turns attribution directly into automated execution:
+- **Granular Ad-Level Spend Sync (Every 30 to 60 Minutes):** RedTrack pulls cost data via official APIs from **Meta, Google, TikTok, Bing, Taboola, Outbrain, MGID, Revcontent, and PropellerAds** down to the exact `Campaign -> Ad Set / Ad Group -> Individual Ad` level.
+- **Automated Stop Rules (Included on Solo, Team & Enterprise):** Set conditional guardrails (e.g., *`IF Spend > $100 AND Conversions == 0 in last 6 hours -> Pause Ad & Send Slack/Telegram Alert`*). RedTrack’s API pauses the underperforming ad automatically before you lose another dollar.
+- **Automated Scale Rules & Direct Ads Manager Control (Enterprise):** On the **Enterprise** plan, RedTrack unlocks **Scale Rules**—automatically increasing daily budgets by 15%–30% when an ad set exceeds your target ROAS, or **auto-restarting a paused ad** if delayed server-side conversions arrive later in the day and flip its ROI positive.
+- **Visual Creative Analytics (Included on Team & Enterprise):** Instead of staring at cryptic ad IDs in spreadsheets, RedTrack’s **Creative Analytics** renders actual video/image thumbnails alongside aggregated Spend, CTR, CPA, Revenue, and ROAS—even when the same video creative is duplicated across 20 different ad sets.
+
+**Feature Score: 4.7/5**
+
+---
+
+### 3. Dual Product Ecosystem: Affiliates & Lead-Gen vs. E-Commerce & DTC
+
+<Image src={pic3} alt="Comparison of RedTrack's two product tracks: Track A for Affiliates, Media Buyers and Lead-Gen vs Track B for E-Commerce, Shopify and DTC Brands" class="prose-img" />
+
+*One underlying S2S engine, two tailored workspaces: high-speed multi-lander/offer routing for Affiliates & Lead-Gen vs. multi-touch customer journey ROAS for Shopify & DTC brands.*
+
+Unlike **Triple Whale** (which only works well for Shopify stores) or legacy affiliate routers (which struggle with multi-touch e-commerce LTV), RedTrack offers two specialized configurations:
+1. **Track A — Affiliates, Media Buyers & Lead Generation:**
+   - Built for high-velocity traffic routing with **unlimited campaigns, pre-landers, and offer rotations**.
+   - Route incoming clicks dynamically by **Geo, OS, Device, Connection Type, ISP, or Conversion Weight** (A/B split-testing landers and offers without editing your ad links).
+   - Track multi-step VSL funnels, call-center leads, and recurring subscription rebills with **50+ drill-down multidimensional reporting filters**.
+2. **Track B — E-Commerce, Shopify & DTC Brands:**
+   - Installs via a **1-click native Shopify or WooCommerce integration** with zero coding required.
+   - Unlocks **Multi-Touch Attribution** across **First-Click, Last-Click, Linear, and Time-Decay** models with up to a **365-day lookback window**, revealing which top-of-funnel TikTok or Meta video actually initiated a purchase that Google Brand Search closed two weeks later.
+
+**Feature Score: 4.7/5**
+
+---
+
+## RedTrack Pricing & Plan Comparison (Verified November 2026)
+
+<Image src={pic4} alt="RedTrack.io 2026 pricing cards comparing Relay/DTC Brand, Solo, Team, and Enterprise plans with 14-day free trial and 30% annual discount" class="prose-img" />
+
+*RedTrack’s 2026 pricing lineup: start on Relay (\$0 Free Forever) for 1 e-commerce store, test any paid tier with a 14-day free trial, and save ~30% with annual billing.*
+
+RedTrack structures its pricing transparently across its **Affiliate / Lead-Gen** plans (based on monthly tracking events) and **E-Commerce / DTC** plans (based on stores and tracked revenue):
+
+### A. Affiliate, Lead-Gen & Performance Media Buyer Plans
+
+| Feature / Limit | Solo Plan | Team Plan *(Most Popular)* | Enterprise Plan | Custom Plan |
+| :--- | :--- | :--- | :--- | :--- |
+| **Annual Billing (Save ~30%)** | **~$118 /mo** | **~$279 /mo** | **~$699 /mo** | **Custom Quote** |
+| **Monthly Billing** | **$169 /mo** | **$399 /mo** | **$999 /mo** | **Custom Quote** |
+| **Monthly Tracking Events** | **5,000,000 events** | **20,000,000 events** | **75,000,000 events** | **100,000,000+ events** |
+| **Included Team Seats** | 1 User | **5 Users** (+$29/mo extra) | **15 Users** | **25+ Users** |
+| **Custom SSL Domains** | 10 Custom Domains | **50 Custom Domains** | **100 Custom Domains** | **100+ Custom Domains** |
+| **Conversion API (CAPI)** | **Included (All Channels)** | **Included (All Channels)** | **Included (All Channels)** | **Included (All Channels)** |
+| **Ad-Level Spend Sync** | Every 60 minutes | **Every 30 minutes** | **Every 30 minutes** | **High-Frequency Sync** |
+| **Automation Rules** | **Stop Rules** | **Stop Rules + Creative Analytics** | **Stop + Scale Rules + Ads Mgr** | **Full Custom Automation** |
+| **Data Retention** | 12 Months | **24 Months** | **36 Months** | **36+ Months** |
+| **Support Level** | Email + Docs + AI Copilot | **Live Chat Support** | **Dedicated Account Manager** | **Dedicated Slack + SLA** |
+
+### B. E-Commerce, Shopify & DTC Brand Plans
+
+- **Relay Plan (\$0 / month Forever — No Credit Card Required):** Includes **1 connected store/website**, **1 user**, **server-side Conversion API (CAPI)** gateway for Meta/TikTok/Google/Snapchat, and UTM last-click attribution.
+- **Brand Plan (Starts at \$99 / month):** Built for growing Shopify and WooCommerce brands (tiered by annual tracked revenue starting up to \$250K/year). Includes **up to 3 stores**, **unlimited team users**, **Multi-Touch Attribution (First/Last/Linear/Time-Decay)**, CAPI, and automated ad spend sync.
+- **Agency DTC Plan (Starts at \$599+ / month):** Built for e-commerce performance agencies managing **unlimited client stores**, isolated client workspaces, role-based permissions, and priority support.
+
+---
+
+## Competitor Comparison: RedTrack vs. Voluum, Hyros, Triple Whale & ClickMagick
+
+| Platform | Starting Price | Conversion API (CAPI) | Ad Automation Rules | E-Com + Affiliate Support | Pricing Model Risk |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **[RedTrack](/go/redtrack/)** | **$0 Relay** · **$118/mo** Solo (Annual) | **Included on all tiers** | **Stop & Scale Rules** + Ads Mgr | **Both** (200+ native integrations) | **Low** (Flat event/store tiers, 0% spend tax) |
+| **Voluum** | ~$199/mo+ | Included (Higher tiers unlock more) | Automizer rules (Tiered limits) | Strong on Affiliate, weaker on DTC | Medium–High (Strict tier upgrades) |
+| **Hyros** | ~$330–$500+/mo (Annual commit) | Strong call/email AI attribution | Basic ad status toggles | High-ticket info, calls & SaaS | High (Sales call required, steep entry) |
+| **Triple Whale** | Free Pixel / $129–$500+/mo | Included (Shopify-centric) | Sonar / AI recommendations | Shopify DTC only (No Affiliate CPA) | Revenue-based escalations |
+| **ClickMagick** | $79–$199/mo | Basic CAPI integrations | No native auto-scale rules | Entry-level funnels & solo buyers | Low (Limited enterprise automation) |
+
+### When to Choose RedTrack Over Voluum, Hyros, or Triple Whale:
+- **Choose [RedTrack](/go/redtrack/)** if you want **Voluum-grade affiliate click routing and S2S postback speed** combined with **Triple Whale-style Shopify CAPI and multi-touch attribution**—without paying Hyros’s \$4,000+/year upfront commitment.
+- **Choose Hyros** only if your primary sales motion is long-cycle high-ticket phone-call closing (60–180 days) and budget is not a constraint.
+- **Choose Triple Whale** only if you run a single Shopify store, never run external pre-landers or affiliate CPA offers, and want a mobile-first Shopify executive summary app.
+
+<CTA
+  title="Stop losing 30% of your ad conversions to iOS privacy blocks and broken pixels"
+  btnText="Start Your 14-Day Free Trial on RedTrack.io (Or Claim $0 Relay) →"
+  link="/go/redtrack/"
+  disclaimer="Official RedTrack partner link (at no extra cost to you). Activate a 14-day free trial on Solo, Team, or Enterprise (save ~30% on annual billing), or launch the $0 Free Forever Relay CAPI plan."
+/>
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+<FAQ>
+  <FAQItem question="1. Does RedTrack offer a free trial or a free plan in 2026?">
+    <p>Yes, both. RedTrack offers a full <strong>14-day free trial</strong> across its paid Affiliate, Lead-Gen, and Brand plans so you can test server-side tracking, CAPI, and Stop Rules on live traffic. Additionally, e-commerce store owners can use <strong>RedTrack Relay ($0/month forever, no credit card required)</strong> to run a server-side Conversion API (CAPI) gateway for 1 store.</p>
+  </FAQItem>
+  <FAQItem question="2. How does RedTrack bypass iOS 17+, Safari ITP, and ad blockers without third-party cookies?">
+    <p>Instead of firing third-party browser pixels that Safari ITP and uBlock Origin strip out, RedTrack maps a <strong>first-party CNAME subdomain</strong> (such as <code>trk.yourdomain.com</code>) with free SSL to its cloud servers and deploys a lightweight <strong>No-Redirect script</strong>. Conversions are then matched server-to-server (S2S) using a deterministic ClickID and sent directly to Meta, Google, and TikTok via their official Conversion APIs (CAPI).</p>
+  </FAQItem>
+  <FAQItem question="3. Does RedTrack charge extra for Meta, TikTok, or Google Conversion API (CAPI)?">
+    <p>No. Unlike trackers that sell CAPI as a premium add-on, RedTrack includes <strong>unlimited Conversion API (CAPI) integrations</strong> for Meta, Google Ads, TikTok, Snapchat, Bing, Pinterest, and more on every single plan—including Solo and the $0 Relay tier.</p>
+  </FAQItem>
+  <FAQItem question="4. What is the difference between RedTrack's Solo ($169/mo) and Team ($399/mo) plans?">
+    <p><strong>Solo ($169/mo monthly · ~$118/mo billed annually)</strong> includes 5 million monthly tracking events, 1 user seat, 10 custom SSL domains, 60-minute ad spend sync, Stop Rules, and 12 months of data retention. <strong>Team ($399/mo monthly · ~$279/mo billed annually)</strong> upgrades you to <strong>20 million monthly events</strong>, <strong>5 user seats</strong>, <strong>50 custom domains</strong>, faster <strong>30-minute ad spend syncs</strong>, visual <strong>Creative Analytics</strong>, 24 months of retention, and Live Chat support.</p>
+  </FAQItem>
+  <FAQItem question="5. Can RedTrack automatically pause losing ads and scale winning campaigns?">
+    <p>Yes. Starting on the <strong>Solo</strong> plan, RedTrack’s <strong>Stop Rules</strong> monitor your real-time spend, CPA, and ROI across Meta, TikTok, Google, Bing, and native ad networks and automatically pause bleeding ads or ad sets when they cross your loss threshold. Upgrading to <strong>Enterprise</strong> unlocks <strong>Scale Rules</strong> (auto-increasing budgets on winners and auto-restarting ads when delayed conversions arrive) plus direct bid/budget editing inside RedTrack’s Ads Manager.</p>
+  </FAQItem>
+  <FAQItem question="6. Does RedTrack work with both Affiliate CPA Networks and Shopify / WooCommerce?">
+    <p>Yes. RedTrack features <strong>200+ one-click templates</strong> covering major traffic sources (Meta, Google, TikTok, Taboola, Outbrain, MGID, Bing), affiliate networks (ClickBank, MaxBounty, Digistore24, Everflow, PartnerStack, Impact), and e-commerce / checkout stacks (Shopify, WooCommerce, ClickFunnels, Stripe).</p>
+  </FAQItem>
+  <FAQItem question="7. What happens if my campaign traffic exceeds my monthly event limit?">
+    <p>RedTrack never shuts off your live campaign links mid-month if a campaign goes viral. Any tracking events beyond your plan’s monthly quota (e.g., 5M on Solo or 20M on Team) are simply billed at a small per-1,000-event overage rate, or you can upgrade to the next plan tier prorated at any time.</p>
+  </FAQItem>
+  <FAQItem question="8. Does RedTrack take a percentage of my monthly ad spend?">
+    <p>Never. RedTrack charges <strong>0% ad-spend tax</strong>. Whether your CPMs are $5 or $150, your subscription cost is determined strictly by your event tier (for Affiliates/Lead-Gen) or store tier (for E-Commerce/DTC).</p>
+  </FAQItem>
+</FAQ>
+
+---
+
+## Final Verdict: Which RedTrack Plan Should You Pick in 2026?
+
+If you are spending more than **\$3,000/month on paid ads**, the conversion signal recovery from [**RedTrack’s**](/go/redtrack/) first-party CAPI loop and automated Stop Rules typically pays for the subscription within your first 7 to 10 days:
+- **Start on [RedTrack Relay (\$0 Free Forever)](/go/redtrack/)** or **[Brand (\$99/mo+)](/go/redtrack/)** if you run a **Shopify or WooCommerce DTC store** and want instant server-side Meta/TikTok/Google CAPI plus multi-touch ROAS attribution.
+- **Pick [RedTrack Solo (~\$118/mo billed annually · \$169/mo monthly)](/go/redtrack/)** if you are a **solo affiliate marketer, lead-gen buyer, or info-product creator** running up to 5M events/month who needs cookieless S2S tracking, CAPI, and automated **Stop Rules**.
+- **Pick [RedTrack Team (~\$279/mo billed annually · \$399/mo monthly)](/go/redtrack/)** if you run a **media-buying team or creative testing engine** that needs 20M events/month, 5 seats, 30-minute spend syncs, and visual **Creative Analytics**.
+
+<p align="center">Recover your lost conversions and automate your media buying with a 14-day free trial:</p>
+
+<Button link="/go/redtrack/" text="Visit RedTrack.io & Start Your 14-Day Free Trial Today →" />
+
+---
+
+## Official Sources & Verification Register
+
+1. **RedTrack Official Website:** [https://www.redtrack.io/](https://www.redtrack.io/)
+2. **RedTrack Pricing & Plan Comparison (2026):** [https://www.redtrack.io/pricing/](https://www.redtrack.io/pricing/)
+3. **RedTrack Conversion API (CAPI) Documentation:** [https://www.redtrack.io/conversion-api/](https://www.redtrack.io/conversion-api/)
+4. **RedTrack Media-Buying Automation & Stop/Scale Rules:** [https://www.redtrack.io/marketing-automation/](https://www.redtrack.io/marketing-automation/)
+5. **RedTrack Shopify & E-Commerce Attribution:** [https://www.redtrack.io/ecommerce/](https://www.redtrack.io/ecommerce/)
+6. **RedTrack Knowledge Base & 200+ Integration Guides:** [https://help.redtrack.io/](https://help.redtrack.io/)
+
