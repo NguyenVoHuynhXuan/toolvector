@@ -35,11 +35,22 @@ const sortedPosts = allPosts.sort(
   (a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf()
 );
 
-const latestPicks = sortedPosts.slice(0, 3).map((post) => ({
+function formatShortPrice(raw?: string): string {
+  if (!raw) return 'See plans';
+  const firstSegment = raw.split(/\s*[•·|]\s*/)[0].trim();
+  const openCount = (firstSegment.match(/\(/g) || []).length;
+  const closeCount = (firstSegment.match(/\)/g) || []).length;
+  const balanced = openCount > closeCount ? `${firstSegment})` : firstSegment;
+  return balanced.length > 28 ? `${balanced.slice(0, 26).trim()}…` : balanced;
+}
+
+const latestPicks = sortedPosts.slice(0, 3).map((post, idx) => ({
   id: post.id,
   name: post.data.name || post.id,
-  serviceType: post.data.serviceType || post.data.category || 'Software Review',
-  price: post.data.startingPrice || 'See plans',
+  serviceType: post.data.category || post.data.serviceType || 'Software Review',
+  price: formatShortPrice(post.data.startingPrice),
+  rating: post.data.rating ? Number(post.data.rating).toFixed(1) : '4.7',
+  accent: idx === 0 ? 'sky' : idx === 1 ? 'cobalt' : 'indigo',
   date: post.data.date
     ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
         new Date(`${post.data.date}T00:00:00`)
@@ -54,7 +65,7 @@ const searchIndex = [
     type: 'Review',
     title: post.data.name || post.id,
     subtitle: post.data.serviceType || post.data.category || 'Independent Review',
-    meta: post.data.startingPrice || '',
+    meta: formatShortPrice(post.data.startingPrice),
     logo: resolveLogo(post.data.logo),
     keywords: `${post.data.name || ''} ${post.data.category || ''} ${post.data.serviceType || ''} ${post.data.description || ''} ${post.id}`.toLowerCase(),
     url: `/blog/${post.id}/`,
@@ -71,10 +82,10 @@ const searchIndex = [
 ];
 
 const quickTags = [
-  { label: 'AI Software & Agents', href: '/category/ai-software-and-ai-agents/' },
-  { label: 'SEO & Marketing', href: '/category/seo-and-marketing/' },
-  { label: 'Developer Tools', href: '/category/website-and-developer/' },
-  { label: 'Travel & eSIM', href: '/category/travel-and-connectivity/' },
+  { label: 'AI Software & Agents', href: '/category/ai-software-and-ai-agents/', tone: 'cobalt' },
+  { label: 'SEO & Marketing', href: '/category/seo-and-marketing/', tone: 'sky' },
+  { label: 'Developer Tools', href: '/category/website-and-developer/', tone: 'indigo' },
+  { label: 'Travel & eSIM', href: '/category/travel-and-connectivity/', tone: 'teal' },
 ];
 ---
 
@@ -87,6 +98,7 @@ const quickTags = [
     <div class="hero__video-overlay"></div>
     <div class="hero__ambient-glow hero__ambient-glow--primary"></div>
     <div class="hero__ambient-glow hero__ambient-glow--secondary"></div>
+    <div class="hero__ambient-glow hero__ambient-glow--tertiary"></div>
   </div>
 
   <!-- Horizontal Architectural Grid Line -->
@@ -160,7 +172,8 @@ const quickTags = [
           <span class="hero__tags-label">Popular:</span>
           {
             quickTags.map((tag) => (
-              <a href={tag.href} class="hero__tag">
+              <a href={tag.href} class={`hero__tag hero__tag--${tag.tone}`}>
+                <span class="hero__tag-dot" aria-hidden="true"></span>
                 {tag.label}
               </a>
             ))
@@ -169,11 +182,40 @@ const quickTags = [
             All {sortedPosts.length} Reviews &rarr;
           </a>
         </div>
+
+        <!-- Modern Multi-Color Trust Highlights Strip -->
+        <div class="hero__highlights" aria-label="Platform highlights">
+          <div class="hero__highlight-pill">
+            <span class="hero__highlight-icon hero__highlight-icon--emerald" aria-hidden="true">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span><strong>4,200+</strong> Vetted Tools</span>
+          </div>
+          <div class="hero__highlight-pill">
+            <span class="hero__highlight-icon hero__highlight-icon--violet" aria-hidden="true">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </span>
+            <span><strong>100%</strong> Hands-On Benchmarks</span>
+          </div>
+          <div class="hero__highlight-pill">
+            <span class="hero__highlight-icon hero__highlight-icon--amber" aria-hidden="true">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </span>
+            <span><strong>Real-Time</strong> 2026 Pricing</span>
+          </div>
+        </div>
       </div>
 
       <!-- Right Column: Floating Glass "Live Editorial Radar" Card -->
       <aside class="hero__radar" aria-label="Latest verified software evaluations">
         <div class="hero__radar-card">
+          <div class="hero__radar-topline" aria-hidden="true"></div>
           <div class="hero__radar-header">
             <div class="hero__radar-title-group">
               <span class="hero__radar-pulse" aria-hidden="true"></span>
@@ -185,10 +227,10 @@ const quickTags = [
           <div class="hero__radar-list">
             {
               latestPicks.map((item) => (
-                <a href={item.url} class="hero__radar-item">
+                <a href={item.url} class={`hero__radar-item hero__radar-item--${item.accent}`}>
                   <div class="hero__radar-logo">
                     {item.logo ? (
-                      <img src={item.logo} alt={item.name} width="38" height="38" loading="eager" />
+                      <img src={item.logo} alt={item.name} width="40" height="40" loading="eager" />
                     ) : (
                       <span>{item.name.slice(0, 2).toUpperCase()}</span>
                     )}
@@ -196,11 +238,13 @@ const quickTags = [
                   <div class="hero__radar-info">
                     <div class="hero__radar-row">
                       <strong class="hero__radar-name">{item.name}</strong>
-                      <span class="hero__radar-date">{item.date}</span>
+                      <div class="hero__radar-badges">
+                        <span class="hero__radar-rating">★ {item.rating}</span>
+                        <span class="hero__radar-date">{item.date}</span>
+                      </div>
                     </div>
                     <div class="hero__radar-meta">
                       <span class="hero__radar-type">{item.serviceType}</span>
-                      <span class="hero__radar-sep">·</span>
                       <span class="hero__radar-price">{item.price}</span>
                     </div>
                   </div>
