@@ -1,0 +1,134 @@
+---
+import Layout from "../../layout/Layout.astro";
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { categories } from "../../data/categories";
+import { getTop5Entries, resolveAssetUrl, slugifyCategory } from "../../utils/contentHelpers";
+import "../../style/pages/directory.css";
+
+const top5Guides = await getTop5Entries();
+const allBlogPosts = await getCollection('blog');
+
+const guideByCategory = new Map(
+  top5Guides.map((g) => [(g.entry.data.category || '').toLowerCase(), g])
+);
+
+const nicheCards = categories.map((cat, idx) => {
+  const matchedGuide = guideByCategory.get(cat.title.toLowerCase());
+  const reviewCount = allBlogPosts.filter((p) => p.data.category === cat.title).length;
+  return {
+    rankNum: String(idx + 1).padStart(2, '0'),
+    title: cat.title,
+    slug: slugifyCategory(cat.title),
+    count: cat.count,
+    reviewCount,
+    guide: matchedGuide,
+  };
+});
+---
+
+<Layout
+  title="Top 5 Software & Tools by Niche (2026) — ToolVector"
+  description="Curated Top 5 rankings across all 11 software niches—tested for ROI, pricing transparency, security, and real-world team adoption."
+>
+  <main class="hub-page">
+    <section class="container">
+      <div class="hub-hero">
+        <span class="hub-hero__eyebrow">2026 Niche Power Rankings</span>
+        <h1 class="hub-hero__title">Top 5 Software Picks for Every Niche</h1>
+        <p class="hub-hero__subtitle">
+          Skip hours of scattered research. Our editors rank the top 5 platforms in every software vertical based on hands-on scoring, hidden pricing traps, and workflow fit.
+        </p>
+      </div>
+
+      {top5Guides.length > 0 && (
+        <div style="margin-bottom: 52px;">
+          <div class="hub-section-heading">
+            <h2>Published Top 5 Buying Guides</h2>
+            <span>{top5Guides.length} guides live</span>
+          </div>
+
+          <div class="hub-grid">
+            {top5Guides.map((item) => {
+              const post = item.entry;
+              const hero = post.data.thumbnail || post.data.logo;
+              const title = post.data.name || item.id;
+              return (
+                <a href={item.url} class="hub-card">
+                  <div class="hub-card__media">
+                    {hero ? (
+                      typeof hero === 'string' ? (
+                        <img src={resolveAssetUrl(hero) || hero} alt={title} class="hub-card__img" loading="lazy" />
+                      ) : (
+                        <Image src={hero} alt={title} class="hub-card__img" />
+                      )
+                    ) : (
+                      <div class="hub-card__placeholder">{title}</div>
+                    )}
+                    <span class="hub-card__badge">Top 5 · {post.data.category || 'Niche Guide'}</span>
+                  </div>
+                  <div class="hub-card__body">
+                    <h3 class="hub-card__title">{title}</h3>
+                    <p class="hub-card__excerpt">{post.data.description}</p>
+                    <div class="hub-card__footer">
+                      <span class="hub-card__date">
+                        {new Date(post.data.date || 0).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </span>
+                      <span class="hub-card__cta">Read Top 5 Guide &rarr;</span>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div class="niche-directory-section">
+        <div class="hub-section-heading">
+          <h2>All 11 Niche Top 5 Hubs</h2>
+          <span>Add MDX guides inside <code>src/content/top5/</code> to publish</span>
+        </div>
+
+        <div class="niche-grid">
+          {nicheCards.map((niche) => (
+            <div class="niche-card">
+              <div>
+                <div class="niche-card__top">
+                  <span class="niche-card__index">{niche.rankNum}</span>
+                  {niche.guide ? (
+                    <span class="niche-card__status niche-card__status--live">Top 5 Live</span>
+                  ) : (
+                    <span class="niche-card__status niche-card__status--planned">Directory Ready</span>
+                  )}
+                </div>
+                <h3 class="niche-card__title" style="margin-top: 12px;">Top 5 {niche.title}</h3>
+                <p class="niche-card__meta" style="margin-top: 6px;">
+                  {niche.guide
+                    ? niche.guide.entry.data.description
+                    : `${niche.count} tracked · ${niche.reviewCount} full deep-dive ${niche.reviewCount === 1 ? 'review' : 'reviews'} published in this category.`}
+                </p>
+              </div>
+
+              <div class="niche-card__actions">
+                {niche.guide ? (
+                  <a href={niche.guide.url} class="niche-card__link">Read Top 5 Guide &rarr;</a>
+                ) : (
+                  <a href={`/category/${niche.slug}/`} class="niche-card__link">Explore {niche.reviewCount} Reviews &rarr;</a>
+                )}
+                <a href={`/category/${niche.slug}/`} class="niche-card__link" style="color: var(--color-text-muted); font-weight: 600;">
+                  Category
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+

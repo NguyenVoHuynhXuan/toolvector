@@ -1,0 +1,435 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layout/Layout.astro';
+import TableOfContents from '../ui/TableOfContents.astro';
+import {
+  isComparisonPost,
+  resolveAssetUrl,
+  type ContentKind,
+  type UnifiedArticleEntry,
+} from '../../utils/contentHelpers';
+import '../../style/pages/article.css';
+
+export interface Props {
+  post: any;
+  kind?: ContentKind;
+  relatedItems?: UnifiedArticleEntry[];
+}
+
+const { post, kind: forcedKind, relatedItems = [] } = Astro.props;
+
+const detectedKind: ContentKind =
+  forcedKind ||
+  (post.data.articleType === 'top-list'
+    ? 'top5'
+    : isComparisonPost(post)
+      ? 'compare'
+      : 'review');
+
+const { Content, headings } = await render(post);
+const resolvedLogoSrc = resolveAssetUrl(post.data.logo);
+const category = post.data.category || post.data.serviceType || post.data.foodType || 'Software Review';
+
+const publishedDate = post.data.date
+  ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(
+      new Date(`${post.data.date}T00:00:00`)
+    )
+  : undefined;
+
+const readingTime = Math.max(
+  3,
+  Math.ceil((post.body?.replace(/<[^>]*>/g, ' ').match(/\S+/g)?.length || 600) / 220)
+);
+
+const mdxTitle = headings.find((h) => h.depth === 1)?.text;
+const fallbackTitle =
+  detectedKind === 'compare'
+    ? `${post.data.name} Comparison 2026: Which Wins?`
+    : detectedKind === 'top5'
+      ? `${post.data.name}: Top 5 Software Guide (2026)`
+      : `${post.data.name} Review 2026: Is It Worth It?`;
+const articleTitle = mdxTitle || fallbackTitle;
+
+const heroImage = post.data.thumbnail || post.data.logo;
+const toolName = post.data.name || 'Featured Tool';
+const toolInitials = toolName.slice(0, 2).toUpperCase();
+
+// Derive Rating, Review Count, Price, and Free Trial for single-tool summary card
+const bodyText = post.body || '';
+const ratingMatch =
+  bodyText.match(/\*\*([345]\.\d)\s*\/\s*5(?:\.0)?\*\*/) ||
+  bodyText.match(/([345]\.\d)\s*\/\s*5(?:\.0)?\s*stars?/i) ||
+  bodyText.match(/Overall(?:\s+Score|\s+Rating)[^\n]*?([345]\.\d)\s*\/\s*5/i);
+const ratingDisplay = post.data.rating
+  ? Number(post.data.rating).toFixed(1)
+  : ratingMatch
+    ? ratingMatch[1]
+    : '4.6';
+
+const revCount = post.data.reviewsCount || 0;
+let reviewsDisplay: string | null = null;
+if (revCount >= 1_000_000) {
+  reviewsDisplay = `(${(revCount / 1_000_000).toFixed(revCount % 1_000_000 === 0 ? 0 : 1).replace(/\.0$/, '')}M+)`;
+} else if (revCount >= 1_000) {
+  reviewsDisplay = `(${(revCount / 1_000).toFixed(revCount >= 10_000 || revCount % 1_000 === 0 ? 0 : 1).replace(/\.0$/, '')}k+)`;
+} else if (revCount >= 20) {
+  reviewsDisplay = `(${revCount}+)`;
+}
+
+const priceDisplay = (post.data.startingPrice || 'Free / Paid Plans').replace(/\s*[·|]\s*/g, ' • ');
+
+const combinedPromo = `${post.data.startingPrice || ''} | ${post.data.promo || ''}`;
+const hasNoCard = /no credit card|no card/i.test(combinedPromo);
+const dayTrialMatch =
+  combinedPromo.match(/(\d+)[- ]day\s+free\s+trial/i) ||
+  bodyText.match(/\b(\d+)[- ]day\s+free\s+trial\b/i);
+const moneyBackMatch =
+  combinedPromo.match(/(\d+)[- ]day\s+money[- ]back/i) ||
+  bodyText.match(/\b(\d+)[- ]day\s+money[- ]back\b/i);
+
+let freeTrialDisplay = post.data.freeTrial || '';
+if (!freeTrialDisplay) {
+  if (/free forever|\$0 forever|free basic plan|100%\s*free\s*to\s*join/i.test(combinedPromo)) {
+    freeTrialDisplay = hasNoCard ? 'Free Forever Plan (No Credit Card)' : 'Free Forever Plan';
+  } else if (dayTrialMatch) {
+    freeTrialDisplay = `${dayTrialMatch[1]}-Day Free Trial${hasNoCard ? ' (No Credit Card)' : ''}`;
+  } else if (/^free\b|free tier|free plan|free signup|free standard|free credits|free trial/i.test(combinedPromo)) {
+    freeTrialDisplay = hasNoCard ? 'Free Plan (No Credit Card)' : 'Free Plan Available';
+  } else if (moneyBackMatch) {
+    freeTrialDisplay = `${moneyBackMatch[1]}-Day Money-Back Guarantee`;
+  } else {
+    freeTrialDisplay = 'Official Plans Available';
+  }
+}
+
+// Structured contenders for Comparisons (either from frontmatter vsTools or split on ` vs `)
+const vsContenders =
+  post.data.vsTools && post.data.vsTools.length > 0
+    ? post.data.vsTools
+    : toolName.includes(' vs ')
+      ? toolName.split(/\s+vs\.?\s+/i).map((name: string, index: number) => ({
+          name: name.trim(),
+          badge: index === 0 ? 'Featured Pick' : 'Contender',
+          score: undefined,
+          price: index === 0 ? priceDisplay : undefined,
+          link: index === 0 ? post.data.link : undefined,
+        }))
+      : [];
+
+const top5Picks = post.data.rankedTools || [];
+
+const parentCrumb =
+  detectedKind === 'compare'
+    ? { label: 'Comparisons', href: '/compare/' }
+    : detectedKind === 'top5'
+      ? { label: 'Top 5 Guides', href: '/top-5/' }
+      : { label: 'Blog', href: '/blog/' };
+
+const pageUrl = Astro.url.href;
+const pageTitle = encodeURIComponent(articleTitle);
+---
+
+<Layout
+  title={`${articleTitle} | ToolVector`}
+  description={post.data.metaDescription || post.data.description || ''}
+  ogImage={resolvedLogoSrc || undefined}
+>
+  <main class="article-page">
+    <!-- Breadcrumb -->
+    <div class="article-breadcrumb container">
+      <nav aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="article-breadcrumb__sep">&gt;</span>
+        <a href={parentCrumb.href}>{parentCrumb.label}</a>
+        <span class="article-breadcrumb__sep">&gt;</span>
+        <span class="article-breadcrumb__current">{articleTitle}</span>
+      </nav>
+    </div>
+
+    <!-- Full-width Featured Thumbnail -->
+    {heroImage && (
+      <div class="article-thumb container">
+        {typeof heroImage === 'string' ? (
+          <img
+            src={resolveAssetUrl(heroImage) || heroImage}
+            alt={`${post.data.name} hero thumbnail`}
+            class="article-thumb__img"
+            width="1200"
+            height="630"
+            loading="eager"
+          />
+        ) : (
+          <Image
+            src={heroImage}
+            alt={`${post.data.name} hero thumbnail`}
+            class="article-thumb__img"
+            width={1200}
+            height={630}
+            loading="eager"
+          />
+        )}
+      </div>
+    )}
+
+    <!-- Main 2-column layout -->
+    <section class="article-layout container">
+      <!-- Left: Article content -->
+      <article class="article-content">
+        <div class="article-meta-row">
+          <span class="article-category-tag">
+            {detectedKind === 'compare'
+              ? `Comparison · ${category}`
+              : detectedKind === 'top5'
+                ? `Top 5 Guide · ${category}`
+                : category}
+          </span>
+          <div class="article-share">
+            <a
+              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${pageTitle}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on X"
+              class="article-share__link"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on LinkedIn"
+              class="article-share__link"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+            </a>
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on Facebook"
+              class="article-share__link"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2.5c0-1.07.33-1.8 1.83-1.8H17.5V1.65c-.66-.09-1.92-.15-3.32-.15-3.29 0-5.54 2-5.54 5.7V9.5H5.5v4h3.14V23h5.36V13.5z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <header class="article-header">
+          <h1>{articleTitle}</h1>
+          <div class="article-byline">
+            <span>By <strong>ToolVector Editorial</strong></span>
+            {publishedDate && (
+              <>
+                <span class="article-byline__sep">·</span>
+                <span>Updated {publishedDate}</span>
+              </>
+            )}
+            <span class="article-byline__sep">·</span>
+            <span>{readingTime} min read</span>
+          </div>
+        </header>
+
+        <div class="prose"><Content /></div>
+      </article>
+
+      <!-- Right: Sticky sidebar -->
+      <aside class="article-sidebar">
+        {detectedKind === 'compare' && vsContenders.length > 0 ? (
+          <div class="sidebar-digest-card">
+            <span class="sidebar-digest-card__eyebrow">Head-to-Head Matchup</span>
+            <h2 class="sidebar-digest-card__title">{toolName}</h2>
+            <p class="sidebar-digest-card__subtitle">
+              {post.data.winnerSummary || 'Independent side-by-side scoring across pricing, features, and workflow fit.'}
+            </p>
+            <div class="sidebar-digest-list">
+              {vsContenders.map((item: any, idx: number) => (
+                <div class:list={['sidebar-digest-item', { 'sidebar-digest-item--top': idx === 0 }]}>
+                  <div class="sidebar-digest-item__top">
+                    <span class="sidebar-digest-item__name">
+                      <span class="sidebar-digest-item__rank">{idx + 1}</span>
+                      {item.name}
+                    </span>
+                    {item.score && <span class="sidebar-digest-item__score">★ {item.score}</span>}
+                  </div>
+                  {item.badge && <span class="sidebar-digest-item__badge">{item.badge}</span>}
+                  {(item.price || item.link) && (
+                    <div class="sidebar-digest-item__bottom">
+                      <span>{item.price || 'Check plans'}</span>
+                      {item.link && (
+                        <a href={item.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-digest-item__link">
+                          Visit &rarr;
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            {post.data.link && (
+              <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="tool-summary-card__cta">
+                <span>Try Top Recommended Pick</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
+            )}
+          </div>
+        ) : detectedKind === 'top5' ? (
+          <div class="sidebar-digest-card">
+            <span class="sidebar-digest-card__eyebrow">Top 5 Niche Rankings</span>
+            <h2 class="sidebar-digest-card__title">{toolName}</h2>
+            <p class="sidebar-digest-card__subtitle">
+              {post.data.winnerSummary || `Hand-tested top 5 picks in ${category} ranked by value and real-world execution.`}
+            </p>
+            {top5Picks.length > 0 && (
+              <div class="sidebar-digest-list">
+                {top5Picks.map((item: any) => (
+                  <div class:list={['sidebar-digest-item', { 'sidebar-digest-item--top': item.rank === 1 }]}>
+                    <div class="sidebar-digest-item__top">
+                      <span class="sidebar-digest-item__name">
+                        <span class="sidebar-digest-item__rank">#{item.rank}</span>
+                        {item.name}
+                      </span>
+                      {item.score && <span class="sidebar-digest-item__score">★ {item.score}</span>}
+                    </div>
+                    {item.badge && <span class="sidebar-digest-item__badge">{item.badge}</span>}
+                    {(item.price || item.link) && (
+                      <div class="sidebar-digest-item__bottom">
+                        <span>{item.bestFor || item.price || ''}</span>
+                        {item.link && (
+                          <a href={item.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-digest-item__link">
+                            Visit &rarr;
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            <a href={post.data.link || '/top-5/'} class="tool-summary-card__cta">
+              <span>{post.data.link ? `Explore #1 Pick` : 'View All Top 5 Guides'}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </a>
+          </div>
+        ) : (
+          <div class="tool-summary-card">
+            <div class="tool-summary-card__header">
+              <div class="tool-summary-card__logo-wrap">
+                {post.data.logo ? (
+                  typeof post.data.logo === 'string' ? (
+                    <img src={resolvedLogoSrc || undefined} alt={`${toolName} logo`} width="44" height="44" class="tool-summary-card__logo" />
+                  ) : (
+                    <Image src={post.data.logo} alt={`${toolName} logo`} width={88} height={88} class="tool-summary-card__logo" />
+                  )
+                ) : (
+                  <span class="tool-summary-card__initials">{toolInitials}</span>
+                )}
+              </div>
+              <div class="tool-summary-card__titles">
+                <p class="tool-summary-card__name">{toolName}</p>
+                <p class="tool-summary-card__category">{category}</p>
+              </div>
+            </div>
+
+            <div class="tool-summary-card__specs">
+              <div class="tool-summary-card__row">
+                <span class="tool-summary-card__label">Rating</span>
+                <span class="tool-summary-card__rating">
+                  <svg width="15" height="15" viewBox="0 0 20 20" fill="#f59e0b" aria-hidden="true">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.447a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.368-2.447a1 1 0 00-1.175 0l-3.368 2.447c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.049 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.3-3.957z" />
+                  </svg>
+                  <strong>{ratingDisplay}</strong>
+                  {reviewsDisplay && <span class="tool-summary-card__reviews">{reviewsDisplay}</span>}
+                </span>
+              </div>
+
+              <div class="tool-summary-card__row">
+                <span class="tool-summary-card__label">Price</span>
+                <span class="tool-summary-card__price">{priceDisplay}</span>
+              </div>
+
+              <div class="tool-summary-card__row">
+                <span class="tool-summary-card__label">Free Trial</span>
+                <span class="tool-summary-card__trial">{freeTrialDisplay}</span>
+              </div>
+            </div>
+
+            {post.data.link && (
+              <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="tool-summary-card__cta">
+                <span>Visit {toolName}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
+            )}
+          </div>
+        )}
+
+        <TableOfContents headings={headings} />
+      </aside>
+    </section>
+
+    <!-- Related articles -->
+    {relatedItems.length > 0 && (
+      <section class="related-section container">
+        <div class="related-section__header">
+          <h2 class="related-section__title">Related articles</h2>
+          <a href={parentCrumb.href} class="related-section__view-all">View all</a>
+        </div>
+
+        <div class="related-grid">
+          {relatedItems.map((rel) => {
+            const relPost = rel.entry;
+            const relHero = relPost.data.thumbnail || relPost.data.logo;
+            const relDate = relPost.data.date
+              ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(
+                  new Date(`${relPost.data.date}T00:00:00`)
+                )
+              : '';
+            const relCategory = relPost.data.category || relPost.data.serviceType || 'Guide';
+            const relName = relPost.data.name || rel.id;
+            const relTitle =
+              rel.kind === 'compare' || rel.kind === 'top5' || relName.toLowerCase().includes('review')
+                ? relName
+                : `${relName} Review 2026: Is It Worth It?`;
+            const relInitials = relName.slice(0, 2).toUpperCase();
+
+            return (
+              <a href={rel.url} class="related-card">
+                <div class="related-card__thumb">
+                  {relHero ? (
+                    typeof relHero === 'string' ? (
+                      <img src={resolveAssetUrl(relHero) || relHero} alt={relName} class="related-card__img" width="400" height="250" loading="lazy" />
+                    ) : (
+                      <Image src={relHero} alt={relName} class="related-card__img" width={400} height={250} loading="lazy" />
+                    )
+                  ) : (
+                    <div class="related-card__placeholder" />
+                  )}
+                </div>
+
+                <div class="related-card__body">
+                  <span class="related-card__tag">{relCategory}</span>
+                  <h3 class="related-card__title">{relTitle}</h3>
+
+                  <div class="related-card__footer">
+                    <div class="related-card__author">
+                      <span class="related-card__avatar">{relInitials}</span>
+                      <span>by ToolVector Editorial</span>
+                    </div>
+                    {relDate && <span class="related-card__date">{relDate}</span>}
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>
+

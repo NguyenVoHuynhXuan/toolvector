@@ -48,7 +48,8 @@ const isHome = currentPath === '/' || currentPath === '';
       <nav class="header__nav">
         <ul class="header__nav-list">
           <li><a href="/#discover-tools" class:list={["header__nav-item", { active: currentPath === '/' }]}>Categories</a></li>
-          <li><a href="/#reviews" class="header__nav-item">Reviews</a></li>
+          <li><a href="/compare/" class:list={["header__nav-item", { active: currentPath.startsWith('/compare') }]}>Compare</a></li>
+          <li><a href="/top-5/" class:list={["header__nav-item", { active: currentPath.startsWith('/top-5') }]}>Top 5</a></li>
           <li><a href="/blog/" class:list={["header__nav-item", { active: currentPath.startsWith('/blog') }]}>Blog</a></li>
           <li><a href="/about/" class:list={["header__nav-item", { active: currentPath.startsWith('/about') }]}>About</a></li>
         </ul>
@@ -215,20 +216,20 @@ const isHome = currentPath === '/' || currentPath === '';
             </a>
           </li>
           <li class="header__drawer-item">
-            <a href="/#reviews" class="header__drawer-link">
+            <a href="/compare/" class="header__drawer-link">
               <span class="drawer-link-number">02</span>
               <div class="drawer-link-content">
-                <span class="drawer-link-title">Verified Reviews</span>
-                <span class="drawer-link-desc">In-depth tests, pricing & benchmarks</span>
+                <span class="drawer-link-title">Head-to-Head Comparisons</span>
+                <span class="drawer-link-desc">Side-by-side matchups across pricing &amp; ROI</span>
               </div>
             </a>
           </li>
           <li class="header__drawer-item">
-            <a href="/#stats-counter" class="header__drawer-link">
+            <a href="/top-5/" class="header__drawer-link">
               <span class="drawer-link-number">03</span>
               <div class="drawer-link-content">
-                <span class="drawer-link-title">Verified Signals</span>
-                <span class="drawer-link-desc">4,200+ tools & research data</span>
+                <span class="drawer-link-title">Top 5 Picks by Niche</span>
+                <span class="drawer-link-desc">Best 5 tools ranked across 11 categories</span>
               </div>
             </a>
           </li>
@@ -236,8 +237,8 @@ const isHome = currentPath === '/' || currentPath === '';
             <a href="/blog/" class="header__drawer-link">
               <span class="drawer-link-number">04</span>
               <div class="drawer-link-content">
-                <span class="drawer-link-title">Insights & Guides</span>
-                <span class="drawer-link-desc">Growth playbooks & industry research</span>
+                <span class="drawer-link-title">Insights & Reviews</span>
+                <span class="drawer-link-desc">In-depth tests, pricing & industry guides</span>
               </div>
             </a>
           </li>

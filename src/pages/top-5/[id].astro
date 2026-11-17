@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import EditorialArticlePage from '../../components/article/EditorialArticlePage.astro';
+import { getTop5Entries } from '../../utils/contentHelpers';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('top5');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const allTop5 = await getTop5Entries();
+const relatedItems = allTop5.filter((item) => item.id !== post.id).slice(0, 3);
+---
+
+<EditorialArticlePage post={post} kind="top5" relatedItems={relatedItems} />
+

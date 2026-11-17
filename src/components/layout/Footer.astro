@@ -39,6 +39,17 @@ const isActive = (path) => {
             </div>
 
 
+            <!-- Explore -->
+            <div class="footer__links-group">
+                <h3 class="footer__links-title">Explore</h3>
+                <ul class="footer__links-list">
+                    <li><a href="/blog/" class:list={["footer__link", { "footer__link--active": isActive("/blog/") }]}>All Reviews</a></li>
+                    <li><a href="/compare/" class:list={["footer__link", { "footer__link--active": isActive("/compare/") }]}>Comparisons</a></li>
+                    <li><a href="/top-5/" class:list={["footer__link", { "footer__link--active": isActive("/top-5/") }]}>Top 5 by Niche</a></li>
+                    <li><a href="/#discover-tools" class="footer__link">Categories</a></li>
+                </ul>
+            </div>
+
             <!-- Company -->
             <div class="footer__links-group">
                 <h3 class="footer__links-title">Company</h3>
@@ -59,12 +70,26 @@ const isActive = (path) => {
             </div>
         </div>
 
+        <!-- Disclaimers (General Disclaimer & Affiliate Disclosure) -->
+        <div class="footer__disclaimers">
+            <p class="footer__disclaimer-item">
+                <strong>General Disclaimer:</strong> Using third-party software, productivity workflows, and AI applications involves inherent operational and data security risks. Before integrating any new tool or relying on its outputs, you must carefully evaluate its suitability for your specific environment, experience level, and organizational risk tolerance. <strong>ToolVector</strong> is strictly an informational directory and review platform. We do not provide technical implementation, data compliance, or business administration advice. We do not guarantee the accuracy, completeness, or reliability of any tool's stated capabilities, pricing, or features, as these may change without notice. We accept no liability for any workflow interruptions, data loss, or damages arising from your reliance on the tools featured or reviewed on our platform.
+            </p>
+            <p class="footer__disclaimer-item">
+                <strong>Affiliate Disclosure:</strong> ToolVector operates as an independent software review and comparison platform. To maintain our high editorial standards and keep the platform free, we may receive financial compensation from the software vendors, SaaS companies, and platform providers featured on our site. This compensation typically occurs when you click on our partner links or successfully sign up for a tool through them. While these commercial partnerships may influence how or where products appear, we strictly prioritize our editorial integrity. Our reviews, ratings, and selections are based entirely on our independent research, rigorous testing, and qualitative assessment. We do not officially endorse any specific tool, and the decision to adopt any software rests entirely with you.
+            </p>
+        </div>
+
         <!-- Footer Bottom -->
         <div class="footer__bottom">
             <p class="footer__copyright">
-                &copy; 2026 ToolVector. All rights reserved.
+                &copy; 2026 ToolVector - All rights reserved
             </p>
-            <div class="footer__socials">
+            <div class="footer__bottom-right">
+                <span class="footer__made-with">
+                    Made with <span class="footer__heart" aria-label="love">&hearts;</span> by ToolVector
+                </span>
+                <div class="footer__socials">
                 <a href="#" class="footer__social-btn" aria-label="X (Twitter)">
                     <svg
                         width="14"
@@ -98,6 +123,7 @@ const isActive = (path) => {
                         ></path></svg
                     >
                 </a>
+            </div>
             </div>
         </div>
     </div>

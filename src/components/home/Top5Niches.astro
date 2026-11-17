@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import { categories } from "../../data/categories";
+import { getTop5Entries, slugifyCategory } from "../../utils/contentHelpers";
+import "../../style/home/top5-niches.css";
+
+const [top5Guides, allBlogPosts] = await Promise.all([
+  getTop5Entries(),
+  getCollection('blog'),
+]);
+
+const guideByCategory = new Map(
+  top5Guides.map((g) => [(g.entry.data.category || '').toLowerCase(), g])
+);
+
+// Showcase 6 top priority niches cleanly (live Top 5 guides prioritized first)
+const nicheShowcase = categories
+  .map((cat, idx) => {
+    const matchedGuide = guideByCategory.get(cat.title.toLowerCase());
+    const reviewsInCat = allBlogPosts.filter((p) => p.data.category === cat.title);
+    const topNames = reviewsInCat.slice(0, 3).map((p) => p.data.name || p.id);
+    return {
+      order: idx + 1,
+      title: cat.title,
+      slug: slugifyCategory(cat.title),
+      count: cat.count,
+      reviewCount: reviewsInCat.length,
+      topNames,
+      guide: matchedGuide,
+    };
+  })
+  .sort((a, b) => Number(Boolean(b.guide)) - Number(Boolean(a.guide)) || b.reviewCount - a.reviewCount)
+  .slice(0, 6);
+---
+
+<section class="section section--alt top5-niches" id="top-5">
+  <div class="container">
+    <div class="top5-niches__header">
+      <div>
+        <span class="top5-niches__eyebrow">CURATED NICHE POWER RANKINGS</span>
+        <h2 class="section-title top5-niches__title">Top 5 Software Picks by Niche</h2>
+        <p class="top5-niches__subtitle">
+          Quickly discover the highest-scoring tools in each vertical without sifting through dozens of individual reviews.
+        </p>
+      </div>
+      <a href="/top-5/" class="top5-niches__view-all">Browse all 11 Top 5 hubs &rarr;</a>
+    </div>
+
+    <div class="top5-niches__grid">
+      {nicheShowcase.map((niche) => (
+        <article class="top5-card">
+          <div class="top5-card__top">
+            <span class="top5-card__badge">TOP 5 · {String(niche.order).padStart(2, '0')}</span>
+            {niche.guide ? (
+              <span class="top5-card__status top5-card__status--live">Guide Live</span>
+            ) : (
+              <span class="top5-card__status">{niche.reviewCount} Reviews</span>
+            )}
+          </div>
+
+          <h3 class="top5-card__title">
+            <a href={niche.guide ? niche.guide.url : `/top-5/`}>
+              Top 5 {niche.title}
+            </a>
+          </h3>
+
+          <p class="top5-card__desc">
+            {niche.guide
+              ? niche.guide.entry.data.description
+              : `Benchmarking ${niche.count} across pricing, features, and support—featuring our highest-rated hands-on picks.`}
+          </p>
+
+          {niche.topNames.length > 0 && (
+            <div class="top5-card__chips" aria-label="Featured tools in this niche">
+              {niche.topNames.map((toolName, i) => (
+                <span class="top5-card__chip">
+                  <strong>#{i + 1}</strong> {toolName}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div class="top5-card__footer">
+            {niche.guide ? (
+              <a href={niche.guide.url} class="top5-card__cta">Read Top 5 Guide &rarr;</a>
+            ) : (
+              <a href={`/category/${niche.slug}/`} class="top5-card__cta">Explore Category Picks &rarr;</a>
+            )}
+            <a href="/top-5/" class="top5-card__secondary">All 11 Niches</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+

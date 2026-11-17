@@ -16,9 +16,9 @@
 /* Main Grid */
 .footer__grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 32px;
-    margin-bottom: 64px;
+    margin-bottom: 44px;
 }
 
 /* Brand Section */
@@ -94,13 +94,54 @@
     color: var(--color-primary);
 }
 
+/* Disclaimers Section */
+.footer__disclaimers {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 0;
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+.footer__disclaimer-item {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.68;
+    color: var(--color-text-muted);
+}
+
+.footer__disclaimer-item strong {
+    color: var(--color-text-dark);
+    font-weight: 700;
+}
+
 /* Footer Bottom (Copyright and Socials) */
 .footer__bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     padding-top: 24px;
     border-top: 1px solid var(--color-border-subtle);
+}
+
+.footer__bottom-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.footer__made-with {
+    font-size: 0.84rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.footer__heart {
+    color: #ef4444;
+    font-size: 0.95rem;
+    margin: 0 2px;
 }
 
 .footer__copyright {
@@ -156,7 +197,12 @@
 
     .footer__bottom {
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
         text-align: center;
+    }
+
+    .footer__bottom-right {
+        flex-direction: column;
+        gap: 12px;
     }
 }

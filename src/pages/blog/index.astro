@@ -1,19 +1,18 @@
 ---
 import Layout from "../../layout/Layout.astro";
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { getAllEditorialEntries, resolveAssetUrl } from "../../utils/contentHelpers";
 
-const allPosts = await getCollection('blog');
-const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf());
+const allEntries = await getAllEditorialEntries();
 
 const uniqueCategories = Array.from(
-    new Set(sortedPosts.map((p) => p.data.category).filter(Boolean))
+    new Set(allEntries.map((item) => item.entry.data.category).filter(Boolean))
 ) as string[];
 ---
 
 <Layout
 	title="Blog — Toolvector Insights"
-	description="Explore our latest guides, playbooks, and industry analysis on software tools."
+	description="Explore our latest guides, software reviews, head-to-head comparisons, and Top 5 niche power rankings."
 >
 	<main style="background-color: var(--color-bg-offset); min-height: 100vh; padding-bottom: 80px;">
         <section class="section" style="background-color: transparent;">
@@ -21,11 +20,11 @@ const uniqueCategories = Array.from(
                 <div class="section-header" style="text-align: center; margin-bottom: 36px;">
                     <h1 class="section-title" style="font-size: clamp(2.4rem, 4vw, 3.5rem); margin-top: 48px; color: var(--color-text-dark); font-weight: 800; letter-spacing: -0.05em;">All Articles</h1>
                     <p class="section-subtitle" style="color: var(--color-text-muted); font-size: 1.15rem; margin-top: 10px;">
-                        Deep dives, independent reviews, and practical playbooks from the ToolVector editorial team.
+                        Deep dives, head-to-head comparisons, and Top 5 niche guides from the ToolVector editorial team.
                     </p>
                 </div>
 
-                <!-- Live Blog Search & Category Filter -->
+                <!-- Live Blog Search, Format Type & Category Filter -->
                 <div class="blog-toolbar">
                     <div class="blog-search-box">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
@@ -35,14 +34,21 @@ const uniqueCategories = Array.from(
                         <input
                             type="search"
                             id="blog-filter-input"
-                            placeholder="Filter articles by tool name, category, or topic..."
+                            placeholder="Filter articles by tool name, category, comparison, or topic..."
                             aria-label="Filter articles"
                         />
-                        <span class="blog-count-badge" id="blog-count-badge">{sortedPosts.length} articles</span>
+                        <span class="blog-count-badge" id="blog-count-badge">{allEntries.length} articles</span>
+                    </div>
+
+                    <div class="blog-type-pills" role="tablist" aria-label="Filter by article format">
+                        <button type="button" class="blog-type-pill is-active" data-kind="">All Formats</button>
+                        <button type="button" class="blog-type-pill" data-kind="review">Tool Reviews</button>
+                        <button type="button" class="blog-type-pill" data-kind="compare">Comparisons</button>
+                        <button type="button" class="blog-type-pill" data-kind="top5">Top 5 by Niche</button>
                     </div>
 
                     <div class="blog-cat-pills" role="tablist" aria-label="Filter by category">
-                        <button type="button" class="blog-cat-pill is-active" data-cat="">All</button>
+                        <button type="button" class="blog-cat-pill is-active" data-cat="">All Categories</button>
                         {uniqueCategories.map((cat) => (
                             <button type="button" class="blog-cat-pill" data-cat={cat}>{cat}</button>
                         ))}
@@ -51,27 +57,46 @@ const uniqueCategories = Array.from(
 
                 <div class="articles-grid" id="blog-articles-grid">
                     {
-                        sortedPosts.map((post) => {
-                            const searchText = `${post.data.name || ''} ${post.data.description || ''} ${post.data.category || ''} ${post.data.serviceType || ''} ${post.id}`.toLowerCase();
+                        allEntries.map((item) => {
+                            const post = item.entry;
+                            const hero = post.data.thumbnail || post.data.logo;
+                            const searchText = `${post.data.name || ''} ${post.data.description || ''} ${post.data.category || ''} ${post.data.serviceType || ''} ${item.kind} ${item.id}`.toLowerCase();
+                            const badgeText =
+                                item.kind === 'compare'
+                                    ? 'Comparison'
+                                    : item.kind === 'top5'
+                                      ? 'Top 5 Guide'
+                                      : post.data.serviceType || post.data.foodType || 'Review';
+
                             return (
                             <a
-                                href={`/blog/${post.id}/`}
+                                href={item.url}
                                 class="article-card"
                                 data-search={searchText}
                                 data-category={post.data.category || ''}
+                                data-kind={item.kind}
                             >
                                 <div class="article-card__image-wrapper">
-                                    {post.data.thumbnail || post.data.logo ? (
-                                        <Image
-                                            src={post.data.thumbnail || post.data.logo}
-                                            alt={post.data.name || ''}
-                                            class="article-card__image"
-                                        />
+                                    {hero ? (
+                                        typeof hero === 'string' ? (
+                                            <img
+                                                src={resolveAssetUrl(hero) || hero}
+                                                alt={post.data.name || ''}
+                                                class="article-card__image"
+                                                loading="lazy"
+                                            />
+                                        ) : (
+                                            <Image
+                                                src={hero}
+                                                alt={post.data.name || ''}
+                                                class="article-card__image"
+                                            />
+                                        )
                                     ) : (
                                         <div class="article-card__image-placeholder"></div>
                                     )}
                                     <span class="article-card__category">
-                                        {post.data.serviceType || post.data.foodType || 'Review'}
+                                        {badgeText}
                                     </span>
                                 </div>
 
@@ -109,13 +134,14 @@ const uniqueCategories = Array.from(
         const emptyState = document.getElementById('blog-empty-state');
         const resetBtn = document.getElementById('blog-reset-btn');
         const cards = Array.from(document.querySelectorAll<HTMLElement>('#blog-articles-grid .article-card'));
-        const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-cat-pill'));
+        const catPills = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-cat-pill'));
+        const typePills = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-type-pill'));
 
         if (!input || !cards.length) return;
 
         let activeCat = '';
+        let activeKind = '';
 
-        // Read ?q= query parameter if navigated from search
         const params = new URLSearchParams(window.location.search);
         const initialQuery = params.get('q');
         if (initialQuery) {
@@ -129,9 +155,11 @@ const uniqueCategories = Array.from(
             cards.forEach((card) => {
                 const hay = card.dataset.search || '';
                 const cat = card.dataset.category || '';
+                const kind = card.dataset.kind || '';
                 const matchText = !q || hay.includes(q);
                 const matchCat = !activeCat || cat === activeCat;
-                const show = matchText && matchCat;
+                const matchKind = !activeKind || kind === activeKind;
+                const show = matchText && matchCat && matchKind;
                 card.style.display = show ? '' : 'none';
                 if (show) visible++;
             });
@@ -146,9 +174,18 @@ const uniqueCategories = Array.from(
 
         input.addEventListener('input', applyFilter);
 
-        pills.forEach((pill) => {
+        typePills.forEach((pill) => {
             pill.addEventListener('click', () => {
-                pills.forEach((p) => p.classList.remove('is-active'));
+                typePills.forEach((p) => p.classList.remove('is-active'));
+                pill.classList.add('is-active');
+                activeKind = pill.dataset.kind || '';
+                applyFilter();
+            });
+        });
+
+        catPills.forEach((pill) => {
+            pill.addEventListener('click', () => {
+                catPills.forEach((p) => p.classList.remove('is-active'));
                 pill.classList.add('is-active');
                 activeCat = pill.dataset.cat || '';
                 applyFilter();
@@ -158,7 +195,9 @@ const uniqueCategories = Array.from(
         resetBtn?.addEventListener('click', () => {
             input.value = '';
             activeCat = '';
-            pills.forEach((p, idx) => p.classList.toggle('is-active', idx === 0));
+            activeKind = '';
+            typePills.forEach((p, idx) => p.classList.toggle('is-active', idx === 0));
+            catPills.forEach((p, idx) => p.classList.toggle('is-active', idx === 0));
             applyFilter();
         });
 
@@ -174,8 +213,8 @@ const uniqueCategories = Array.from(
     .blog-toolbar {
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        max-width: 860px;
+        gap: 14px;
+        max-width: 900px;
         margin: 0 auto 44px;
     }
 
@@ -218,11 +257,31 @@ const uniqueCategories = Array.from(
         white-space: nowrap;
     }
 
+    .blog-type-pills,
     .blog-cat-pills {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         gap: 8px;
+    }
+
+    .blog-type-pill {
+        padding: 7px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--color-border-primary-subtle);
+        background: var(--color-bg-primary-subtle);
+        color: var(--color-primary);
+        font-size: 0.84rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.18s ease;
+    }
+
+    .blog-type-pill.is-active {
+        background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%);
+        border-color: transparent;
+        color: #ffffff;
     }
 
     .blog-cat-pill {

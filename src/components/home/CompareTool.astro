@@ -1,26 +1,74 @@
 ---
+import { Image } from 'astro:assets';
+import { getComparisonEntries, resolveAssetUrl } from "../../utils/contentHelpers";
 import "../../style/home/compare-tool.css";
+
+const allComparisons = await getComparisonEntries();
+const featuredComparisons = allComparisons.slice(0, 4);
 ---
 
-<section class="section compare-tool">
-    <div class="container">
-        <div class="compare-tool__banner">
-            <!-- Participants -->
-            <div class="compare-tool__participants">
-                <span class="compare-tool__name">ChatGPT</span>
-                <span class="compare-tool__vs">vs</span>
-                <span class="compare-tool__name">Claude</span>
+<section class="section compare-tool" id="comparisons">
+  <div class="container">
+    <div class="compare-tool__header">
+      <div>
+        <span class="compare-tool__eyebrow">HEAD-TO-HEAD COMPARISONS</span>
+        <h2 class="section-title compare-tool__title">Side-by-Side Software Matchups</h2>
+        <p class="compare-tool__subtitle">
+          Honest pricing, hidden feature limits, and clear winner verdicts across top competing platforms.
+        </p>
+      </div>
+      <a href="/compare/" class="compare-tool__view-all">View all comparisons &rarr;</a>
+    </div>
+
+    <div class="compare-tool__grid">
+      {featuredComparisons.map((item) => {
+        const post = item.entry;
+        const name = post.data.name || item.id;
+        const hero = post.data.thumbnail || post.data.logo;
+        const contenders = name.includes(' vs ')
+          ? name.split(/\s+vs\.?\s+/i).map((c) => c.trim())
+          : [name];
+
+        return (
+          <a href={item.url} class="compare-card">
+            <div class="compare-card__top">
+              <div class="compare-card__media">
+                {hero ? (
+                  typeof hero === 'string' ? (
+                    <img src={resolveAssetUrl(hero) || hero} alt={name} class="compare-card__img" loading="lazy" />
+                  ) : (
+                    <Image src={hero} alt={name} class="compare-card__img" />
+                  )
+                ) : (
+                  <div class="compare-card__placeholder">VS</div>
+                )}
+              </div>
+              <div class="compare-card__head-info">
+                <span class="compare-card__cat">{post.data.category || 'Comparison'}</span>
+                <h3 class="compare-card__title">{name}</h3>
+              </div>
             </div>
 
-            <!-- Description -->
-            <p class="compare-tool__desc">
-                We tested both across reasoning, writing quality, coding and
-                pricing. See the full breakdown and which one wins for your use
-                case.
-            </p>
+            {contenders.length >= 2 && (
+              <div class="compare-card__matchup">
+                {contenders.map((c, idx) => (
+                  <>
+                    {idx > 0 && <span class="compare-card__vs-pill">VS</span>}
+                    <span class="compare-card__contender">{c}</span>
+                  </>
+                ))}
+              </div>
+            )}
 
-            <!-- Button -->
-            <a href="#" class="compare-tool__btn"> View comparison &rarr; </a>
-        </div>
+            <p class="compare-card__desc">{post.data.description}</p>
+
+            <div class="compare-card__footer">
+              <span class="compare-card__price">{post.data.startingPrice || 'Full 2026 breakdown'}</span>
+              <span class="compare-card__link">Compare now &rarr;</span>
+            </div>
+          </a>
+        );
+      })}
     </div>
+  </div>
 </section>

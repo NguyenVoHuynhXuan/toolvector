@@ -2,6 +2,7 @@
 // src/components/home/Hero.astro
 import { getCollection } from 'astro:content';
 import { categories } from '../../data/categories';
+import { getComparisonEntries, getTop5Entries, slugifyCategory } from '../../utils/contentHelpers';
 import '../../style/home/hero.css';
 
 const svgAssets = import.meta.glob<{ default: { src: string } }>('../../assets/**/*.svg', { eager: true });
@@ -30,7 +31,11 @@ function resolveLogo(logo: any): string | null {
   return logo.src || null;
 }
 
-const allPosts = await getCollection('blog');
+const [allPosts, comparisonEntries, top5Entries] = await Promise.all([
+  getCollection('blog'),
+  getComparisonEntries(),
+  getTop5Entries(),
+]);
 const sortedPosts = allPosts.sort(
   (a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf()
 );
@@ -70,6 +75,26 @@ const searchIndex = [
     keywords: `${post.data.name || ''} ${post.data.category || ''} ${post.data.serviceType || ''} ${post.data.description || ''} ${post.id}`.toLowerCase(),
     url: `/blog/${post.id}/`,
   })),
+  ...comparisonEntries
+    .filter((item) => item.collection === 'compare')
+    .map((item) => ({
+      type: 'Compare',
+      title: item.entry.data.name || item.id,
+      subtitle: `${item.entry.data.category || 'Software'} Comparison`,
+      meta: 'Head-to-Head',
+      logo: resolveLogo(item.entry.data.logo),
+      keywords: `${item.entry.data.name || ''} compare vs ${item.entry.data.category || ''} ${item.entry.data.description || ''} ${item.id}`.toLowerCase(),
+      url: item.url,
+    })),
+  ...top5Entries.map((item) => ({
+    type: 'Top 5',
+    title: item.entry.data.name || item.id,
+    subtitle: `${item.entry.data.category || 'Niche'} Power Ranking`,
+    meta: 'Top 5 Guide',
+    logo: resolveLogo(item.entry.data.logo),
+    keywords: `top 5 best ${item.entry.data.name || ''} ${item.entry.data.category || ''} ${item.entry.data.description || ''} ${item.id}`.toLowerCase(),
+    url: item.url,
+  })),
   ...categories.map((cat) => ({
     type: 'Category',
     title: cat.title,
@@ -77,7 +102,7 @@ const searchIndex = [
     meta: 'Category',
     logo: null,
     keywords: `${cat.title} ${cat.count}`.toLowerCase(),
-    url: `/category/${slugify(cat.title)}/`,
+    url: `/category/${slugifyCategory(cat.title)}/`,
   })),
 ];
 
