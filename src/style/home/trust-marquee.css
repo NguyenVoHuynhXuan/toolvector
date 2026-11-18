@@ -1,10 +1,10 @@
 /* src/style/home/trust-marquee.css */
-/* Trusted by Innovative Teams Worldwide - Running Marquee */
+/* Trusted by 200,000+ builders, founders, and teams worldwide - Running Marquee */
 
 .trusted-teams {
   position: relative;
   width: 100%;
-  padding: 52px 0 58px;
+  padding: 40px 0 46px;
   background: var(--color-bg-base, #ffffff);
   border-top: 1px solid var(--color-border-subtle, #f1f5f9);
   border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
@@ -20,19 +20,18 @@
 
 .trusted-teams__header {
   max-width: 1200px;
-  margin: 0 auto 34px;
+  margin: 0 auto 30px;
   padding: 0 24px;
   text-align: center;
 }
 
 .trusted-teams__title {
   margin: 0;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #64748b;
-  line-height: 1.4;
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #4a4b65;
+  line-height: 1.45;
   user-select: none;
 }
 
@@ -47,19 +46,17 @@
   overflow: hidden;
   display: flex;
   user-select: none;
-  /* Premium Edge Soft Fade */
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
 }
 
-/* Fallback side fades */
 .trusted-teams__marquee-wrapper::before,
 .trusted-teams__marquee-wrapper::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 80px;
+  width: 72px;
   z-index: 2;
   pointer-events: none;
 }
@@ -79,7 +76,7 @@
   display: flex;
   width: max-content;
   align-items: center;
-  animation: trusted-marquee 36s linear infinite;
+  animation: trusted-marquee 42s linear infinite;
   will-change: transform;
 }
 
@@ -91,16 +88,16 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  gap: 64px;
-  padding-right: 64px; /* equal spacing between group ends */
+  gap: 80px;
+  padding-right: 80px;
 }
 
 .trusted-teams__item {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2b2d42;
-  opacity: 0.85;
+  color: #14132a;
+  opacity: 0.94;
   transition: transform 0.25s ease, opacity 0.25s ease, color 0.25s ease;
   flex-shrink: 0;
   cursor: default;
@@ -108,19 +105,19 @@
 
 .trusted-teams__item:hover {
   opacity: 1;
-  color: #0f172a;
+  color: #0b0a1a;
   transform: translateY(-2px) scale(1.04);
 }
 
 :root[data-theme="dark"] .trusted-teams__item {
   color: #e2e8f0;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 :root[data-theme="dark"] .trusted-teams__item:hover {
   color: #ffffff;
   opacity: 1;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.28));
 }
 
 .trusted-teams__item svg {
@@ -130,29 +127,33 @@
   max-width: none;
 }
 
-/* Individual logo height tunings for optical alignment */
-.trusted-teams__item--salesforce svg {
-  height: 38px;
-}
-
-.trusted-teams__item--harvard svg {
-  height: 32px;
-}
-
-.trusted-teams__item--nbc svg {
-  height: 34px;
-}
-
-.trusted-teams__item--amazon svg {
+/* Individual logo optical heights matching baseline */
+.trusted-teams__item--asana svg {
   height: 28px;
 }
 
-.trusted-teams__item--ibm svg {
-  height: 27px;
+.trusted-teams__item--intercom svg {
+  height: 35px;
 }
 
-.trusted-teams__item--grant-thornton svg {
-  height: 25px;
+.trusted-teams__item--hubspot svg {
+  height: 32px;
+}
+
+.trusted-teams__item--clickup svg {
+  height: 33px;
+}
+
+.trusted-teams__item--aircall svg {
+  height: 28px;
+}
+
+.trusted-teams__item--notion svg {
+  height: 35px;
+}
+
+.trusted-teams__item--figma svg {
+  height: 28px;
 }
 
 /* Keyframe for continuous horizontal glide */
@@ -160,6 +161,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -168,36 +170,60 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .trusted-teams {
-    padding: 38px 0 44px;
+    padding: 32px 0 38px;
   }
 
   .trusted-teams__header {
-    margin-bottom: 24px;
+    margin-bottom: 22px;
   }
 
   .trusted-teams__title {
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
+    font-size: 0.9rem;
   }
 
   .trusted-teams__track {
-    animation-duration: 26s;
+    animation-duration: 30s;
   }
 
   .trusted-teams__group {
-    gap: 44px;
-    padding-right: 44px;
+    gap: 50px;
+    padding-right: 50px;
   }
 
-  .trusted-teams__item--salesforce svg { height: 32px; }
-  .trusted-teams__item--harvard svg { height: 27px; }
-  .trusted-teams__item--nbc svg { height: 29px; }
-  .trusted-teams__item--amazon svg { height: 24px; }
-  .trusted-teams__item--ibm svg { height: 23px; }
-  .trusted-teams__item--grant-thornton svg { height: 21px; }
+  .trusted-teams__item--asana svg {
+    height: 23px;
+  }
+
+  .trusted-teams__item--intercom svg {
+    height: 29px;
+  }
+
+  .trusted-teams__item--hubspot svg {
+    height: 26px;
+  }
+
+  .trusted-teams__item--clickup svg {
+    height: 27px;
+  }
+
+  .trusted-teams__item--aircall svg {
+    height: 23px;
+  }
+
+  .trusted-teams__item--notion svg {
+    height: 29px;
+  }
+
+  .trusted-teams__item--figma svg {
+    height: 23px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .trusted-teams__marquee-wrapper {
+    overflow-x: auto;
+  }
+
   .trusted-teams__track {
     animation: none;
   }

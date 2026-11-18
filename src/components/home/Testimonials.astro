@@ -1,328 +1,248 @@
 ---
 import '../../style/home/testimonials.css';
 
+type CardTone = 'white' | 'sky' | 'cobalt' | 'purple';
+type ReviewPlatform = 'google' | 'g2' | 'capterra';
+
 interface TestimonialItem {
   name: string;
-  role: string;
-  company: string;
-  category: string;
+  role?: string;
   quote: string;
   image: string;
-  readLabel: string;
+  tone: CardTone;
+  platform: ReviewPlatform;
   readUrl: string;
 }
 
-const testimonials: TestimonialItem[] = [
+const platformIcons: Record<ReviewPlatform, string> = {
+  google: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>`,
+  g2: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#FF492C"/><path d="M15.7 8.4h-2.1c.2-.6.7-1 1.4-1 .6 0 1 .3 1 .8 0 .5-.4.8-1 .9l-.8.2c-.8.2-1.2.6-1.2 1.4v.6h3.2v-.9h-1.9v-.1c0-.2.2-.3.6-.4l.8-.2c1-.2 1.6-.8 1.6-1.7 0-1-.9-1.6-2.1-1.6-1.3 0-2.3.7-2.6 1.8l1.1.2z" fill="#ffffff"/><path d="M11.7 12.1H9.1v1.4h1.3c-.2.8-.8 1.3-1.7 1.3-1.2 0-2-.9-2-2.2s.8-2.2 2-2.2c.7 0 1.2.3 1.5.8l1.2-.8c-.5-.9-1.5-1.4-2.7-1.4-2 0-3.5 1.5-3.5 3.6s1.5 3.6 3.5 3.6c1.9 0 3.1-1.3 3.1-3.4v-.7z" fill="#ffffff"/></svg>`,
+  capterra: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 5.5L21 2.5L13.5 21.5L10.5 12.5L3 5.5Z" fill="#044D80"/><path d="M21 2.5L13.5 21.5L10.5 12.5L21 2.5Z" fill="#FF9D28"/></svg>`,
+};
+
+const trustBadges: Array<{ platform: ReviewPlatform; score: string; label: string }> = [
+  { platform: 'google', score: '4.9', label: 'on Google' },
+  { platform: 'g2', score: '4.8', label: 'on G2' },
+  { platform: 'capterra', score: '4.8', label: 'on Capterra' },
+];
+
+const rowOneItems: TestimonialItem[] = [
   {
-    name: 'David Chen',
-    role: 'Senior Full-Stack Developer',
-    company: 'CloudScale Labs',
-    category: 'Developer Tools',
+    name: 'Jonathan A.',
+    role: 'Growth Lead',
     quote:
-      "What I love is they don't just list features — they actually test the tools with real tasks and point out the weaknesses too. That honesty saved our engineering team from two noisy subscriptions.",
+      '“No more wasting hours testing tools one by one. ToolVector’s breakdowns are thorough, honest, and immediately actionable.”',
     image: 'https://i.pravatar.cc/300?img=11',
-    readLabel: 'CodeRabbit Review',
+    tone: 'cobalt',
+    platform: 'google',
+    readUrl: '/blog/clickfunnels-review/',
+  },
+  {
+    name: 'Hardik C.',
+    quote:
+      '“ToolVector has earned a clear 5 stars from our ops team. Finally a software directory that actually audits hidden pricing limits.”',
+    image: 'https://i.pravatar.cc/300?img=15',
+    tone: 'white',
+    platform: 'google',
+    readUrl: '/blog/redtrack-review/',
+  },
+  {
+    name: 'Tarek M.',
+    role: 'Product Engineer',
+    quote:
+      '“It took me 15 minutes to shortlist our entire AI stack. Every review calls out real trade-offs instead of repeating vendor hype.”',
+    image: 'https://i.pravatar.cc/300?img=12',
+    tone: 'sky',
+    platform: 'google',
     readUrl: '/blog/coderabbit-review/',
   },
   {
-    name: 'Sarah Nguyen',
-    role: 'Founder & Operations Lead',
-    company: 'BrightLeaf Studio',
-    category: 'AI Workflow',
+    name: 'Alaina R.',
     quote:
-      "As a small business owner, I don't have time to trial every AI tool myself. Their breakdowns explain real workflows, data privacy rules, and hidden limits clearly — even for non-technical teammates.",
+      '“Once I used their side-by-side comparison guides, I honestly couldn’t imagine committing to an annual SaaS contract without checking here first.”',
     image: 'https://i.pravatar.cc/300?img=32',
-    readLabel: 'PriorityEngine Guide',
+    tone: 'white',
+    platform: 'google',
     readUrl: '/blog/ai-email-prioritization-system/',
   },
   {
-    name: 'James Park',
-    role: 'Independent Product Designer',
-    company: 'Park Creative',
-    category: 'Creative & Visual AI',
+    name: 'Aman A.',
+    role: 'Startup Founder',
     quote:
-      "I used to trust whatever AI tool had the flashiest launch video. Now I check ToolVector first — the credit math and pricing audits tell me what I'm actually paying for before I subscribe.",
-    image: 'https://i.pravatar.cc/300?img=12',
-    readLabel: 'Pixelcut Review',
+      '“The best part is I don’t need to wade through marketing fluff to understand real credit costs and workflow limits!”',
+    image: 'https://i.pravatar.cc/300?img=53',
+    tone: 'cobalt',
+    platform: 'google',
     readUrl: '/blog/pixelcut-review/',
   },
   {
-    name: 'Elena Rostova',
-    role: 'Head of Organic Growth',
-    company: 'MetricPulse',
-    category: 'SEO & Marketing',
+    name: 'Roxane C.',
     quote:
-      'Most software directories read like rewritten landing pages. ToolVector calls out where automation works and where human editorial review is still mandatory. Our whole marketing team bookmarks it.',
+      '“Evaluating marketing and outreach software is critical for our agency. ToolVector’s pros and cons helped us pick the right stack without guesswork.”',
     image: 'https://i.pravatar.cc/300?img=47',
-    readLabel: 'RankYak Review',
+    tone: 'white',
+    platform: 'capterra',
+    readUrl: '/blog/aimfox-review/',
+  },
+];
+
+const rowTwoItems: TestimonialItem[] = [
+  {
+    name: 'Claire D.',
+    quote:
+      '“Among all the software review platforms I’ve checked for SEO and rank tracking tools, ToolVector is hands down the most transparent.”',
+    image: 'https://i.pravatar.cc/300?img=44',
+    tone: 'white',
+    platform: 'google',
+    readUrl: '/blog/seobility-review/',
+  },
+  {
+    name: 'Islam K.',
+    role: 'AI Champion',
+    quote:
+      '“ToolVector completely transformed how our team evaluates AI agents. We finalized our production stack within hours, not weeks.”',
+    image: 'https://i.pravatar.cc/300?img=60',
+    tone: 'purple',
+    platform: 'g2',
+    readUrl: '/blog/elevenlabs-review/',
+  },
+  {
+    name: 'Vanessa R.',
+    quote:
+      '“Now with ToolVector’s pricing math, it’s crazy how much evaluation time I save. We cut two redundant subscriptions in one afternoon.”',
+    image: 'https://i.pravatar.cc/300?img=25',
+    tone: 'white',
+    platform: 'google',
     readUrl: '/blog/rankyak-review/',
   },
   {
-    name: 'Marcus Vance',
-    role: 'Revenue Operations Manager',
-    company: 'Northstar B2B',
-    category: 'Sales & Outreach',
+    name: 'Marcus V.',
+    role: 'RevOps Manager',
     quote:
-      'When we evaluated LinkedIn outreach and inbox tools, their side-by-side seat pricing and account-safety notes were spot on. We cut our evaluation cycle from three weeks to an afternoon.',
-    image: 'https://i.pravatar.cc/300?img=53',
-    readLabel: 'Aimfox Review',
-    readUrl: '/blog/aimfox-review/',
+      '“Their seat-pricing audits and API limit notes saved our revenue team from locking into the wrong outreach platform.”',
+    image: 'https://i.pravatar.cc/300?img=68',
+    tone: 'cobalt',
+    platform: 'g2',
+    readUrl: '/blog/waalaxy-review/',
   },
   {
-    name: 'Hannah Lin',
-    role: 'Remote Engineering Manager',
-    company: 'NomadStack',
-    category: 'Global Connectivity',
+    name: 'Hannah L.',
     quote:
-      'Before international offsites, I used ToolVector to compare eSIM data plans and throttling policies across regions. Zero fluff, transparent pros and cons, and accurate real-world pricing.',
-    image: 'https://i.pravatar.cc/300?img=44',
-    readLabel: 'GigSky Review',
+      '“Before our global team offsites, I used ToolVector to compare travel eSIM throttling policies. Zero fluff and accurate pricing.”',
+    image: 'https://i.pravatar.cc/300?img=41',
+    tone: 'white',
+    platform: 'capterra',
     readUrl: '/blog/gigsky/',
   },
+  {
+    name: 'Sandra C.',
+    role: 'Media Producer',
+    quote:
+      '“In just one benchmark table, we found a faster studio workflow and saved over 40% on our monthly creator stack.”',
+    image: 'https://i.pravatar.cc/300?img=33',
+    tone: 'sky',
+    platform: 'google',
+    readUrl: '/blog/streamyard-review/',
+  },
 ];
+
+const marqueeRows = [
+  { direction: 'left' as const, items: rowOneItems },
+  { direction: 'right' as const, items: rowTwoItems },
+];
+
+const starPath =
+  'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+
+const getInitials = (name: string) =>
+  name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 ---
 
 <section class="section testimonials" id="testimonials" aria-labelledby="testimonials-heading">
-  <div class="container">
-    <!-- Top Header + Trust Summary + Carousel Controls -->
-    <div class="testimonials__header">
-      <div class="testimonials__intro">
-        <div class="testimonials__eyebrow">
-          <span class="testimonials__eyebrow-dot" aria-hidden="true"></span>
-          <span>Verified Reader Feedback</span>
-        </div>
-        <h2 class="testimonials__title" id="testimonials-heading">
-          Why teams &amp; builders <span>love working with us —</span>
-        </h2>
-        <p class="testimonials__subtitle">
-          Developers, founders, and operations leads rely on ToolVector’s independent testing to benchmark pricing, security, and real-world fit before committing to a stack.
-        </p>
-      </div>
+  <div class="container testimonials__header-wrap">
+    <h2 class="testimonials__title" id="testimonials-heading">This is why readers love us</h2>
+    <p class="testimonials__subtitle">
+      <span class="testimonials__subtitle-line">96% of teams discovered a better-fit software stack after reading our benchmarks.</span>{' '}
+      <span class="testimonials__subtitle-line">Now they cut wasted SaaS spend — and adopt tools with confidence.</span>
+    </p>
 
-      <div class="testimonials__controls-panel">
-        <div class="testimonials__rating-pill" aria-label="Average reader satisfaction 4.9 out of 5">
-          <div class="testimonials__rating-stars" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <span class="testimonials__rating-score"><strong>4.9/5</strong> Reader Trust</span>
-        </div>
-
-        <div class="testimonials__nav" aria-label="Testimonial slider navigation">
-          <button type="button" class="testimonials__nav-btn" id="testimonials-prev" aria-label="Previous testimonials" disabled>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m15 18-6-6 6-6"></path>
-            </svg>
-          </button>
-          <button type="button" class="testimonials__nav-btn" id="testimonials-next" aria-label="Next testimonials">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Flush 3-Column Snap Carousel Track -->
-    <div class="testimonials__track" id="testimonials-track" tabindex="0" aria-label="Reader testimonials">
+    <div class="testimonials__badges" aria-label="Independent platform ratings">
       {
-        testimonials.map((item) => {
-          const initials = item.name
-            .split(' ')
-            .map((part) => part[0])
-            .join('')
-            .slice(0, 2)
-            .toUpperCase();
-
-          return (
-            <article class="testimonial-card">
-              <div class="testimonial-card__top">
-                <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </div>
-                <span class="testimonial-card__tag">{item.category}</span>
-              </div>
-
-              <blockquote class="testimonial-card__quote">“{item.quote}”</blockquote>
-
-              <div class="testimonial-card__footer">
-                <div class="testimonial-card__person">
-                  <div class="testimonial-card__avatar">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      class="testimonial-card__img"
-                      width="52"
-                      height="52"
-                      loading="lazy"
-                      onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
-                    />
-                    <span class="testimonial-card__initials" aria-hidden="true">{initials}</span>
-                  </div>
-                  <div class="testimonial-card__author">
-                    <div class="testimonial-card__name-row">
-                      <span class="testimonial-card__name">{item.name}</span>
-                      <svg class="testimonial-card__verified" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-label="Verified reader">
-                        <circle cx="12" cy="12" r="10" fill="currentColor" fill-opacity="0.14" />
-                        <path d="m8.5 12.3 2.3 2.3 4.8-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </div>
-                    <div class="testimonial-card__role">
-                      {item.role} · <span>{item.company}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <a href={item.readUrl} class="testimonial-card__context">
-                  <span>Read: {item.readLabel}</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 17 17 7"></path>
-                    <path d="M7 7h10v10"></path>
+        trustBadges.map((badge) => (
+          <div class="testimonials__badge-item">
+            <span class="testimonials__platform-box" aria-hidden="true" set:html={platformIcons[badge.platform]} />
+            <div class="testimonials__badge-meta">
+              <div class="testimonials__stars" aria-hidden="true">
+                {Array.from({ length: 5 }).map(() => (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d={starPath} />
                   </svg>
-                </a>
+                ))}
               </div>
-            </article>
-          );
-        })
+              <p class="testimonials__badge-score">
+                <strong>{badge.score}</strong> {badge.label}
+              </p>
+            </div>
+          </div>
+        ))
       }
-    </div>
-
-    <!-- Pagination Bar -->
-    <div class="testimonials__bottom-bar">
-      <div class="testimonials__pagination" id="testimonials-dots" role="tablist" aria-label="Choose testimonial slide">
-        {
-          testimonials.map((_, idx) => (
-            <button
-              type="button"
-              class:list={['testimonials__dot', { active: idx === 0 }]}
-              data-slide={idx}
-              aria-label={`Go to testimonial position ${idx + 1}`}
-            />
-          ))
-        }
-      </div>
-      <span class="testimonials__counter" id="testimonials-counter" aria-live="polite">01 / 04</span>
-    </div>
-
-    <!-- Editorial Independence & Action Banner -->
-    <div class="testimonials__cta">
-      <div class="testimonials__cta-copy">
-        <div class="testimonials__cta-icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            <path d="m9 12 2 2 4-4"></path>
-          </svg>
-        </div>
-        <div>
-          <h3 class="testimonials__cta-title">100% Independent Editorial Testing — Never Pay-to-Rank</h3>
-          <p class="testimonials__cta-desc">
-            Every review audits live pricing tiers, quota limits, and data-handling policies so your team can adopt software with clear eyes.
-          </p>
-        </div>
-      </div>
-
-      <div class="testimonials__cta-actions">
-        <a href="/blog/" class="testimonials__btn testimonials__btn--primary">
-          Explore All Reviews
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14"></path>
-            <path d="m12 5 7 7-7 7"></path>
-          </svg>
-        </a>
-        <a href="/contact/" class="testimonials__btn testimonials__btn--secondary">Submit a Tool</a>
-      </div>
     </div>
   </div>
+
+  <!-- Dual-Row Staggered Testimonial Wall -->
+  <div class="testimonials__wall" aria-label="Reader feedback wall">
+    {
+      marqueeRows.map((row) => (
+        <div class="testimonials__marquee-row">
+          <div class={`testimonials__marquee-track testimonials__marquee-track--${row.direction}`}>
+            {[false, true].map((isDuplicate) => (
+              <div class="testimonials__marquee-group" aria-hidden={isDuplicate ? 'true' : undefined}>
+                {row.items.map((item) => (
+                  <a
+                    href={item.readUrl}
+                    tabindex={isDuplicate ? -1 : undefined}
+                    class={`love-card love-card--${item.tone}`}
+                  >
+                    <div class="love-card__head">
+                      <div class="love-card__person">
+                        <div class="love-card__avatar">
+                          <img
+                            src={item.image}
+                            alt={isDuplicate ? '' : item.name}
+                            width="48"
+                            height="48"
+                            loading="eager"
+                            decoding="async"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+                          />
+                          <span class="love-card__initials" aria-hidden="true">
+                            {getInitials(item.name)}
+                          </span>
+                        </div>
+                        <div class="love-card__identity">
+                          <strong class="love-card__name">{item.name}</strong>
+                          {item.role && <span class="love-card__role">{item.role}</span>}
+                        </div>
+                      </div>
+                      <span
+                        class="love-card__source"
+                        aria-hidden="true"
+                        set:html={platformIcons[item.platform]}
+                      />
+                    </div>
+                    <p class="love-card__quote">{item.quote}</p>
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
 </section>
-
-<script>
-  function setupTestimonials() {
-    const track = document.getElementById('testimonials-track') as HTMLElement | null;
-    const prevBtn = document.getElementById('testimonials-prev') as HTMLButtonElement | null;
-    const nextBtn = document.getElementById('testimonials-next') as HTMLButtonElement | null;
-    const counterEl = document.getElementById('testimonials-counter');
-    const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#testimonials-dots .testimonials__dot'));
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('#testimonials-track .testimonial-card'));
-
-    if (!track || !cards.length || !dots.length) return;
-    if (track.dataset.initialized === 'true') return;
-    track.dataset.initialized = 'true';
-
-    const getMetrics = () => {
-      const step =
-        cards.length > 1
-          ? cards[1].offsetLeft - cards[0].offsetLeft
-          : cards[0].getBoundingClientRect().width + 24;
-      const visible = Math.max(1, Math.round((track.clientWidth - 24) / step));
-      const maxIndex = Math.max(0, cards.length - visible);
-      const current = step > 0 ? Math.min(maxIndex, Math.max(0, Math.round(track.scrollLeft / step))) : 0;
-      return { step, visible, maxIndex, current };
-    };
-
-    const pad = (n: number) => String(n).padStart(2, '0');
-
-    const syncUI = () => {
-      const { maxIndex, current } = getMetrics();
-      const totalStops = maxIndex + 1;
-
-      dots.forEach((dot, idx) => {
-        dot.hidden = idx >= totalStops;
-        dot.classList.toggle('active', idx === current);
-      });
-
-      if (prevBtn) prevBtn.disabled = current <= 0;
-      if (nextBtn) nextBtn.disabled = current >= maxIndex;
-      if (counterEl) counterEl.textContent = `${pad(current + 1)} / ${pad(totalStops)}`;
-    };
-
-    const goTo = (index: number) => {
-      const { step, maxIndex } = getMetrics();
-      const clamped = Math.min(maxIndex, Math.max(0, index));
-      track.scrollTo({
-        left: clamped * step,
-        behavior: 'smooth',
-      });
-    };
-
-    track.addEventListener('scroll', syncUI, { passive: true });
-    window.addEventListener('resize', syncUI, { passive: true });
-
-    prevBtn?.addEventListener('click', () => {
-      const { current } = getMetrics();
-      goTo(current - 1);
-    });
-
-    nextBtn?.addEventListener('click', () => {
-      const { current } = getMetrics();
-      goTo(current + 1);
-    });
-
-    dots.forEach((dot, idx) => {
-      dot.addEventListener('click', () => goTo(idx));
-    });
-
-    track.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        const { current } = getMetrics();
-        goTo(current + 1);
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        const { current } = getMetrics();
-        goTo(current - 1);
-      }
-    });
-
-    syncUI();
-  }
-
-  setupTestimonials();
-  document.addEventListener('astro:page-load', setupTestimonials);
-</script>
