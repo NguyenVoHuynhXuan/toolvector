@@ -1,8 +1,7 @@
 ---
-import { Image } from "astro:assets";
 import "../../style/home/browse-category.css";
 import { categories } from "../../data/categories";
-import waalaxyBanner from "../../assets/banners/waalaxy-banner.jpg";
+import WaalaxyBannerCard from "./WaalaxyBannerCard.astro";
 
 function slugify(text: string) {
     return text.toString().toLowerCase()
@@ -13,34 +12,30 @@ function slugify(text: string) {
         .replace(/^-+/, '')
         .replace(/-+$/, '');
 }
-
-const bannerSlots = ["left", "right", "mobile"] as const;
 ---
 
 <section class="section browse-category" id="discover-tools">
-  <!-- Stage: Header + Category Grid flanked by Left & Right Partner Banners on Desktop -->
-  <div class="browse-category__stage">
-    <div class="browse-category__center">
-      <!-- Header -->
-      <div class="section-header browse-category__header">
-        <div class="browse-category__title-group">
-          <span class="browse-category__eyebrow">DISCOVER</span>
-          <h2 class="section-title">Browse by category</h2>
-          <p class="section-subtitle">
-            Jump straight to the tools built for your workflow.
-          </p>
-        </div>
-        <a href="/category/ai-software-and-ai-agents/" class="browse-category__link">
-          All categories
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </a>
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header browse-category__header">
+      <div class="browse-category__title-group">
+        <span class="browse-category__eyebrow">DISCOVER</span>
+        <h2 class="section-title">Browse by category</h2>
+        <p class="section-subtitle">
+          Jump straight to the tools built for your workflow.
+        </p>
       </div>
+      <a href="/category/ai-software-and-ai-agents/" class="browse-category__link">
+        All categories
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
 
-      <!-- CanhCam Architectural Grid with Large Unblocked Images -->
-      <div class="browse-category__grid">
+    <!-- CanhCam Architectural Grid with Large Unblocked Images -->
+    <div class="browse-category__grid">
       {
         categories.map((category, index) => {
           const delay = (0.08 + (index % 6) * 0.08).toFixed(2);
@@ -107,52 +102,11 @@ const bannerSlots = ["left", "right", "mobile"] as const;
           </div>
         </a>
       </div>
-      </div>
     </div>
 
-    {
-      bannerSlots.map((slot) => (
-        <aside
-          class={`browse-category__rail browse-category__rail--${slot}`}
-          aria-label="Featured partner Waalaxy"
-        >
-          <div class="browse-category__sticky-slot">
-            <a
-              href="/go/waalaxy/"
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              class="waalaxy-promo-banner"
-              aria-label="Try Waalaxy Free - Turn LinkedIn Into Your #1 Acquisition Channel"
-            >
-              <div class="waalaxy-promo-banner__media">
-                <Image
-                  src={waalaxyBanner}
-                  alt="Waalaxy — Turn LinkedIn Into Your #1 Acquisition Channel. Find prospects, automate outreach, and build better conversations. Try Waalaxy Free."
-                  class="waalaxy-promo-banner__img"
-                  width={1024}
-                  height={576}
-                  loading="lazy"
-                />
-              </div>
-              <div class="waalaxy-promo-banner__body">
-                <div class="waalaxy-promo-banner__meta">
-                  <span class="waalaxy-promo-banner__tag">Featured Partner</span>
-                  <span class="waalaxy-promo-banner__rating">&#9733; 4.7/5</span>
-                </div>
-                <ul class="waalaxy-promo-banner__perks">
-                  <li>800+ LinkedIn prospects / month</li>
-                  <li>99+ multichannel outreach flows</li>
-                  <li>Built-in email finder &bull; 14-day free trial</li>
-                </ul>
-                <span class="waalaxy-promo-banner__cta">
-                  Start Free Trial &rarr;
-                </span>
-              </div>
-            </a>
-          </div>
-        </aside>
-      ))
-    }
+    <div class="browse-category__mobile-banner">
+      <WaalaxyBannerCard compact />
+    </div>
   </div>
 </section>
 

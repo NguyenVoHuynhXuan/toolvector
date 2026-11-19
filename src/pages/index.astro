@@ -10,6 +10,7 @@ import CompareTool from "../components/home/CompareTool.astro";
 import Top5Niches from "../components/home/Top5Niches.astro";
 import AffiliateRankings from "../components/home/AffiliateRankings.astro";
 import Testimonials from "../components/home/Testimonials.astro";
+import PromoCorridor from "../components/home/PromoCorridor.astro";
 ---
 
 <Layout
@@ -21,11 +22,13 @@ import Testimonials from "../components/home/Testimonials.astro";
 		<div class="reveal"><StatsCounter /></div>
 		<TrustMarquee />
 		<IntroStatement />
-		<div class="reveal"><BrowseCategory /></div>
-		<div class="reveal"><TrendingWeek /></div>
-		<div class="reveal"><CompareTool /></div>
-		<div class="reveal"><Top5Niches /></div>
-		<div class="reveal"><AffiliateRankings /></div>
+		<PromoCorridor>
+			<div class="reveal"><BrowseCategory /></div>
+			<div class="reveal"><TrendingWeek /></div>
+			<div class="reveal"><CompareTool /></div>
+			<div class="reveal"><Top5Niches /></div>
+			<div class="reveal"><AffiliateRankings /></div>
+		</PromoCorridor>
 		<div class="reveal"><Testimonials /></div>
 	</main>
 </Layout>

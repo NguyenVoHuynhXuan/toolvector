@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import waalaxyBanner from '../../assets/banners/waalaxy-banner.jpg';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<a
+  href="/go/waalaxy/"
+  target="_blank"
+  rel="noopener noreferrer sponsored"
+  class:list={['waalaxy-promo-banner', { 'waalaxy-promo-banner--compact': compact }]}
+  aria-label="Try Waalaxy Free - Turn LinkedIn Into Your #1 Acquisition Channel"
+>
+  <div class="waalaxy-promo-banner__media">
+    <Image
+      src={waalaxyBanner}
+      alt="Waalaxy — Turn LinkedIn Into Your #1 Acquisition Channel. Find prospects, automate outreach, and build better conversations. Try Waalaxy Free."
+      class="waalaxy-promo-banner__img"
+      width={1024}
+      height={576}
+      loading="lazy"
+    />
+  </div>
+  {!compact && (
+    <div class="waalaxy-promo-banner__body">
+      <div class="waalaxy-promo-banner__meta">
+        <span class="waalaxy-promo-banner__tag">Featured Partner</span>
+        <span class="waalaxy-promo-banner__rating">&#9733; 4.7/5</span>
+      </div>
+      <ul class="waalaxy-promo-banner__perks">
+        <li>800+ LinkedIn prospects / month</li>
+        <li>99+ multichannel outreach flows</li>
+        <li>Built-in email finder &bull; 14-day free trial</li>
+      </ul>
+      <span class="waalaxy-promo-banner__cta">
+        Start Free Trial &rarr;
+      </span>
+    </div>
+  )}
+</a>
+

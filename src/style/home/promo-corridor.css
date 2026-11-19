@@ -1,0 +1,218 @@
+/* src/style/home/promo-corridor.css */
+/* Full-corridor sticky partner rails spanning BrowseCategory through AffiliateRankings, stopping before Testimonials */
+
+.home-promo-corridor {
+  position: relative;
+  overflow-x: clip;
+}
+
+.home-promo-corridor__rails {
+  display: none;
+}
+
+/* Shared Waalaxy Promo Banner Card Styling */
+.waalaxy-promo-banner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  background: linear-gradient(180deg, #031246 0%, #020b2e 100%);
+  box-shadow: 0 18px 42px rgba(3, 16, 58, 0.2);
+  text-decoration: none;
+  color: #ffffff;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.waalaxy-promo-banner:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.72);
+  box-shadow: 0 24px 52px rgba(3, 16, 58, 0.3);
+}
+
+.waalaxy-promo-banner__media {
+  width: 100%;
+  overflow: hidden;
+  background: #03103a;
+}
+
+.waalaxy-promo-banner__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.waalaxy-promo-banner:hover .waalaxy-promo-banner__img {
+  transform: scale(1.03);
+}
+
+.waalaxy-promo-banner__body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  border-top: 1px solid rgba(96, 165, 250, 0.16);
+}
+
+.waalaxy-promo-banner__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.waalaxy-promo-banner__tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  color: #7dd3fc;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.waalaxy-promo-banner__rating {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fbbf24;
+  white-space: nowrap;
+}
+
+.waalaxy-promo-banner__perks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.waalaxy-promo-banner__perks li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.8rem;
+  line-height: 1.38;
+  color: #dbeafe;
+  font-weight: 500;
+}
+
+.waalaxy-promo-banner__perks li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #38bdf8;
+  font-weight: 800;
+}
+
+.waalaxy-promo-banner__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.waalaxy-promo-banner:hover .waalaxy-promo-banner__cta {
+  filter: brightness(1.08);
+}
+
+:root[data-theme="dark"] .waalaxy-promo-banner {
+  border-color: rgba(96, 165, 250, 0.36);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.52);
+}
+
+@media (min-width: 1280px) {
+  .home-promo-corridor {
+    --rail-w: clamp(238px, 18vw, 304px);
+    --rail-edge: 16px;
+    --rail-gap: 18px;
+    --rail-gutter: calc(var(--rail-w) + var(--rail-edge) + var(--rail-gap));
+  }
+
+  .home-promo-corridor__content .container {
+    max-width: min(var(--max-width-container, 1240px), calc(100% - (var(--rail-gutter) * 2)));
+  }
+
+  .home-promo-corridor__rails {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1920px;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .home-promo-corridor__rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--rail-w);
+    padding-top: 204px;
+    padding-bottom: 56px;
+  }
+
+  .home-promo-corridor__rail--left {
+    left: var(--rail-edge);
+  }
+
+  .home-promo-corridor__rail--right {
+    right: var(--rail-edge);
+  }
+
+  .home-promo-corridor__sticky {
+    position: sticky;
+    top: 96px;
+    pointer-events: auto;
+  }
+}
+
+/* Keep 3-column inner cards roomy on standard 1280-1580px laptops while rails flank both sides */
+@media (min-width: 1280px) and (max-width: 1580px) {
+  .home-promo-corridor__content .category-item__info {
+    padding: 28px 18px 16px;
+  }
+
+  .home-promo-corridor__content .category-item__title {
+    font-size: 1.18rem;
+  }
+
+  .home-promo-corridor__content .article-feed-grid,
+  .home-promo-corridor__content .top5-niches__grid {
+    gap: 20px;
+  }
+
+  .home-promo-corridor__content .aff-rankings__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 28px;
+  }
+}
+
+@media (min-width: 1720px) {
+  .home-promo-corridor {
+    --rail-w: clamp(290px, 17.4vw, 340px);
+    --rail-edge: 24px;
+    --rail-gap: 24px;
+  }
+}
+

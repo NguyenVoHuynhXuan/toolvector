@@ -28,13 +28,13 @@ const { title, description, canonical, ogImage, noindex } = Astro.props;
 			ogImage={ogImage}
 			noindex={noindex}
 		/>
-		<!-- Theme Initialization Script (prevents FOUC) -->
+		<!-- Theme Initialization Script (prevents FOUC; defaults to light unless user explicitly chose dark) -->
 		<script is:inline>
 			const getThemePreference = () => {
-				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-					return localStorage.getItem('theme');
+				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme') === 'dark') {
+					return 'dark';
 				}
-				return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				return 'light';
 			};
 			const isDark = getThemePreference() === 'dark';
 			document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');

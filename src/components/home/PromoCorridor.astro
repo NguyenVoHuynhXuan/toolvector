@@ -1,0 +1,23 @@
+---
+import '../../style/home/promo-corridor.css';
+import WaalaxyBannerCard from './WaalaxyBannerCard.astro';
+
+const sideSlots = ['left', 'right'] as const;
+---
+
+<div class="home-promo-corridor">
+  <div class="home-promo-corridor__rails" aria-label="Featured partner Waalaxy">
+    {sideSlots.map((side) => (
+      <aside class={`home-promo-corridor__rail home-promo-corridor__rail--${side}`}>
+        <div class="home-promo-corridor__sticky">
+          <WaalaxyBannerCard />
+        </div>
+      </aside>
+    ))}
+  </div>
+
+  <div class="home-promo-corridor__content">
+    <slot />
+  </div>
+</div>
+
