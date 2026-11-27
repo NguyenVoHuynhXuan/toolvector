@@ -44,7 +44,7 @@ const bgStyle = bgImage
 
 <div class={`cta-block ${size === 'lg' ? 'cta-block--lg' : ''} ${floatingImage ? 'cta-block--has-floating-image' : ''}`} style={bgStyle} data-theme={theme}>
   {title && <h3>{title}</h3>}
-  <a href={link} target="_blank" rel="noopener noreferrer sponsored" class={`cta-block__btn ${size === 'lg' ? 'cta-block__btn--lg' : ''}`} style={`background-color: ${btnBg}; color: ${btnColor};`}>
+  <a href={link} target="_blank" rel="sponsored nofollow noopener noreferrer" data-sponsored="true" class={`cta-block__btn ${size === 'lg' ? 'cta-block__btn--lg' : ''}`} style={`background-color: ${btnBg}; color: ${btnColor};`}>
     {btnText}
   </a>
   {disclaimer && <span class="cta-block__disclaimer">{disclaimer}</span>}

@@ -4,28 +4,52 @@ interface Props {
   text: string;
   bg?: string;
   color?: string;
+  sponsored?: boolean;
+  sponsoredNote?: string;
 }
 
-const { 
-  link, 
+const {
+  link,
   text,
   bg = "#07371f",
-  color = "#fff"
+  color = "#fff",
+  sponsored,
+  sponsoredNote = "Sponsored affiliate link",
 } = Astro.props;
+
+const isAffiliateLink =
+  sponsored ?? /^(?:\/go\/|https?:\/\/(?:www\.)?(?:link\.waalaxy\.com|waal\.ink)\b)/i.test(link);
 ---
 
-<a href={link} target="_blank" rel="noopener noreferrer sponsored" class="inline-btn" style={`background-color: ${bg}; color: ${color};`}>
-  {text}
-</a>
+<div class="inline-btn-wrap">
+  <a
+    href={link}
+    target="_blank"
+    rel="sponsored nofollow noopener noreferrer"
+    data-sponsored={isAffiliateLink ? "true" : undefined}
+    class="inline-btn"
+    style={`background-color: ${bg}; color: ${color};`}
+  >
+    {text}
+  </a>
+  {isAffiliateLink && (
+    <span class="inline-btn__sponsored-note">{sponsoredNote}</span>
+  )}
+</div>
 
 <style>
+  .inline-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1.5rem 0;
+  }
   .inline-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: fit-content;
     min-height: 50px;
-    margin: 1.5rem 0;
     padding: 0 24px;
     font-weight: 800;
     border-radius: 7px;
@@ -39,5 +63,12 @@ const {
     transform: translateY(-2px);
     opacity: 0.95;
     box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+  .inline-btn__sponsored-note {
+    margin-top: 6px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #64748b);
+    letter-spacing: 0.01em;
   }
 </style>

@@ -257,8 +257,8 @@ const pageTitle = encodeURIComponent(articleTitle);
                     <div class="sidebar-digest-item__bottom">
                       <span>{item.price || 'Check plans'}</span>
                       {item.link && (
-                        <a href={item.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-digest-item__link">
-                          Visit &rarr;
+                        <a href={item.link} target="_blank" rel="sponsored nofollow noopener noreferrer" data-sponsored="true" class="sidebar-digest-item__link">
+                          Visit (Sponsored) &rarr;
                         </a>
                       )}
                     </div>
@@ -267,12 +267,17 @@ const pageTitle = encodeURIComponent(articleTitle);
               ))}
             </div>
             {post.data.link && (
-              <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="tool-summary-card__cta">
-                <span>Try Top Recommended Pick</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
+              <>
+                <a href={post.data.link} target="_blank" rel="sponsored nofollow noopener noreferrer" data-sponsored="true" class="tool-summary-card__cta">
+                  <span>Try Top Recommended Pick</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </a>
+                {post.data.link.startsWith('/go/') && (
+                  <p class="tool-summary-card__sponsored-note">Sponsored affiliate link</p>
+                )}
+              </>
             )}
           </div>
         ) : detectedKind === 'top5' ? (
@@ -298,7 +303,7 @@ const pageTitle = encodeURIComponent(articleTitle);
                       <div class="sidebar-digest-item__bottom">
                         <span>{item.bestFor || item.price || ''}</span>
                         {item.link && (
-                          <a href={item.link} target="_blank" rel="noopener noreferrer sponsored" class="sidebar-digest-item__link">
+                          <a href={item.link} target="_blank" rel="sponsored nofollow noopener noreferrer" data-sponsored="true" class="sidebar-digest-item__link">
                             Visit &rarr;
                           </a>
                         )}
@@ -308,12 +313,21 @@ const pageTitle = encodeURIComponent(articleTitle);
                 ))}
               </div>
             )}
-            <a href={post.data.link || '/top-5/'} class="tool-summary-card__cta">
+            <a
+              href={post.data.link || '/top-5/'}
+              target={post.data.link?.startsWith('/go/') ? '_blank' : undefined}
+              rel={post.data.link?.startsWith('/go/') ? 'sponsored nofollow noopener noreferrer' : undefined}
+              data-sponsored={post.data.link?.startsWith('/go/') ? 'true' : undefined}
+              class="tool-summary-card__cta"
+            >
               <span>{post.data.link ? `Explore #1 Pick` : 'View All Top 5 Guides'}</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </a>
+            {post.data.link?.startsWith('/go/') && (
+              <p class="tool-summary-card__sponsored-note">Sponsored affiliate link</p>
+            )}
           </div>
         ) : (
           <div class="tool-summary-card">
@@ -359,12 +373,17 @@ const pageTitle = encodeURIComponent(articleTitle);
             </div>
 
             {post.data.link && (
-              <a href={post.data.link} target="_blank" rel="noopener noreferrer sponsored" class="tool-summary-card__cta">
-                <span>Visit {toolName}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
+              <>
+                <a href={post.data.link} target="_blank" rel="sponsored nofollow noopener noreferrer" data-sponsored="true" class="tool-summary-card__cta">
+                  <span>Visit {toolName}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </a>
+                {post.data.link.startsWith('/go/') && (
+                  <p class="tool-summary-card__sponsored-note">Sponsored affiliate link</p>
+                )}
+              </>
             )}
           </div>
         )}

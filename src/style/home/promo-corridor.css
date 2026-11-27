@@ -32,9 +32,30 @@
 }
 
 .waalaxy-promo-banner__media {
+  position: relative;
   width: 100%;
   overflow: hidden;
   background: #03103a;
+}
+
+.waalaxy-promo-banner__sponsored-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(2, 11, 46, 0.84);
+  border: 1px solid rgba(125, 211, 252, 0.45);
+  backdrop-filter: blur(8px);
+  color: #e0f2fe;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .waalaxy-promo-banner__img {
@@ -131,6 +152,15 @@
 
 .waalaxy-promo-banner:hover .waalaxy-promo-banner__cta {
   filter: brightness(1.08);
+}
+
+.waalaxy-promo-banner__disclosure {
+  display: block;
+  text-align: center;
+  font-size: 0.67rem;
+  line-height: 1.35;
+  color: rgba(191, 219, 254, 0.78);
+  letter-spacing: 0.01em;
 }
 
 :root[data-theme="dark"] .waalaxy-promo-banner {

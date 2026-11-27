@@ -12,14 +12,16 @@ const { compact = false } = Astro.props;
 <a
   href="/go/waalaxy/"
   target="_blank"
-  rel="noopener noreferrer sponsored"
+  rel="sponsored nofollow noopener noreferrer"
+  data-sponsored="true"
   class:list={['waalaxy-promo-banner', { 'waalaxy-promo-banner--compact': compact }]}
-  aria-label="Try Waalaxy Free - Turn LinkedIn Into Your #1 Acquisition Channel"
+  aria-label="Sponsored: Try Waalaxy Free - Turn LinkedIn Into Your #1 Acquisition Channel (Affiliate Link)"
 >
   <div class="waalaxy-promo-banner__media">
+    <span class="waalaxy-promo-banner__sponsored-badge">Sponsored</span>
     <Image
       src={waalaxyBanner}
-      alt="Waalaxy — Turn LinkedIn Into Your #1 Acquisition Channel. Find prospects, automate outreach, and build better conversations. Try Waalaxy Free."
+      alt="Waalaxy (Sponsored) — Turn LinkedIn Into Your #1 Acquisition Channel. Find prospects, automate outreach, and build better conversations. Try Waalaxy Free."
       class="waalaxy-promo-banner__img"
       width={1024}
       height={576}
@@ -29,7 +31,7 @@ const { compact = false } = Astro.props;
   {!compact && (
     <div class="waalaxy-promo-banner__body">
       <div class="waalaxy-promo-banner__meta">
-        <span class="waalaxy-promo-banner__tag">Featured Partner</span>
+        <span class="waalaxy-promo-banner__tag">Sponsored Partner</span>
         <span class="waalaxy-promo-banner__rating">&#9733; 4.7/5</span>
       </div>
       <ul class="waalaxy-promo-banner__perks">
@@ -39,6 +41,9 @@ const { compact = false } = Astro.props;
       </ul>
       <span class="waalaxy-promo-banner__cta">
         Start Free Trial &rarr;
+      </span>
+      <span class="waalaxy-promo-banner__disclosure">
+        Sponsored affiliate link &middot; We may earn a commission
       </span>
     </div>
   )}

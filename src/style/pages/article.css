@@ -455,6 +455,15 @@
     transform: translateX(3px);
 }
 
+.article-page .tool-summary-card__sponsored-note {
+    margin: 8px 0 0;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #64748b);
+    letter-spacing: 0.01em;
+}
+
 /* ----- Sidebar Ad Banner Image (1080x1080) ----- */
 .sidebar-ad-card {
     display: flex;
